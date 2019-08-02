@@ -16,15 +16,15 @@ use function GuzzleHttp\json_encode;
 |
 */
 
-Route::get('/mot/{number}', function ($number){
+Route::get('/tax/{number}', function ($number){
     return response()->json([
         'object' => Mot::select('t')
             ->where('reg', $number)
             ->get()
-    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    ]);
 });
 
-Route::get('/tax/{number}', function ($number){
+Route::get('/mot/{number}', function ($number){
     return response()->json([
         'object' => Tax::select('m')
             ->where('reg', $number)
