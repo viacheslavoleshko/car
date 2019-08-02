@@ -1,5 +1,10 @@
 <?php
 
+use Illuminate\Http\Request;
+use App\Models\Mot;
+use App\Models\Tax;
+use function GuzzleHttp\json_encode;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,13 +16,23 @@
 |
 */
 
+Route::get('/mot/{number}', function ($number){
+    return response()->json([
+        'object' => Mot::select('t')
+            ->where('reg', $number)
+            ->get()
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+});
+
+Route::get('/tax/{number}', function ($number){
+    return response()->json([
+        'object' => Tax::select('m')
+            ->where('reg', $number)
+            ->get()
+    ]);
+});
 
 Route::get('/', function () {
     return view('welcome');
 });
-
-
-Route::get('/mot', 'PagesController@mot');
-Route::get('/tax', 'PagesController@tax');
-Route::get('/services', 'PagesController@services');
 
