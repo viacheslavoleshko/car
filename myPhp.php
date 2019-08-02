@@ -63,7 +63,7 @@ $table = "mot";
 
 
 // -----------------------select-----------------------
-$query_select = "SELECT reg FROM public.mot WHERE m is null OR m='null'";
+$query_select = "SELECT reg FROM public.mot WHERE m is null";
 $updated_query = "SELECT reg from public.mot WHERE updated_at is null";
 // // ------------------end select  ---------------------
 
