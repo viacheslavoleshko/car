@@ -11,6 +11,13 @@
 |
 */
 
+
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/mot', 'PagesController@mot');
+Route::get('/tax', 'PagesController@tax');
+Route::get('/services', 'PagesController@services');
+
