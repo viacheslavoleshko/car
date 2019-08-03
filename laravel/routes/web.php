@@ -5,6 +5,12 @@ use App\Models\Mot;
 use App\Models\Tax;
 use function GuzzleHttp\json_encode;
 
+error_reporting(E_ALL & ~E_WARNING  & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
+ 
+header('Access-Control-Allow-Origins: Content-Type, X-Auth-Token, Origin, Authorization, Token, token, Image, image, content, content-type');
+header('Access-Control-Allow-Headers: Content-Type, X-Auth-Token, Origin, Authorization, Token, token, Image, image, content, content-type');
+header('Access-Control-Allow-Methods: *');
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
