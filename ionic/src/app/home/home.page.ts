@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { CarService } from '../car.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { relative } from 'path';
 
 @Component({
   selector: 'app-home',
@@ -7,21 +9,20 @@ import { CarService } from '../car.service';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
+ mot;
+ registration;
 
-  mot;
-  tax;
-  sitemaps;
+  constructor(private carService: CarService, private router: Router, private route : ActivatedRoute) {}
 
-  constructor(private carService: CarService) {
-    this.carService.getMot().subscribe(value => {
+  getCar() {
+    this.carService.getMot(this.registration).subscribe(value => {
       this.mot = value;
       console.log(this.mot);
     });
-    this.carService.getTax().subscribe(value => {
-      this.tax = value;
-      console.log(this.tax);
-    });
+  }
 
+  Taxed() {
+    this.router.navigateByUrl('/taxed')
   }
 
 }

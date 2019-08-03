@@ -9,18 +9,12 @@ export class CarService {
   
   constructor(private http : HttpClient) { }
 
-  getTax() {
-    return this.http.get(`${this.basepath}/tax/LB08VEX`);
-
-    // return this.http.get(`https://api.nix.ltd/api/v1/postcode/LS`);
-    // this.nativeHttp.get(`api/tax/LB08VEX`, {}, {})
-    // .then( res => res);
+  getTax(registration) {
+    return this.http.get(`${this.basepath}/tax/${registration}`);
   }
 
-  getMot() {
-    return this.http.get(`${this.basepath}/mot/LB08VEX`);
-    // this.nativeHttp.get(`${this.basepath}/mot/LB08VEX`, {}, {})
-    // .then( res => res);
+  getMot(registration) {
+    return this.http.get(`${this.basepath}/mot/${registration}`);
   }
 
 }
