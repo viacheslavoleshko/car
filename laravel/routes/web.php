@@ -24,10 +24,7 @@ header('Access-Control-Allow-Methods: *');
 
 Route::get('/tax/{number}', function ($number){
 
-    $json = Tax::select('t')->where('reg', $number)->get();
-    $json = json_encode($json, JSON_UNESCAPED_UNICODE);
-
-    return view('index', ['object' => $json]);
+    return response()->json(['object' => Tax::select('t')->where('reg', $number)->get()]);
 });
 
 Route::get('/mot/{number}', function ($number){
@@ -38,4 +35,3 @@ Route::get('/mot/{number}', function ($number){
 Route::get('/', function () {
     return view('welcome');
 });
-
