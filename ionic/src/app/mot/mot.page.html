@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Ionic Blank
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content >
+<div *ngIf="mot !== -1; else elseMot">
+    <ion-item>
+    <ion-input 
+    color="primary"
+    placeholder="Enter reg number"
+    [(ngModel)]="registration"
+    ></ion-input>
+  </ion-item>
+  <ion-button
+    class="primary"
+    size="middle"
+    expand="block"
+    (click)="getCar()"
+    >
+    <ion-icon slot="icon-only" name="search"></ion-icon>
+      Find car with reg number
+    </ion-button>
+
+
+  <ion-row>
+    <ion-col size="12">
+      <div class="registra">
+        <h1>
+        {{mot['registration']}}
+        </h1>
+      </div>
+    </ion-col>
+
+    <ion-col size = "12">
+        <h1 class="make">{{mot['make']}}  {{mot['model']}}</h1>
+      </ion-col>
+      <ion-col>
+        <a href="#" class="check">Check another vachicle</a>
+      </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12">First date use: {{mot['firstUsedDate']}}</ion-col>
+    <ion-col size="12">Registration date: {{mot['registrationDate']}}</ion-col>
+    <ion-col size="12">Manufacture date: {{mot['manufactureDate']}}</ion-col>
+    <ion-col size="12">Engine size: {{mot['engineSize']}}</ion-col>
+  </ion-row>
+
+
+  <ion-row>
+    <h2>Tests</h2>
+    <ion-col size="12">Date complete test: {{mot['motTests'][0]['completedDate']}}</ion-col>
+    <ion-col size="12">Test result: {{mot['motTests'][0]['testResult']}}</ion-col>
+    <ion-col size="12">Expiry date: {{mot['motTests'][0]['expiryDate']}}</ion-col>
+    <ion-col size="12">Odometer value: {{mot['motTests'][0]['odometerValue']}}</ion-col>
+    <ion-col size="12">Odometer unit: {{mot['motTests'][0]['odometerUnit']}}</ion-col>
+    <ion-col size="12">Test number: {{mot['motTests'][0]['motTestNumber']}}</ion-col>
+    <ion-col size="12">Odometer result type: {{mot['motTests'][0]['odometerResultType']}}</ion-col>
+    <ul *ngIf="mot['rfrAndComments']">
+      <p>Monitor and repair if neccessary(advisories)</p>
+      <li>{{mot['motTests'][0]['rfrAndComments'][0]['text']}}</li>
+      <li>{{mot['motTests'][0]['rfrAndComments'][0]['type']}}</li>
+    </ul>
+  </ion-row>
+</div>
+
+<ng-template #elseMot>
+    <h1>Sorry, not found you MOT!</h1>
+  </ng-template>
+</ion-content>
+

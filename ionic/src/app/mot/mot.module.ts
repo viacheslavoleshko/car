@@ -5,21 +5,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { TaxedPage } from './taxed.page';
+import { MotPage } from './mot.page';
 
 const routes: Routes = [
   {
-    path: 'taxed',
-    component: TaxedPage,
-    children: [
-      { path: 'tax', loadChildren: '../tax/tax.module#TaxPageModule' },
-      { path: 'mot', loadChildren: '../mot/mot.module#MotPageModule' }
-    ]
-  },
-  {
     path: '',
-    redirectTo: '/taxed',
-    pathMatch: 'full'
+    component: MotPage
   }
 ];
 
@@ -30,6 +21,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [TaxedPage]
+  declarations: [MotPage]
 })
-export class TaxedPageModule {}
+export class MotPageModule {}
