@@ -11,8 +11,8 @@ export class TaxPage implements OnInit {
 // ['object'][0]['t']
 
   //  tax ={"Status bar":{"Status":"✓ Taxed","Tax due":"01 December 2019"},"Vehicle make":"MERCEDES","Date of first registration":"June 2008","Year of manufacture":"2008","Cylinder capacity (cc)":"1498 cc","CO₂Emissions":"148 g/km","Fuel type":"PETROL","Euro Status":"Not available","Export marker":"No","Vehicle status":"Tax not due","Vehicle colour":"SILVER","Vehicle type approval":"M1","Wheelplan":"2-AXLE-RIGID BODY","Revenue weight":"1740kg"};
-   tax = -1;
-  
+  //  tax = {"Status bar":{"Status":"✓ SORN","Tax due":null},"Vehicle make":"FORD","Date of first registration":"February 2018","Year of manufacture":"2018","Cylinder capacity (cc)":"1198 cc","CO₂Emissions":"114 g/km","Fuel type":"PETROL","Euro Status":"Not available","Export marker":"No","Vehicle status":"SORN in place","Vehicle colour":"SILVER","Vehicle type approval":"M1","Wheelplan":"2-AXLE-RIGID BODY","Revenue weight":"1530kg"};
+  tax = -1;
     constructor(private carService: CarService, private router: Router, private route : ActivatedRoute) {
       // this.carService.getTax(this.registration).subscribe(value => {
       //   this.tax = value;
