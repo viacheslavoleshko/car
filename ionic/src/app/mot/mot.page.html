@@ -51,7 +51,7 @@
   </ion-row>
 
 
-  <ion-row *ngIf="mot['motTest']; else motTests">
+  <ion-row *ngIf="mot['motTests']; else motTests">
     <h2>Tests</h2>
     <ion-col size="12">Date complete test: {{mot['motTests'][0]['completedDate']}}</ion-col>
     <ion-col size="12">Test result: {{mot['motTests'][0]['testResult']}}</ion-col>
