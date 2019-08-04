@@ -35,3 +35,10 @@ Route::get('/mot/{number}', function ($number){
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get("gmaps/car", array(
+    "as"   => "sitemap",
+    "uses" => "SitemapController@sitemap",
+));
+
+//Route::get('gmaps/car/1', 'SitemapController@numbers');
