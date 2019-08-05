@@ -1,0 +1,22 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>Welcome on TAX tab</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <ion-item>
+      <ion-col size="12">
+        <h3>
+          <ion-label position="floating">Find you TAX car with reg number</ion-label>
+        </h3>
+        <ion-input
+          color="primary"
+          placeholder="Enter reg number"
+          [(ngModel)]="regNumb"
+        ></ion-input>
+      </ion-col>
+    </ion-item>
+    <ion-button (click)="toTaxDetails()">Go to tax!</ion-button>
+  </ion-content>
+  

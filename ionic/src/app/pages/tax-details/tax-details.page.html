@@ -1,0 +1,96 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>tax details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-button (click)="toHome()">
+    Go to TAX tab!
+  </ion-button>
+  <div *ngIf="tax; else elseTax">
+    <div *ngIf="tax !== -1  && tax['length'] !==0 && tax[0]['t'] !== undefined; else elseTax">
+      <ion-row *ngIf="tax[0]['t']['Status bar']">
+        <ion-col *ngIf="tax[0]['t']['Status bar']['Status']" >
+          <p>
+            {{ tax[0]['t']["Status bar"]["Status"] }}
+          </p>
+        </ion-col>
+        <ion-col class="Status_Bar" size="6">
+          <p
+            *ngIf="tax[0]['t']['Status bar']['Tax due']"
+            class="Status_Bar"
+          >
+            {{ tax[0]['t']["Status bar"]["Tax due"] }}
+          </p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ul class="taxed">
+          <li *ngIf="tax[0]['t']['Vehicle make']">
+            <span class="taxed__span">Vahicle make</span>:
+            <span class="taxed__json">{{ tax[0]['t']["Vehicle make"] }}</span>
+          </li>
+          <li *ngIf="tax[0]['t']['Date of first registration']">
+            <span class="taxed__span">Date of first registration</span>:
+            <span class="taxed__json">{{
+              tax[0]['t']["Date of first registration"]
+            }}</span>
+          </li>
+          <li *ngIf="tax[0]['t']['Year of manufacture']">
+            <span class="taxed__span">Year of manufacture</span>:
+            <span class="taxed__json">{{ tax[0]['t']["Year of manufacture"] }}</span>
+          </li>
+          <li *ngIf="tax[0]['t']['Cylinder capacity (cc)']">
+            <span class="taxed__span">Cylinder capacity (cc)</span>:
+            <span class="taxed__json">{{ tax[0]['t']["Cylinder capacity (cc)"] }}</span>
+          </li>
+          <li *ngIf="tax[0]['t']['CO₂Emissions']">
+            <span class="taxed__span">CO₂Emissions</span>:
+            <span class="taxed__json">{{ tax[0]['t']["CO₂Emissions"] }}</span>
+          </li>
+          <li *ngIf="tax[0]['t']['Fuel type']">
+            <span class="taxed__span">Fuel type</span>:
+            <span class="taxed__json">{{ tax[0]['t']["Fuel type"] }}</span>
+          </li>
+          <li *ngIf="tax[0]['t']['Euro Status']">
+            <span class="taxed__span">Euro Status</span>:
+            <span class="taxed__json">{{ tax[0]['t']["Euro Status"] }}</span>
+          </li>
+          <li *ngIf="tax[0]['t']['Expor marker']">
+            <span class="taxed__span">Export marker</span>:
+            <span class="taxed__json">{{ tax[0]['t']["Expor marker"] }}</span>
+          </li>
+          <li *ngIf="tax[0]['t']['Vehicle status']">
+            <span class="taxed__span">Vehicle status</span>:
+            <span class="taxed__json">{{ tax[0]['t']["Vehicle status"] }}</span>
+          </li>
+          <li *ngIf="tax[0]['t']['Vehicle colour']">
+            <span class="taxed__span">Vehicle colour</span>:
+            <span class="taxed__json">{{ tax[0]['t']["Vehicle colour"] }}</span>
+          </li>
+          <li *ngIf="tax[0]['t']['Vehicle type approval'] ">
+            <span class="taxed__span">Vehicle type approval</span>:
+            <span class="taxed__json">{{ tax[0]['t']["Vehicle type approval"] }}</span>
+          </li>
+          <li *ngIf="tax[0]['t']['Wheelplan']">
+            <span class="taxed__span">Wheelplan</span>:
+            <span class="taxed__json">{{ tax[0]['t']["Wheelplan"] }}</span>
+          </li>
+          <li *ngIf="tax[0]['t']['Revenue weight']">
+            <span class="taxed__span">Revenue weight</span>:
+            <span class="taxed__json">{{ tax[0]['t']["Revenue weight"] }}</span>
+          </li>
+          <li>
+            <span class="taxed__span">Tax rates</span>:
+            <span class="taxed__json"><a href="#">View tax rates</a></span>
+          </li>
+        </ul>
+      </ion-row>
+    </div>
+  </div>
+
+  <ng-template #elseTax>
+    <h1>Sorry, not found you TAX!</h1>
+  </ng-template>
+</ion-content>

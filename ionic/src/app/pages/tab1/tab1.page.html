@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Welcome on MOT tab</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-col size="12">
+      <h3>
+        <ion-label position="floating">Find you MOT car with reg number</ion-label>
+      </h3>
+      <ion-input
+        color="primary"
+        placeholder="Enter reg number"
+        [(ngModel)]="regNumb"
+      ></ion-input>
+    </ion-col>
+  </ion-item>
+  <ion-button (click)="toMotDetails()">Go to mot!</ion-button>
+</ion-content>
