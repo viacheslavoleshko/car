@@ -9,7 +9,12 @@ class Mot extends Model
     protected $table = 'mot';
     protected $casts = [
         'm' => 'array',
-        'created_at' => 'datetime:Y-m-d',
-        'updated_at' => 'datetime:Y-m-d',
     ];
+
+    /*public function getDateFormat()
+    {
+        return 'Y-m-d H:i:s.uO';
+    }*/
+
+    protected $dateFormat = 'Y-m-d H:i:s.uO';
 }

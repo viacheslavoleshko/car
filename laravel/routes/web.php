@@ -38,7 +38,12 @@ Route::get('/', function () {
 
 Route::get("gmaps/car", array(
     "as"   => "sitemap",
-    "uses" => "SitemapController@sitemap",
+    "uses" => "SitemapController@index",
 ));
 
-//Route::get('gmaps/car/1', 'SitemapController@numbers');
+Route::get('gmaps/car/1', 'SitemapController@numbers1');
+Route::get('gmaps/car/2', 'SitemapController@numbers2');
+Route::get('gmaps/car/3', 'SitemapController@numbers3');
+Route::get('gmaps/car/4', 'SitemapController@numbers4');
+Route::get('gmaps/car/5', 'SitemapController@numbers5');
+
