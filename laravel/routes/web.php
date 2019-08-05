@@ -42,8 +42,3 @@ Route::get("gmaps/car", array(
 ));
 
 Route::get('gmaps/car/{page}', 'SitemapController@numbers')->where('page', '[0-9]+');
-
-Route::get('test', function(){
-    $res = ceil(Mot::whereNotNull('updated_at')->count() / getenv('SITEMAP_OFFSET'));
-    dd($res);
-});
