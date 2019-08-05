@@ -1,32 +1,5 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
-
 <ion-content >
 <div *ngIf="mot !== -1; else elseMot">
-    <ion-item>
-    <ion-input 
-    color="primary"
-    placeholder="Enter reg number"
-    [(ngModel)]="registration"
-    ></ion-input>
-  </ion-item>
-  <ion-button
-    class="primary"
-    size="middle"
-    expand="block"
-    (click)="getCar()"
-    >
-    <ion-icon slot="icon-only" name="search"></ion-icon>
-      Find car with reg number
-    </ion-button>
-
-
   <ion-row>
     <ion-col size="12">
       <div class="registra">
