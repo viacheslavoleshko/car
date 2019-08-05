@@ -3,9 +3,10 @@
 xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
     @foreach ($numbers as $number)
         <url>
-            <loc>{{ url("/mot/{$number->reg}") }}</loc>
-            <changefreq>monthly</changefreq>
             <priority>0.8</priority>
+            <loc>{{ url("/mot/{$number->reg}") }}</loc>
+            <lastmod>{{ $number->updated_at->tz('UTC')->toAtomString() }}</lastmod>
+            <changefreq>monthly</changefreq>
         </url>
     @endforeach
 </urlset>
