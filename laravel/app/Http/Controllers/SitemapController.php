@@ -41,65 +41,31 @@ class SitemapController extends Controller
 
     public function index()
     {
-        $numbers = Mot::orderBy('created_at', 'desc')->first();
+        $count = Mot::whereNotNull('updated_at')->count();
+        //->orderBy('updated_at', 'desc')->first();
 
         return response()->view('sitemap/index', [
-            'numbers' => $numbers,
+            'count' => $count,
         ])->header('Content-Type', 'text/xml');
     }
 
-    public function numbers1()
+    public function numbers($page)
     {
-        $numbers = Mot::orderBy("id", "asc")
-        ->skip(getenv('SITEMAP_OFFSET') * 0)
-        ->take(getenv('SITEMAP_OFFSET'))
-        ->get();
-        return response()->view('sitemap/mot', [
-            'numbers' => $numbers,
-        ])->header('Content-Type', 'text/xml');
-    }
+        $count = Mot::whereNotNull('updated_at')->count();
 
-    public function numbers2()
-    {
-        $numbers = Mot::orderBy("id", "asc")
-        ->skip(getenv('SITEMAP_OFFSET') * 1)
-        ->take(getenv('SITEMAP_OFFSET'))
-        ->get();
-        return response()->view('sitemap/mot', [
-            'numbers' => $numbers,
-        ])->header('Content-Type', 'text/xml');
-    }
-
-    public function numbers3()
-    {
-        $numbers = Mot::orderBy("id", "asc")
-        ->skip(getenv('SITEMAP_OFFSET') * 2)
-        ->take(getenv('SITEMAP_OFFSET'))
-        ->get();
-        return response()->view('sitemap/mot', [
-            'numbers' => $numbers,
-        ])->header('Content-Type', 'text/xml');
-    }
-
-    public function numbers4()
-    {
-        $numbers = Mot::orderBy("id", "asc")
-        ->skip(getenv('SITEMAP_OFFSET') * 3)
-        ->take(getenv('SITEMAP_OFFSET'))
-        ->get();
-        return response()->view('sitemap/mot', [
-            'numbers' => $numbers,
-        ])->header('Content-Type', 'text/xml');
-    }
-
-    public function numbers5()
-    {
-        $numbers = Mot::orderBy("id", "asc")
-        ->skip(getenv('SITEMAP_OFFSET') * 4)
-        ->take(getenv('SITEMAP_OFFSET'))
-        ->get();
-        return response()->view('sitemap/mot', [
-            'numbers' => $numbers,
-        ])->header('Content-Type', 'text/xml');
+        if( $page <= ceil($count / getenv('SITEMAP_OFFSET')) && $page != 0 )
+        {
+            $numbers = Mot::whereNotNull('updated_at')
+            ->orderBy("id", "asc")
+            ->skip(getenv('SITEMAP_OFFSET') * ($page - 1) )
+            ->take(getenv('SITEMAP_OFFSET'))
+            ->get();
+            return response()->view('sitemap/mot', [
+                'numbers' => $numbers,
+            ])->header('Content-Type', 'text/xml');
+        }else
+        {
+            abort(404);
+        }
     }
 }
