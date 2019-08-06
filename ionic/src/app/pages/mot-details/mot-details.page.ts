@@ -19,6 +19,7 @@ export class MotDetailsPage implements OnInit {
       setTimeout(() => {
         this.carService.getMot(this.regNumb).subscribe(val => {
           this.mot = val['object'];
+          console.log(this.mot);
         })
       }, 500);
  }

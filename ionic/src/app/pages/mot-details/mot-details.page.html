@@ -62,20 +62,31 @@
           <h1>Car don't have tests!</h1>
         </ng-template>
 
-      <ion-row *ngIf="mot[0]['m']['rfrAndComments']; else comments">
+      <ion-row *ngIf="mot[0]['m']['rfrAndComments']">
         <h3>Comments</h3>
         <ul>
           <p>Monitor and repair if neccessary(advisories)</p>
-          <li *ngFor="let item of mot[0]['m']['rfrAndComments'] |keyvalue">
-            {{ item.key }} - {{item.value}}
-          </li>
+          <p *ngFor="let item of mot[0]['m']['rfrAndComments']">
+            <li *ngFor="let i of item |keyvalue">
+              {{ i.key }} - {{i.value}}
+            </li>
+          </p>
         </ul>
       </ion-row>
 
-      <ng-template #comments>
-        <h1>Car don't have comments!</h1>
-      </ng-template>
 
+      <!-- <ion-row *ngFor="let item of mot[0]['m'] | keyvalue ">
+        <ion-col *ngIf="item.key">
+            <div *ngIf="Array.isArray(item.key)">
+              <ul>
+                <li *ngFor="let i of item.key"> {{i.key}} - {{i.value}} </li>
+              </ul>
+            </div>
+            <div *ngIf="!item.key['length']">
+                {{item.key}} -{{item.value}}
+            </div>
+        </ion-col>
+      </ion-row> -->
 
     </div>
 
