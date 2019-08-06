@@ -36,9 +36,23 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get("gmaps/car", array(
+/*Route::get("gmaps/car", array(
     "as"   => "sitemap",
     "uses" => "SitemapController@index",
 ));
 
-Route::get('gmaps/car/{page}', 'SitemapController@numbers')->where('page', '[0-9]+');
+Route::get('gmaps/car/{page}', 'SitemapController@numbers')->where('page', '[0-9]+');*/
+
+Route::group([
+    'as' => 'gmaps::',
+    'prefix' => 'gmaps',
+], function () {
+    Route::get('/car/', [
+        'uses'       => 'SitemapController@index',
+        'as'         => 'index',
+    ]);
+    Route::get('/car/{page}', [
+        'uses' => 'SitemapController@numbers',
+        'as' => 'sitemap',
+    ])->where('page', '[0-9]+');
+});

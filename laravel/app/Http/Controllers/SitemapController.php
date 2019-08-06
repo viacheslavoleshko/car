@@ -39,19 +39,30 @@ class SitemapController extends Controller
     <lastmod>{{ $number->updated_at->tz('GMT')->toAtomString() }}</lastmod>
     */
 
+    public function __construct() 
+    {
+        //$this->style = getenv('APP_URL'). '/laravel/vendor/sitemap/styles/index.xsl';
+    }
+
     public function index()
     {
         $count = Mot::whereNotNull('updated_at')->count();
         //->orderBy('updated_at', 'desc')->first();
+        $style = 'http://' . $_SERVER['HTTP_HOST'] . '/laravel/public/styles/index.xsl';
+        //dd($style);
+        $pages = ceil($count / getenv('SITEMAP_OFFSET'));
 
         return response()->view('sitemap/index', [
             'count' => $count,
+            'pages' => $pages,
+            'style' => $style,
         ])->header('Content-Type', 'text/xml');
     }
 
     public function numbers($page)
     {
         $count = Mot::whereNotNull('updated_at')->count();
+        $style = 'http://' . $_SERVER['HTTP_HOST'] . '/laravel/public/styles/xml.xsl';
 
         if( $page <= ceil($count / getenv('SITEMAP_OFFSET')) && $page != 0 )
         {
@@ -62,6 +73,7 @@ class SitemapController extends Controller
             ->get();
             return response()->view('sitemap/mot', [
                 'numbers' => $numbers,
+                'style' => $style,
             ])->header('Content-Type', 'text/xml');
         }else
         {
