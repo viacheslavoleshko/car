@@ -41,14 +41,14 @@ class SitemapController extends Controller
 
     public function __construct() 
     {
-        $this->style = getenv('APP_URL'). '/vendor/sitemap/styles/index.xsl';
+        //$this->style = getenv('APP_URL'). '/laravel/vendor/sitemap/styles/index.xsl';
     }
 
     public function index()
     {
         $count = Mot::whereNotNull('updated_at')->count();
         //->orderBy('updated_at', 'desc')->first();
-        $style = getenv('APP_URL'). '/vendor/sitemap/styles/index.xsl';
+        $style = getenv('APP_URL'). '/laravel/vendor/sitemap/styles/index.xsl';
         $pages = ceil($count / getenv('SITEMAP_OFFSET'));
 
         return response()->view('sitemap/index', [
@@ -61,7 +61,7 @@ class SitemapController extends Controller
     public function numbers($page)
     {
         $count = Mot::whereNotNull('updated_at')->count();
-        $style = getenv('APP_URL'). '/vendor/sitemap/styles/xml.xsl';
+        $style = getenv('APP_URL'). '/laravel/vendor/sitemap/styles/xml.xsl';
 
         if( $page <= ceil($count / getenv('SITEMAP_OFFSET')) && $page != 0 )
         {
