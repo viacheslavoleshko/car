@@ -5,7 +5,7 @@ import { of } from 'rxjs';
   providedIn: 'root'
 })
 export class CarService {
-  basepath = 'http://car.nix.ltd';
+  basepath = 'https://car.nix.ltd';
   
   constructor(private http : HttpClient) { }
 
