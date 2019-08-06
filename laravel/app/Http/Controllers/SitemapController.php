@@ -48,7 +48,7 @@ class SitemapController extends Controller
     {
         $count = Mot::whereNotNull('updated_at')->count();
         //->orderBy('updated_at', 'desc')->first();
-        $style = 'http://' . $_SERVER['HTTP_HOST'] . '/laravel/public/styles/index.xsl';
+        $style = getenv('APP_URL') . '/sitemap/styles/index.xsl';
         //dd($style);
         $pages = ceil($count / getenv('SITEMAP_OFFSET'));
 
@@ -62,7 +62,7 @@ class SitemapController extends Controller
     public function numbers($page)
     {
         $count = Mot::whereNotNull('updated_at')->count();
-        $style = 'http://' . $_SERVER['HTTP_HOST'] . '/laravel/public/styles/xml.xsl';
+        $style = getenv('APP_URL') . '/sitemap/styles/xml.xsl';
 
         if( $page <= ceil($count / getenv('SITEMAP_OFFSET')) && $page != 0 )
         {
