@@ -8,7 +8,7 @@ import { CarService } from '../../car.service';
   styleUrls: ['./mot-details.page.scss'],
 })
 export class MotDetailsPage implements OnInit {
-
+  
   mot;
   tax;
   regNumb;
@@ -26,6 +26,8 @@ export class MotDetailsPage implements OnInit {
       this.carService.getTax(this.regNumb).subscribe(val => {
         this.tax = val['object'];
       });
+
+
  }
 
  ngOnInit() {
