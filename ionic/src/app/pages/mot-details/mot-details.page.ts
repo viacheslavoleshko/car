@@ -8,7 +8,6 @@ import { CarService } from '../../car.service';
   styleUrls: ['./mot-details.page.scss'],
 })
 export class MotDetailsPage implements OnInit {
-  
   mot;
   tax;
   regNumb;
@@ -18,16 +17,11 @@ export class MotDetailsPage implements OnInit {
     private route : ActivatedRoute) {
       this.regNumb = this.route.snapshot.paramMap.get('regNumb');
       this.carService.getMot(this.regNumb).subscribe(val => {
-        this.mot = val['object'];
-        console.log(this.mot);
-      console.log(this.mot[0]['m']['motTests'], '-------==---------=')
-  
+        this.mot = val;
       });
       this.carService.getTax(this.regNumb).subscribe(val => {
-        this.tax = val['object'];
+        this.tax = val;
       });
-
-
  }
 
  ngOnInit() {

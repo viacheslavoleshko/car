@@ -15,6 +15,6 @@ export class Tab1Page implements OnInit {
  ngOnInit() {}
 
  toDetails() {
-  this.router.navigate(['mot-details', `${this.regNumb}`]);
+  this.router.navigate(['details', `${this.regNumb}`]);
   }
 }

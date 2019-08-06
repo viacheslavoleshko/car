@@ -13,104 +13,41 @@
   <div *ngIf="mot; else elseMot">
     <div
       *ngIf="
-        mot !== -1 && mot['length'] !== 0 && mot[0]['m'] !== undefined;
+        mot !== -1 &&
+          mot['object'][0]['m'] !== -1 &&
+          mot['object'][0]['m'] !== undefined;
         else elseMot
       "
     >
       <ion-row>
-        <ion-col size="12">
-          <div *ngIf="mot[0]['m']['registration']" class="registra">
-            <h1>
-              {{ mot[0]["m"]["registration"] }}
-            </h1>
+        <ion-item *ngFor="let item of mot['object'][0]['m'] | keyvalue">
+          <div *ngIf="item.key !== 'motTests'">
+            <p>{{ item.key }} - {{ item.value }}</p>
           </div>
-        </ion-col>
-
-        <ion-col size="12">
-          <h1 class="make">
-            <span *ngIf="mot[0]['m']['make']">{{ mot[0]["m"]["make"] }}</span>
-            <span *ngIf="mot[0]['m']['model']">{{ mot[0]["m"]["model"] }}</span>
-          </h1>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col *ngIf="mot[0]['m']['firstUsedDate']" size="12"
-          >First date use: {{ mot[0]["m"]["firstUsedDate"] }}</ion-col
-        >
-        <ion-col *ngIf="mot[0]['m']['registrationDate']" size="12"
-          >Registration date: {{ mot[0]["m"]["registrationDate"] }}</ion-col
-        >
-        <ion-col *ngIf="mot[0]['m']['manufactureDate']" size="12"
-          >Manufacture date: {{ mot[0]["m"]["manufactureDate"] }}</ion-col
-        >
-        <ion-col *ngIf="mot[0]['m']['engineSize']" size="12"
-          >Engine size: {{ mot[0]["m"]["engineSize"] }}</ion-col
-        >
+        </ion-item>
       </ion-row>
 
-      <div *ngIf="mot[0]['m']['motTests']">
-        <table>
-          <caption class="caption">
-            Mot test history
-          </caption>
-          <tr>
-            <th
-              *ngFor="let test of mot[0]['m']['motTests'][0] | keyvalue"
-              class="motTestHeader"
-            >
-              {{ test.key }}
-            </th>
-          </tr>
-          <tr *ngFor="let tests of mot[0]['m']['motTests']">
-            <td
-              *ngFor="let test of tests | keyvalue"
-              [ngClass]="{
-                success: test.value === 'PASSED',
-                fail: test.value === 'FAILED'
-              }"
-            >
-
-            <span  *ngIf="
-              test.key === 'completedDate' && test.value.length === '' || test.key === 'expiryDate' && test.value.length === ''
-              || test.key === 'motTestNumber' && test.value.length === '' || test.key === 'odometerResultType' && test.value.length === ''
-              || test.key === 'odometerUnit' && test.value.length === '' || test.key === 'odometerValue' && test.value.length === '' 
-              || test.key === 'rfrAndComments' && test.value.length === 0
-              ;else goodValue
-              ">
-                Don't have value
-              </span>
-              <ng-template #goodValue>
-                <span>
-                  {{ test.value }}
-                </span>
-              </ng-template>
-            </td>
-          </tr>
-        </table>
-      </div>
-
-      <!-- <ion-row *ngIf="mot[0]['m']['motTests']; else motTests">
-        <h2>Tests</h2>
-        <ion-col size="12">
-          <ul *ngFor="let test of mot[0]['m']['motTests']">
-            <li *ngFor="let t of test | keyvalue">
-              {{t.key}} - {{t.value}}
+      <ion-row *ngFor="let test of mot['object'][0]['m']['motTests']">
+        <ion-item *ngFor="let t of test | keyvalue">
+          <ul *ngIf="t.key === 'rfrAndComments'; else notComment">
+            <p>{{ t.key }}:</p>
+            <li *ngFor="let i of t.value | keyvalue">
+              <p *ngFor="let l of i.value | keyvalue">
+                {{ l.key }} --- {{ l.value }}
+              </p>
             </li>
           </ul>
-        </ion-col>
-      </ion-row>
-
-      <ng-template #motTests>
-          <h1>Car don't have tests!</h1>
-        </ng-template>
- -->
-      <ion-row *ngIf="mot[0]['m']['rfrAndComments']">
-        <ul>
-          <p>Monitor and repair if neccessary(advisories)</p>
-          <li *ngFor="let item of mot[0]['m']['rfrAndComments'] | keyvalue">
-            {{ item.key }} - {{ item.value }}
-          </li>
-        </ul>
+          <ng-template #notComment>
+            <br />
+            <div>
+              <p>{{ t.key }} - {{ t.value }}</p>
+            </div>
+          </ng-template>
+        </ion-item>
+        <br />
+        <ion-item>
+          <h1>-------------</h1>
+        </ion-item>
       </ion-row>
     </div>
   </div>
@@ -121,91 +58,49 @@
   <!-- END OF MOT TAMPLATE -->
 
   <!-- START TAX TEMPLATE -->
-  <!--     
-    <div *ngIf="tax; else elseTax">
-      <div *ngIf="tax !== -1  && tax['length'] !==0 && tax[0]['t'] !== undefined; else elseTax">
-        <ion-row *ngIf="tax[0]['t']['Status bar']">
-          <ion-col *ngIf="tax[0]['t']['Status bar']['Status']" >
-            <p>
-              {{ tax[0]['t']["Status bar"]["Status"] }}
-            </p>
-          </ion-col>
-          <ion-col class="Status_Bar" size="6">
-            <p
-              *ngIf="tax[0]['t']['Status bar']['Tax due']"
-              class="Status_Bar"
-            >
-              {{ tax[0]['t']["Status bar"]["Tax due"] }}
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ul class="taxed">
-            <li *ngIf="tax[0]['t']['Vehicle make']">
-              <span class="taxed__span">Vahicle make</span>:
-              <span class="taxed__json">{{ tax[0]['t']["Vehicle make"] }}</span>
+
+  <div *ngIf="tax; else elseTax">
+    <div
+      *ngIf="
+        tax !== -1 &&
+          tax['object'][0]['t'] !== -1 &&
+          tax['object'][0]['t'] !== undefined;
+        else elseTax
+      "
+    >
+      <h1>TAXED information</h1>
+
+      <ion-row *ngIf="tax['object'][0]['t']['Status bar']">
+        <ion-item *ngIf="tax['object'][0]['t']['Status bar']['Status']">
+          <p>
+            {{ tax["object"][0]["t"]["Status bar"]["Status"] }}
+          </p>
+        </ion-item>
+        <ion-item class="Status_Bar" size="6">
+          <p
+            *ngIf="tax['object'][0]['t']['Status bar']['Tax due']"
+            class="Status_Bar"
+          >
+            {{ tax["object"][0]["t"]["Status bar"]["Tax due"] }}
+          </p>
+        </ion-item>
+      </ion-row>
+      <ion-row>
+        <ul class="taxed">
+          <span *ngFor="let item of tax['object'][0]['t'] | keyvalue">
+            <li *ngIf="item.key !== 'Status bar'">
+              <span class="taxed__span">{{ item.key }}</span
+              >:
+              <span class="taxed__json"> {{ item.value }}</span>
             </li>
-            <li *ngIf="tax[0]['t']['Date of first registration']">
-              <span class="taxed__span">Date of first registration</span>:
-              <span class="taxed__json">{{
-                tax[0]['t']["Date of first registration"]
-              }}</span>
-            </li>
-            <li *ngIf="tax[0]['t']['Year of manufacture']">
-              <span class="taxed__span">Year of manufacture</span>:
-              <span class="taxed__json">{{ tax[0]['t']["Year of manufacture"] }}</span>
-            </li>
-            <li *ngIf="tax[0]['t']['Cylinder capacity (cc)']">
-              <span class="taxed__span">Cylinder capacity (cc)</span>:
-              <span class="taxed__json">{{ tax[0]['t']["Cylinder capacity (cc)"] }}</span>
-            </li>
-            <li *ngIf="tax[0]['t']['CO₂Emissions']">
-              <span class="taxed__span">CO₂Emissions</span>:
-              <span class="taxed__json">{{ tax[0]['t']["CO₂Emissions"] }}</span>
-            </li>
-            <li *ngIf="tax[0]['t']['Fuel type']">
-              <span class="taxed__span">Fuel type</span>:
-              <span class="taxed__json">{{ tax[0]['t']["Fuel type"] }}</span>
-            </li>
-            <li *ngIf="tax[0]['t']['Euro Status']">
-              <span class="taxed__span">Euro Status</span>:
-              <span class="taxed__json">{{ tax[0]['t']["Euro Status"] }}</span>
-            </li>
-            <li *ngIf="tax[0]['t']['Expor marker']">
-              <span class="taxed__span">Export marker</span>:
-              <span class="taxed__json">{{ tax[0]['t']["Expor marker"] }}</span>
-            </li>
-            <li *ngIf="tax[0]['t']['Vehicle status']">
-              <span class="taxed__span">Vehicle status</span>:
-              <span class="taxed__json">{{ tax[0]['t']["Vehicle status"] }}</span>
-            </li>
-            <li *ngIf="tax[0]['t']['Vehicle colour']">
-              <span class="taxed__span">Vehicle colour</span>:
-              <span class="taxed__json">{{ tax[0]['t']["Vehicle colour"] }}</span>
-            </li>
-            <li *ngIf="tax[0]['t']['Vehicle type approval'] ">
-              <span class="taxed__span">Vehicle type approval</span>:
-              <span class="taxed__json">{{ tax[0]['t']["Vehicle type approval"] }}</span>
-            </li>
-            <li *ngIf="tax[0]['t']['Wheelplan']">
-              <span class="taxed__span">Wheelplan</span>:
-              <span class="taxed__json">{{ tax[0]['t']["Wheelplan"] }}</span>
-            </li>
-            <li *ngIf="tax[0]['t']['Revenue weight']">
-              <span class="taxed__span">Revenue weight</span>:
-              <span class="taxed__json">{{ tax[0]['t']["Revenue weight"] }}</span>
-            </li>
-            <li *ngIf="tax[0]['t']['View tax rates']">
-              <span class="taxed__span">Tax rates</span>:
-              <span class="taxed__json"><a href="#">{{tax[0]['t']['View tax rates']}}</a></span>
-            </li>
-          </ul>
-        </ion-row>
-      </div>
+          </span>
+        </ul>
+      </ion-row>
     </div>
-  
-    <ng-template #elseTax>
-      <h1>Sorry, not found you TAX!</h1>
-    </ng-template> -->
+  </div>
+
+  <ng-template #elseTax>
+    <h1>Sorry, not found you TAX!</h1>
+  </ng-template>
   <!-- END TAX DETAILS -->
 </ion-content>
