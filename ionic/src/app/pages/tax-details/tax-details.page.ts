@@ -16,11 +16,9 @@ export class TaxDetailsPage implements OnInit {
     private router: Router, 
     private route : ActivatedRoute) {
       this.regNumb = this.route.snapshot.paramMap.get('regNumb');
-      setTimeout(() => {
         this.carService.getTax(this.regNumb).subscribe(val => {
           this.tax = val['object'];
         })
-      }, 500);
     }
   ngOnInit() {}
 

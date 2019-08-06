@@ -1,0 +1,25 @@
+.caption {
+    font-size: 15px;
+    background: silver;
+    font-style: italic;
+}
+
+.motTestHeader {
+    background: silver;
+    padding: 5px;
+}
+
+tr, td, th{
+    border: 1px solid black;
+    text-align: center;
+    padding: 10px;
+}
+
+.success {
+    background: green;
+}
+
+.fail {
+    background: red;
+}
+

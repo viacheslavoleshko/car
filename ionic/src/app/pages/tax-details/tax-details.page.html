@@ -81,9 +81,9 @@
             <span class="taxed__span">Revenue weight</span>:
             <span class="taxed__json">{{ tax[0]['t']["Revenue weight"] }}</span>
           </li>
-          <li>
+          <li *ngIf="tax[0]['t']['View tax rates']">
             <span class="taxed__span">Tax rates</span>:
-            <span class="taxed__json"><a href="#">View tax rates</a></span>
+            <span class="taxed__json"><a href="#">{{tax[0]['t']['View tax rates']}}</a></span>
           </li>
         </ul>
       </ion-row>

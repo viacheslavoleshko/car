@@ -6,11 +6,17 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { Tab1Page } from './tab1.page';
+import { MotDetailsPage } from '../mot-details/mot-details.page';
+import { MotDetailsPageModule } from '../mot-details/mot-details.module';
 
 const routes: Routes = [
   {
     path: '',
     component: Tab1Page
+  },
+  {
+    path: ':/component:/regNumb',
+    component : MotDetailsPageModule
   }
 ];
 

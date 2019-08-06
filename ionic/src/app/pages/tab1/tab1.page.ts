@@ -8,15 +8,13 @@ import { CarService } from '../../car.service';
   styleUrls: ['./tab1.page.scss'],
 })
 export class Tab1Page implements OnInit {
-
   regNumb;
   constructor(private router: Router) {
  }
 
  ngOnInit() {}
 
-  toMotDetails() {
-    this.router.navigate(['mot-details', `${this.regNumb}`]);
+ toDetails() {
+  this.router.navigate(['mot-details', `${this.regNumb}`]);
   }
-
 }
