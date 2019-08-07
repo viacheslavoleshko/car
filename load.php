@@ -76,6 +76,7 @@
     {
         $connect_string = "host=ninja.nix.ltd port=5372 dbname=car user=car password=Gbfh466578BBFFk#$";      
         $dbconnect = pg_connect($connect_string) or die('connection failed');
+        $errors = 0;
 
         $plate_number = "no number";
         $max = -1.0;
@@ -102,14 +103,83 @@
                     $max = $response['data']['results'][0]['confidence'];
                     $plate_number = $response['data']['results'][0]['plate'];
 
-                    if($plate_number != "no number")
+                    if($plate_number != "no number" && strlen($plate_number) == 7)
                     {
-                        $query = "insert into mot (reg) values ('$plate_number')";
-                        $result = pg_query($dbconnect, $query);
-            
-                        if  (!$result) 
+                        $arr = str_split($plate_number);
+
+                        if($arr[0] == '0')
                         {
-                            echo "Query did not execute";
+                            $arr[0] = 'O';
+                        }else if( $arr[0] == '1')
+                        {
+                            $arr[0] = 'I';
+                        }
+
+                        if($arr[1] == '0')
+                        {
+                            $arr[1] = 'O';
+                        }else if( $arr[1] == '1')
+                        {
+                            $arr[1] = 'I';
+                        }
+
+                        if($arr[2] == 'O')
+                        {
+                            $arr[2] = '0';
+                        }else if( $arr[2] == 'I')
+                        {
+                            $arr[2] = '1';
+                        }
+
+                        if($arr[3] == 'O')
+                        {
+                            $arr[3] = '0';
+                        }else if( $arr[3] == 'I')
+                        {
+                            $arr[3] = '1';
+                        }
+
+                        if($arr[4] == '0')
+                        {
+                            $arr[4] = 'O';
+                        }else if( $arr[4] == '1')
+                        {
+                            $arr[4] = 'I';
+                        }
+
+                        if($arr[5] == '0')
+                        {
+                            $arr[5] = 'O';
+                        }else if( $arr[5] == '1')
+                        {
+                            $arr[5] = 'I';
+                        }
+
+                        if($arr[6] == '0')
+                        {
+                            $arr[6] = 'O';
+                        }else if( $arr[6] == '1')
+                        {
+                            $arr[6] = 'I';
+                        }
+
+                        $plate_number = implode($arr);
+
+                        $pattern = '/^[A-Z]{2}[0-9]{2}[A-Z]{3}$/'; 
+                        if (preg_match($pattern, $plate_number))
+                        {
+                            $query = "insert into mot (reg) values ('$plate_number')";
+                            $result = pg_query($dbconnect, $query);
+                
+                            if  (!$result) 
+                            {
+                                echo nl2br("Query did not execute\n");
+                                $errors++;
+                                if($errors >= 4)
+                                {
+                                    die("Too many queries errors");
+                                }
+                            }
                         }
                     }
                 }
@@ -139,7 +209,7 @@
 
     /*Start to calculate result*/
     $cars_info = array();
-    for($j = 1; $j < 3; $j++){
+    for($j = 1; $j < 5; $j++){
         $my_url = $my_url . "&page=" . $j . "";
         $page = get_page($my_url);
         $cars_id = array();
