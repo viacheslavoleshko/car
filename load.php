@@ -81,7 +81,8 @@
         $plate_number = "no number";
         $max = -1.0;
         foreach($photo_links_array as $photo_link){
-            $imagedata = file_get_contents($photo_link);
+            //$imagedata = file_get_contents($photo_link); //old
+            $imagedata = get_page($photo_link);
             $base64 = base64_encode($imagedata);
             if(!file_put_contents('tmp'.DS.'check.jpg', base64_decode($base64))){
                 $response['error']= 'Error: Failed saving image to disk, please check webserver permissions.';
