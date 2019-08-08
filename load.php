@@ -72,15 +72,16 @@
     }
 
     /*Function that, based on photos links of car, determines car plate using openALPR library*/
-    function get_car_plate($photo_links_array)
+    function get_car_plate($photo_links_array, $error_counter)
     {
         $connect_string = "host=ninja.nix.ltd port=5372 dbname=car user=car password=Gbfh466578BBFFk#$";      
         $dbconnect = pg_connect($connect_string) or die('connection failed');
-        $errors = 0;
+        
 
         $plate_number = "no number";
         $max = -1.0;
-        foreach($photo_links_array as $photo_link){
+        $i = 0;
+        foreach(array_slice($photo_links_array, 0, 5) as $photo_link){
             //$imagedata = file_get_contents($photo_link); //old
             $imagedata = get_page($photo_link);
             $base64 = base64_encode($imagedata);
@@ -88,6 +89,7 @@
                 $response['error']= 'Error: Failed saving image to disk, please check webserver permissions.';
                 respond($response);
             }
+            sleep(2);
             $result = run('alpr --country eu --json tmp'.DS.'check.jpg');
             unlink('tmp'.DS.'check.jpg');
 
@@ -169,23 +171,31 @@
                         $pattern = '/^[A-Z]{2}[0-9]{2}[A-Z]{3}$/'; 
                         if (preg_match($pattern, $plate_number))
                         {
-                            $query = "insert into mot (reg) values ('$plate_number')";
-                            $result = pg_query($dbconnect, $query);
-                
-                            if  (!$result) 
-                            {
-                                echo nl2br("Query did not execute\n");
-                                $errors++;
-                                if($errors >= 4)
-                                {
-                                    die("Too many queries errors");
-                                }
-                            }
+                            $valid_numbers = array();
+                            $valid_numbers[] = $plate_number;
+                            $flipped = array_flip(array_count_values($valid_numbers));
+                            ksort($flipped);
+                            $most_encounter = array_pop($flipped);
                         }
                     }
                 }
             }
         }
+
+
+        $query = "insert into mot (reg) values ('$most_encounter')";
+        $result = pg_query($dbconnect, $query);
+
+        if  (!$result) 
+        {
+            echo nl2br("Query did not execute\n");
+            $error_counter++;
+            if($error_counter >= 4)
+            {
+                die("Too many queries errors");
+            }
+        }
+
         pg_close($dbconnect);
 
         return $plate_number;
@@ -215,12 +225,11 @@
         $page = get_page($my_url);
         $cars_id = array();
         $cars_id = get_cars_id($page);
+        $errors = 0;
         foreach($cars_id as $car_id){
             $tmp_array = array();
             $tmp_array = get_gallery_cars($car_id);
-            $plate_number = get_car_plate($tmp_array["images"]);
-
-                      
+            $plate_number = get_car_plate($tmp_array["images"], $errors);
 
             print("Car: " . $tmp_array["title"] . "\nPlate: " . $plate_number . "\n\n");
             array_push($cars_info, array("car_name"=>$tmp_array["title"], "car_plate"=>$plate_number));
