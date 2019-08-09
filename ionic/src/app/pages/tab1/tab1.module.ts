@@ -15,6 +15,10 @@ const routes: Routes = [
     component: Tab1Page
   },
   {
+    path: ':regNumb',
+    component: Tab1Page
+  },
+  {
     path: ':/component:/regNumb',
     component : MotDetailsPageModule
   }

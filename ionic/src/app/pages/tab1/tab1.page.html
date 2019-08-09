@@ -1,28 +1,168 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Welcome on App Car</ion-title>
+    <ion-title>Search</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-item>
     <ion-col size="12">
-      <h3>
-        <ion-label position="floating">Find you MOT and TAX info about car with reg number</ion-label>
-      </h3>
       <ion-input
         color="primary"
         placeholder="Enter reg number"
         [(ngModel)]="regNumb"
+        (ionChange) = "search()"
+        routerDirection="backward"
       ></ion-input>
     </ion-col>
   </ion-item>
-
-  <ion-item>
+  <!--<ion-item>-->
+    <!--<ion-row>-->
+      <!--<ion-col size="12">-->
+          <!--<ion-button (click)="toDetails()">Searching info about you car!</ion-button>-->
+      <!--</ion-col>-->
+    <!--</ion-row>-->
+  <!--</ion-item>-->
+  <ion-grid *ngIf="obj !== undefined && obj.m !== null">
+    <div class="label">MOT</div>
     <ion-row>
-      <ion-col size="12">
-          <ion-button (click)="toDetails()">Searching info about you car!</ion-button>
-      </ion-col>
+      <ion-col>Engine size</ion-col>
+      <ion-col>{{obj.m.engineSize}}cc</ion-col>
     </ion-row>
-  </ion-item>
+    <ion-row>
+      <ion-col>Fuel Type</ion-col>
+      <ion-col>{{obj.m.fuelType}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Make</ion-col>
+      <ion-col>{{obj.m.make}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Model</ion-col>
+      <ion-col>{{obj.m.model}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Colour</ion-col>
+      <ion-col>{{obj.m.primaryColour}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Registration</ion-col>
+      <ion-col>{{obj.m.registration}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Registration date</ion-col>
+      <ion-col>{{obj.m.registrationDate}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col (click)="showMotTests()"> <span id="arrow">►</span>Mot test</ion-col>
+    </ion-row>
+      <div *ngFor="let test of obj.m.motTests" class="hidden mleft" name="motTests">
+        <ion-row>
+          <ion-col>Completed date</ion-col>
+          <ion-col>{{test.completedDate}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Expiry date</ion-col>
+          <ion-col>{{test.expiryDate}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Mot test number</ion-col>
+          <ion-col>{{test.motTestNumber}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Odometer result type</ion-col>
+          <ion-col>{{test.odometerResultType}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Odometer unit </ion-col>
+          <ion-col>{{test.odometerUnit}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Odometer value </ion-col>
+          <ion-col>{{test.odometerValue}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>RFR and comments</ion-col>
+        </ion-row>
+        <div *ngFor="let item of test.rfrAndComments" class="mleft">
+          <ion-row>
+            <ion-col>Text</ion-col>
+            <ion-col>{{item.text}}</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>Type</ion-col>
+            <ion-col>{{item.type}}</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>Dangerous</ion-col>
+            <ion-col>{{item.dangerous}}</ion-col>
+          </ion-row>
+          <hr><hr>
+          <hr><hr>
+        </div>
+        <hr/>
+      </div>
+  </ion-grid>
+
+   <ion-grid *ngIf="tax !== undefined && tax['t'] !== undefined">
+     <div class="label">TAX</div>
+     <div class="status">
+       <span><b>{{tax['t']['Status bar']['Status']}}</b></span>
+       <span class="date"><b>{{tax['t']['Status bar']['Tax due']}}</b></span>
+     </div>
+     <ion-row>
+       <ion-col>CO₂Emissions</ion-col>
+       <ion-col>{{tax['t']['CO₂Emissions']}}</ion-col>
+     </ion-row>
+     <ion-row>
+       <ion-col>Cylinder capacity (cc)</ion-col>
+       <ion-col>{{tax['t']['Cylinder capacity (cc)']}}</ion-col>
+     </ion-row>
+     <ion-row>
+       <ion-col>Date of first registration</ion-col>
+       <ion-col>{{tax['t']['Date of first registration']}}</ion-col>
+     </ion-row>
+     <ion-row>
+       <ion-col>Euro Status</ion-col>
+       <ion-col>{{tax['t']['Euro Status']}}</ion-col>
+     </ion-row>
+     <ion-row>
+       <ion-col>Export marker</ion-col>
+       <ion-col>{{tax['t']['Export marker']}}</ion-col>
+     </ion-row>
+     <ion-row>
+       <ion-col>Fuel type</ion-col>
+       <ion-col>{{tax['t']['Fuel type']}}</ion-col>
+     </ion-row>
+     <ion-row>
+       <ion-col>Vehicle colour</ion-col>
+       <ion-col>{{tax['t']['Vehicle colour']}}</ion-col>
+     </ion-row>
+     <ion-row>
+       <ion-col>Revenue weight</ion-col>
+       <ion-col>{{tax['t']['Revenue weight']}}</ion-col>
+     </ion-row>
+     <ion-row>
+       <ion-col>Vehicle make</ion-col>
+       <ion-col>{{tax['t']['Vehicle make']}}</ion-col>
+     </ion-row>
+     <ion-row>
+       <ion-col>Vehicle status</ion-col>
+       <ion-col>{{tax['t']['Vehicle status']}}</ion-col>
+     </ion-row>
+     <ion-row>
+       <ion-col>Vehicle type approval</ion-col>
+       <ion-col>{{tax['t']['Vehicle type approval']}}</ion-col>
+     </ion-row>
+     <ion-row>
+       <ion-col>Wheelplan</ion-col>
+       <ion-col>{{tax['t']['Wheelplan']}}</ion-col>
+     </ion-row>
+     <ion-row>
+       <ion-col>Year of manufacture</ion-col>
+       <ion-col>{{tax['t']['Year of manufacture']}}</ion-col>
+     </ion-row>
+
+   </ion-grid>
+
 </ion-content>

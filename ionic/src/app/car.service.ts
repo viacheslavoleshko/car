@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { of } from 'rxjs';
+import {Observable, of} from 'rxjs';
+import {Mot, Object} from "./models/Mot";
 @Injectable({
   providedIn: 'root'
 })
@@ -16,5 +17,4 @@ export class CarService {
   getMot(registration) {
     return this.http.get(`${this.basepath}/mot/${registration}`);
   }
-
 }
