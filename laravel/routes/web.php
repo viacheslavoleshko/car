@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use App\Models\Mot;
 use App\Models\Tax;
+use App\Models\Vdi;
 //use function GuzzleHttp\json_encode;
 
 error_reporting(E_ALL & ~E_WARNING  & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
@@ -55,4 +56,8 @@ Route::group([
         'uses' => 'SitemapController@numbers',
         'as' => 'sitemap',
     ])->where('page', '[0-9]+');
+});
+
+Route::get('/vdi/{number}', function ($number) {
+    return response()->json(['object' => Vdi::select('vdi')->where('reg', $number)->get()]);
 });
