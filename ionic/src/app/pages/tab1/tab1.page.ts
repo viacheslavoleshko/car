@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import { CarService } from '../../car.service';
-import {Object} from "../../models/Mot";
+import {FinanceRecordList, Object, WriteOffRecordList} from "../../models/Mot";
 import {NavController} from "@ionic/angular";
 
 @Component({
@@ -13,6 +13,9 @@ export class Tab1Page implements OnInit {
     regNumb;
     obj: Object = new Object();
     tax;
+    vdi;
+    writeOffRecordList: WriteOffRecordList[] = [];
+    financeList: FinanceRecordList[] = [];
     constructor(private router: Router,
                 private carService: CarService,
                 private route : ActivatedRoute,
@@ -23,6 +26,7 @@ export class Tab1Page implements OnInit {
         this.regNumb = this.route.snapshot.paramMap.get('regNumb');
         if(this.regNumb !== null)
         this.search();
+
     }
 
     search() {
@@ -37,15 +41,22 @@ export class Tab1Page implements OnInit {
             this.carService.getTax(this.regNumb).subscribe((res) => {
                 this.tax = res['object']['0'];
             });
+            this.carService.getVdi(this.regNumb).subscribe(res => {
+                this.vdi = res['object']['0'];
+                if(this.vdi !== undefined) {
+                    this.writeOffRecordList = this.vdi['vdi']['Response']['DataItems']['WriteOffRecordList'];
+                    this.financeList = this.vdi['vdi']['Response']['DataItems']['FinanceRecordList'];
+                }
+            });
         }
     }
 
-    showMotTests() {
-        const motTests = document.getElementsByName('motTests');
+    showList(id: string, name: string) {
+        const motTests = document.getElementsByName(name);
         for (let i = 0; i < motTests.length; i++) {
             motTests[i].classList.toggle('hidden');
         }
-        const txt = document.getElementById('arrow');
+        const txt = document.getElementById(id);
         if(txt.innerText === '▼') {
             txt.innerText = '►';
         } else {

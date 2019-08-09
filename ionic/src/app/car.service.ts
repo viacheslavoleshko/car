@@ -17,4 +17,7 @@ export class CarService {
   getMot(registration) {
     return this.http.get(`${this.basepath}/mot/${registration}`);
   }
+  getVdi(registration) {
+    return this.http.get(`${this.basepath}/vdi/${registration}`);
+  }
 }

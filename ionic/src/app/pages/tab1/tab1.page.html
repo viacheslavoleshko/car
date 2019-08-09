@@ -1,9 +1,3 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Search</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
   <ion-item>
     <ion-col size="12">
@@ -16,13 +10,171 @@
       ></ion-input>
     </ion-col>
   </ion-item>
-  <!--<ion-item>-->
-    <!--<ion-row>-->
-      <!--<ion-col size="12">-->
-          <!--<ion-button (click)="toDetails()">Searching info about you car!</ion-button>-->
-      <!--</ion-col>-->
-    <!--</ion-row>-->
-  <!--</ion-item>-->
+  <ion-grid *ngIf="vdi !== undefined && vdi['vdi'] !== undefined">
+    <div class="label">VDI</div>
+    <ion-row>
+      <ion-col>WriteOffDate</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['WriteOffDate']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col (click)="showList('finance', 'financeList')"><span id="finance">►</span>FinanceRecordList</ion-col>
+    </ion-row>
+    <span *ngIf="financeList !== []" class="hidden" name="financeList">
+        <div class="mleft" *ngFor="let item of financeList">
+        <ion-row>
+          <ion-col>AgreementDate</ion-col>
+          <ion-col>{{item.AgreementDate}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>AgreementType</ion-col>
+          <ion-col>{{item.AgreementType}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>AgreementNumber</ion-col>
+          <ion-col>{{item.AgreementNumber}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>AgreementTerm</ion-col>
+          <ion-col>{{item.AgreementTerm}}</ion-col>
+        </ion-row>
+          <ion-row>
+          <ion-col>ContactNumber</ion-col>
+          <ion-col>{{item.ContactNumber}}</ion-col>
+        </ion-row>
+          <ion-row>
+          <ion-col>FinanceCompany</ion-col>
+          <ion-col>{{item.FinanceCompany}}</ion-col>
+        </ion-row>
+          <ion-row>
+          <ion-col>VehicleDescription</ion-col>
+          <ion-col>{{item.VehicleDescription}}</ion-col>
+        </ion-row>
+          </div>
+      </span>
+    <ion-row>
+      <ion-col>WrittenOff</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['WrittenOff']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col (click)="showList('write', 'writeList')"><span id="write">►</span>WriteOffRecordList</ion-col>
+    </ion-row>
+      <span *ngIf="writeOffRecordList !== []" class="hidden" name="writeList">
+        <div class="mleft" *ngFor="let item of writeOffRecordList">
+        <ion-row>
+          <ion-col>MiaftrEntryDate</ion-col>
+          <ion-col>{{item.MiaftrEntryDate}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>LossData</ion-col>
+          <ion-col>{{item.LossDate}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>LossType</ion-col>
+          <ion-col>{{item.LossType}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Category</ion-col>
+          <ion-col>{{item.Category}}</ion-col>
+        </ion-row>
+          </div>
+      </span>
+    <ion-row>
+      <ion-col>LatestKeeperChangeDate</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['LatestKeeperChangeDate']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>PreviousColour</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['PreviousColour']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>PlateChangeList</ion-col>
+      <ion-col>PlateChangeList</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>ScrapDate</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['ScrapDate']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>ImportedFromOutsideEu</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['ImportedFromOutsideEu']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>ColourChangeCount</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['ColourChangeCount']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Imported</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['Imported']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>StolenMiaftrRecordList</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['StolenMiaftrRecordList']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>LatestV5cIssuedDate</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['LatestV5cIssuedDate']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>WriteOffRecordCount</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['WriteOffRecordCount']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>ImportUsedBeforeUkRegistration</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['ImportUsedBeforeUkRegistration']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>MileageAnomalyDetected</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['MileageAnomalyDetected']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>StolenStatus</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['StolenStatus']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Scrapped</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['Scrapped']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>HighRiskRecordCount</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['HighRiskRecordCount']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Stolen</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['Stolen']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>ImportDate</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['ImportDate']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Exported</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['Exported']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>WriteOffCategory</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['WriteOffCategory']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>ExportDate</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['ExportDate']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>VinLast5</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['VinLast5']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>PlateChangeCount</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['PlateChangeCount']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>PreviousKeeperCount</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['PreviousKeeperCount']}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>FinanceRecordCount</ion-col>
+      <ion-col>{{vdi['vdi']['Response']['DataItems']['FinanceRecordCount']}}</ion-col>
+    </ion-row>
+  </ion-grid>
   <ion-grid *ngIf="obj !== undefined && obj.m !== null">
     <div class="label">MOT</div>
     <ion-row>
@@ -54,7 +206,7 @@
       <ion-col>{{obj.m.registrationDate}}</ion-col>
     </ion-row>
     <ion-row>
-      <ion-col (click)="showMotTests()"> <span id="arrow">►</span>Mot test</ion-col>
+      <ion-col (click)="showList('arrow', 'motTests')"> <span id="arrow">►</span>Mot test</ion-col>
     </ion-row>
       <div *ngFor="let test of obj.m.motTests" class="hidden mleft" name="motTests">
         <ion-row>

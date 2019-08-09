@@ -34,27 +34,23 @@ export class RfrAndComments {
         public dangerous = ''
     ) {}
 }
-// export class Tax {
-//     constructor(
-//         public cO2Emissions = '',
-//         public cylinderCapacity = '',
-//         public dateOfFirstRegistration = '',
-//         public euroStatus = '',
-//         public exportMarker = '',
-//         public fuelType = '',
-//         public revenueWeight = '',
-//         public VehicleColour = '',
-//         public vehicleMake = '',
-//         public vehicleStatus = '',
-//         public VehicleTypeApproval = '',
-//         public wheelplan = '',
-//         public yearofManufacture = '',
-//         public statusBar: StatusBar = new StatusBar()
-//     ) {}
-// }
-// export class StatusBar {
-//     constructor(
-//         public status = '',
-//         public taxDue = ''
-//     ) {}
-// }
+export class WriteOffRecordList {
+    constructor(
+        public MiaftrEntryDate = '',
+        public LossDate = '',
+        public LossType = '',
+        public Category = '',
+    ) {}
+}
+export class FinanceRecordList {
+    constructor(
+        public AgreementDate = '',
+        public AgreementType = '',
+        public AgreementTerm = '',
+        public AgreementNumber = '',
+        public FinanceCompany = '',
+        public ContactNumber = '',
+        public VehicleDescription = ''
+    ) {
+    }
+}
