@@ -18,12 +18,13 @@ export class Tab1Page implements OnInit {
     financeList: FinanceRecordList[] = [];
     constructor(private router: Router,
                 private carService: CarService,
-                private route : ActivatedRoute,
-                private navController: NavController) {
+                private route : ActivatedRoute) {
     }
 
     ngOnInit() {
-        this.regNumb = this.route.snapshot.paramMap.get('regNumb');
+        this.route.params.subscribe((params) => {
+            this.regNumb = params['regNumb'];
+        });
         if(this.regNumb !== null)
         this.search();
 
@@ -43,7 +44,7 @@ export class Tab1Page implements OnInit {
             });
             this.carService.getVdi(this.regNumb).subscribe(res => {
                 this.vdi = res['object']['0'];
-                if(this.vdi !== undefined) {
+                if(this.vdi !== undefined && this.vdi['vdi'] !== null && this.vdi['vdi'] !== undefined) {
                     this.writeOffRecordList = this.vdi['vdi']['Response']['DataItems']['WriteOffRecordList'];
                     this.financeList = this.vdi['vdi']['Response']['DataItems']['FinanceRecordList'];
                 }

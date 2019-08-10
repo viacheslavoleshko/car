@@ -13,7 +13,6 @@ import { HttpClientModule } from "@angular/common/http";
 import { CarService } from "./car.service";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
-
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],

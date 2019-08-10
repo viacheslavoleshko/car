@@ -6,11 +6,10 @@
         placeholder="Enter reg number"
         [(ngModel)]="regNumb"
         (ionChange) = "search()"
-        routerDirection="backward"
       ></ion-input>
     </ion-col>
   </ion-item>
-  <ion-grid *ngIf="vdi !== undefined && vdi['vdi'] !== undefined">
+  <ion-grid *ngIf="vdi !== undefined && vdi['vdi'] !== undefined && vdi['vdi'] !== null">
     <div class="label">VDI</div>
     <ion-row>
       <ion-col>WriteOffDate</ion-col>
