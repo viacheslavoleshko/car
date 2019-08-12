@@ -62,4 +62,4 @@ Route::get('/vdi/{number}', function ($number) {
 
 Route::get('stripe', array('middleware' => 'cors', 'uses' => 'StripeController@stripeGet'));
 
-Route::get('load_vdi', 'VdiController@index');
+Route::get('getvdi', 'VdiController@index');
