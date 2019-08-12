@@ -23,7 +23,7 @@ class VdiController extends Controller
 
         foreach ($numbers as $number) {
 
-            dd($number);
+            var_dump($number);
             $json = self::curlNumberPlate($number);
         
             Vdi::where('reg', $number)
