@@ -5,19 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Vdi;
+use DB;
 
 class VdiController extends Controller
 {
     public function index()
     {
-        $numbers = Vdi::select('mot.reg')
+        $numbers = DB::table('mot')
             ->distinct()
             ->join('stripe', 'mot.reg', '=', 'stripe.reg')
-            ->whereNull('vdi')
-            ->where('status', 'payed')
+            ->whereNull('mot.vdi')
+            ->where('stripe.status', 'payed')
             ->whereRaw("(stripe.created_at + interval '10 minute') > now()")
             ->limit(3)
-            ->pluck('reg');
+            ->pluck('mot.reg');
 
         //dd($numbers);
 
@@ -34,7 +35,8 @@ class VdiController extends Controller
 
     public function curlNumberPlate($vrm)
     {
-        $info = "https://uk1.ukvehicledata.co.uk/api/datapackage/VdiCheckFull?v=2&api_nullitems=1&auth_apikey=e5a4d4af-a5f0-4fe8-8d53-893116b7ebae&key_VRM={$vrm}";
+        $apikey = getenv('VDI_API');
+        $info = "https://uk1.ukvehicledata.co.uk/api/datapackage/VdiCheckFull?v=2&api_nullitems=1&auth_apikey={$apikey}&key_VRM={$vrm}";
         $json = file_get_contents($info);
 
         return $json;
