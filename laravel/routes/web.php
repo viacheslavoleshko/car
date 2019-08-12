@@ -1,9 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-use App\Models\Mot;
-use App\Models\Tax;
-use App\Models\Vdi;
+use App\Models;
 //use function GuzzleHttp\json_encode;
 
 error_reporting(E_ALL & ~E_WARNING  & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
@@ -25,12 +23,12 @@ header('Access-Control-Allow-Methods: *');
 
 Route::get('/tax/{number}', function ($number){
 
-    return response()->json(['object' => Tax::select('t')->where('reg', $number)->get()]);
+    return response()->json(['object' => $data = Models\Tax::select('t')->where('reg', $number)->get()]);
 });
 
 Route::get('/mot/{number}', function ($number){
 
-    return response()->json(['object' => Mot::select('m')->where('reg', $number)->get()]);
+    return response()->json(['object' => $data = Models\Mot::select('m')->where('reg', $number)->get()]);
 });
 
 Route::get('/', function () {
@@ -59,5 +57,7 @@ Route::group([
 });
 
 Route::get('/vdi/{number}', function ($number) {
-    return response()->json(['object' => Vdi::select('vdi')->where('reg', $number)->get()]);
+    return response()->json(['object' => $data = Models\Vdi::select('vdi')->where('reg', $number)->get()]);
 });
+
+Route::get('stripe', array('middleware' => 'cors', 'uses' => 'StripeController@stripeGet'));
