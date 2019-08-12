@@ -13,8 +13,8 @@ class Mot extends Model
 
     /*public function getDateFormat()
     {
-        return 'Y-m-d H:i:s.uO';
+        return 'Y-m-d H:i:s.uO'; //don't touch this
     }*/
 
-    protected $dateFormat = 'Y-m-d H:i:s.uO';
+    protected $dateFormat = 'Y-m-d H:i:s';
 }
