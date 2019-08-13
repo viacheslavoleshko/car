@@ -21,14 +21,12 @@ class VdiController extends Controller
             ->pluck('mot.reg');
 
         foreach ($numbers as $number) {
-
             var_dump($number);
             $json = self::curlNumberPlate($number);
         
             Vdi::where('reg', $number)
                 ->update(['vdi' => $json]);
         }
-            
     }
 
     public function curlNumberPlate($vrm)

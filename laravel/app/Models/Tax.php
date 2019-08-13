@@ -7,5 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Tax extends Model
 {
     protected $table = 'mot';
-    protected $casts = ['t' => 'array'];
+    protected $casts = [
+        't' => 'array',
+    ];
 }

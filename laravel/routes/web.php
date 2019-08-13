@@ -24,18 +24,22 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/tax/{number}', function ($number){
-
-    return response()->json(['object' => $data = Models\Tax::select('t')->where('reg', $number)->get()]);
+Route::get('/tax/{number}', function ($number) {
+    return response()->json([
+        'object' => $data = Models\Tax::select('t')->where('reg', $number)->get(),
+    ]);
 });
 
-Route::get('/mot/{number}', function ($number){
-
-    return response()->json(['object' => $data = Models\Mot::select('m')->where('reg', $number)->get()]);
+Route::get('/mot/{number}', function ($number) {
+    return response()->json([
+        'object' => $data = Models\Mot::select('m')->where('reg', $number)->get(),
+    ]);
 });
 
 Route::get('/vdi/{number}', function ($number) {
-    return response()->json(['object' => $data = Models\Vdi::select('vdi')->where('reg', $number)->get()]);
+    return response()->json([
+        'object' => $data = Models\Vdi::select('vdi')->where('reg', $number)->get(),
+    ]);
 });
 
 Route::group([
@@ -52,7 +56,10 @@ Route::group([
     ])->where('page', '[0-9]+');
 });
 
-Route::get('stripe', array('middleware' => 'cors', 'uses' => 'StripeController@stripeGet'));
+Route::get('stripe', array(
+    'middleware' => 'cors', 
+    'uses' => 'StripeController@stripeGet'
+));
 
 Route::get('getvdi', 'VdiController@index');
 

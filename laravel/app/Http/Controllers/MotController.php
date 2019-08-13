@@ -11,21 +11,19 @@ class MotController extends Controller
     public function index()
     {
         $query_select = Mot::select('reg')
-        ->whereNull('m')
-        ->whereNull('updated_at')
-        ->pluck('reg');
+            ->whereNull('m')
+            ->whereNull('updated_at')
+            ->pluck('reg');
 
         foreach($query_select as $value) {
             sleep(1);
             $res = self::get_car($value);
             var_dump($res);
         
-            if($res->httpStatus == "404")
-            {
+            if ($res->httpStatus == "404") {
                 Mot::where('reg', $value)
                     ->update(['m' => '-1'], ['updated_at' => now()->toDateTimeString('Y-m-d H:i:s')]);
-            }else
-            {
+            } else {
                 $json = json_encode($res[0]);
                 
                 Mot::where('reg', $value)
@@ -34,7 +32,8 @@ class MotController extends Controller
         }
     }
 
-    function get_car($car) {
+    function get_car($car) 
+    {
         set_time_limit(0);
 
         $url = "https://beta.check-mot.service.gov.uk/trade/vehicles/mot-tests?registration=$car";

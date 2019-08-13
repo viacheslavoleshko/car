@@ -26,19 +26,18 @@ class SitemapController extends Controller
         $count = Mot::whereNotNull('updated_at')->count();
         $style = getenv('APP_URL') . '/sitemap/styles/xml.xsl';
 
-        if( $page <= ceil($count / getenv('SITEMAP_OFFSET')) && $page != 0 )
-        {
+        if ( $page <= ceil($count / getenv('SITEMAP_OFFSET')) && $page != 0 ) {
             $numbers = Mot::whereNotNull('updated_at')
-            ->orderBy("id", "asc")
-            ->skip(getenv('SITEMAP_OFFSET') * ($page - 1) )
-            ->take(getenv('SITEMAP_OFFSET'))
-            ->get();
+                ->orderBy("id", "asc")
+                ->skip(getenv('SITEMAP_OFFSET') * ($page - 1) )
+                ->take(getenv('SITEMAP_OFFSET'))
+                ->get();
+            
             return response()->view('sitemap/mot', [
                 'numbers' => $numbers,
                 'style' => $style,
             ])->header('Content-Type', 'text/xml');
-        }else
-        {
+        } else {
             abort(404);
         }
     }
