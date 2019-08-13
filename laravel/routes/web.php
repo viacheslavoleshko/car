@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DvlaController;
 use Illuminate\Http\Request;
 use App\Models;
 
@@ -64,3 +65,5 @@ Route::get('stripe', array(
 Route::get('getvdi', 'VdiController@index');
 
 Route::get('getmot', 'MotController@index');
+
+Route::get('dvla', 'DvlaController@index');
