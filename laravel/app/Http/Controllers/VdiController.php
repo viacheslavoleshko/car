@@ -20,8 +20,6 @@ class VdiController extends Controller
             ->limit(3)
             ->pluck('mot.reg');
 
-        //dd($numbers);
-
         foreach ($numbers as $number) {
 
             var_dump($number);

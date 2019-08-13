@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use App\Models;
-//use function GuzzleHttp\json_encode;
 
 error_reporting(E_ALL & ~E_WARNING  & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
  
@@ -38,13 +37,6 @@ Route::get('/mot/{number}', function ($number){
 Route::get('/vdi/{number}', function ($number) {
     return response()->json(['object' => $data = Models\Vdi::select('vdi')->where('reg', $number)->get()]);
 });
-
-/*Route::get("gmaps/car", array(
-    "as"   => "sitemap",
-    "uses" => "SitemapController@index",
-));
-
-Route::get('gmaps/car/{page}', 'SitemapController@numbers')->where('page', '[0-9]+');*/
 
 Route::group([
     'as' => 'gmaps::',

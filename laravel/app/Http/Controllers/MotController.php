@@ -12,13 +12,8 @@ class MotController extends Controller
     {
         $query_select = Mot::select('reg')
         ->whereNull('m')
-        ->pluck('reg');
-
-        $updated_query = Mot::select('reg')
         ->whereNull('updated_at')
         ->pluck('reg');
-
-        //dd($updated_query);
 
         foreach($query_select as $value) {
             sleep(1);
@@ -28,21 +23,14 @@ class MotController extends Controller
             if($res->httpStatus == "404")
             {
                 Mot::where('reg', $value)
-                    ->update(['m' => '-1']);
+                    ->update(['m' => '-1'], ['updated_at' => now()->toDateTimeString('Y-m-d H:i:s')]);
             }else
             {
                 $json = json_encode($res[0]);
                 
                 Mot::where('reg', $value)
-                    ->update(['m' => $json]);
+                    ->update(['m' => $json], ['updated_at' => now()->toDateTimeString('Y-m-d H:i:s')]);
             }
-        }
-
-        foreach($updated_query as $value) {
-            sleep(1);
-            $res = self::get_car($value);
-            Mot::where('reg', $value)
-                    ->update(['updated_at' => now()->toDateTimeString('Y-m-d H:i:s')]);
         }
     }
 
@@ -50,7 +38,7 @@ class MotController extends Controller
         set_time_limit(0);
 
         $url = "https://beta.check-mot.service.gov.uk/trade/vehicles/mot-tests?registration=$car";
-        $apiKey = 'KUrpvRU9dv7CEJhQQ61VA1mDfiPjVckA3FolOaOy';   
+        $apiKey = getenv('MOT_API');   
         $headers = array(
             'Accept: application/json+v6',
             "X-Api-Key: $apiKey"
