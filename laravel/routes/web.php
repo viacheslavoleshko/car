@@ -43,6 +43,12 @@ Route::get('/vdi/{number}', function ($number) {
     ]);
 });
 
+Route::get('/dvla/{number}', function ($number) {
+    return response()->json([
+        'object' => $data = Dvla::select('location', 'area')->where( 'first_reg', substr($number, 0, 2) )->get(),
+    ]);
+});
+
 Route::group([
     'as' => 'gmaps::',
     'prefix' => 'gmaps',
@@ -66,4 +72,4 @@ Route::get('getvdi', 'VdiController@index');
 
 Route::get('getmot', 'MotController@index');
 
-Route::get('dvla', 'DvlaController@index');
+//Route::get('dvla', 'DvlaController@fill');

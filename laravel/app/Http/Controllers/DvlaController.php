@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
+use App\Models\Dvla;
 
 class DvlaController extends Controller
 {
-    public function index()
+    public function fill()
     {
         set_time_limit(0);
         
