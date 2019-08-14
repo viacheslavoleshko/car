@@ -1,6 +1,6 @@
 <?php
 error_reporting(0);
-
+set_time_limit(0);
 
 
 function curlNumberPlate($vrm){
@@ -41,7 +41,7 @@ function curlNumberPlate($vrm){
         'Correct' => 'True',
     ];
     //var_dump(isset($nodes['viewstate']));
-    if(isset($nodes['viewstate'])){
+    if(isset($nodes['viewstate'])) {
         curl_setopt($ch2, CURLOPT_URL, "https://vehicleenquiry.service.gov.uk/ViewVehicle");
         curl_setopt($ch2, CURLOPT_HEADER, false);
         curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
@@ -71,9 +71,6 @@ function curlNumberPlate($vrm){
 
         $result = curl_exec($ch2);
 
-
-        //var_dump($nodes);
-
         $dom->loadHTML($result);
         $xpath = new DOMXpath($dom);
 
@@ -97,9 +94,8 @@ function curlNumberPlate($vrm){
             'Revenue weight' => $xpath->query('.//ul[@class="list-summary"]/li[13]/span[2]/strong')->item(0)->nodeValue,
         ];
 
-        //var_dump($info);
         return json_encode($info);
-    }else{
+    } else {
         return '-1';
     }
 }
@@ -116,7 +112,6 @@ function pushToDB(){
         echo "Query did not execute";
     }
     $numberplates = pg_fetch_all($result);
-    //var_dump($numberplates);
 
     foreach ($numberplates as $value) {
         foreach ($value as $item) {
@@ -129,21 +124,16 @@ function pushToDB(){
             if  (!$result2) {
                 echo "Query did not execute";
             }
-            
-        //var_dump($item);
-        //curlNumberPlate($item);
         }
         sleep(1);
     }
+
     if  ($result2) {
         echo "Done";
     }
-    pg_free_result($result2);
+
     pg_close($dbconnect);
 }
 
 pushToDB();
-//curlNumberPlate();
-
-
 ?>
