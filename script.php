@@ -1,6 +1,6 @@
 <?php
-error_reporting(0);
-set_time_limit(0);
+//error_reporting(0);
+
 
 
 function curlNumberPlate($vrm){
@@ -26,13 +26,10 @@ function curlNumberPlate($vrm){
     
     $site = curl_exec($ch1);
 
-    //var_dump($site);
-
     $dom = new DOMDocument();
     $dom->loadHTML($site);
     $xpath = new DOMXpath($dom);
 
-    
     $nodes = [
         'viewstate' => $xpath->query('//input[@id="viewstate"]/attribute::value')->item(0)->nodeValue,
         'Vrm' => $xpath->query('//input[@id="Vrm"]/attribute::value')->item(0)->nodeValue,
@@ -40,8 +37,8 @@ function curlNumberPlate($vrm){
         'Colour' => $xpath->query('//input[@id="Colour"]/attribute::value')->item(0)->nodeValue,
         'Correct' => 'True',
     ];
-    //var_dump(isset($nodes['viewstate']));
-    if(isset($nodes['viewstate'])) {
+
+    if(isset($nodes['viewstate'])){
         curl_setopt($ch2, CURLOPT_URL, "https://vehicleenquiry.service.gov.uk/ViewVehicle");
         curl_setopt($ch2, CURLOPT_HEADER, false);
         curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
@@ -75,33 +72,29 @@ function curlNumberPlate($vrm){
         $xpath = new DOMXpath($dom);
 
         $info = [
-            'Status bar' => [
-            'Status' => $xpath->query('.//div[@class="isValid"][1]/h2')->item(0)->nodeValue,
-            'Tax due' => $xpath->query('.//div[@class="isValid"][1]/p/strong/text()[preceding-sibling::br]')->item(0)->nodeValue,
-            ],
-            'Vehicle make' => $xpath->query('.//ul[@class="list-summary"]/li[1]/span[2]/strong')->item(0)->nodeValue,
-            'Date of first registration' => $xpath->query('.//li[@id="UKRegistrationDateDummyDateV5CMatch"]/span[2]/strong')->item(0)->nodeValue,
-            'Year of manufacture' => $xpath->query('.//ul[@class="list-summary"]/li[3]/span[2]/strong')->item(0)->nodeValue,
-            'Cylinder capacity (cc)' => $xpath->query('.//li[@id="CylinderCapacity"]/span[2]/strong')->item(0)->nodeValue,
-            'CO₂Emissions' => $xpath->query('.//ul[@class="list-summary"]/li[5]/span[2]/strong')->item(0)->nodeValue,
-            'Fuel type' => $xpath->query('.//li[@id="FuelType"]/span[2]/strong')->item(0)->nodeValue,
-            'Euro Status' => $xpath->query('.//ul[@class="list-summary"]/li[7]/span[2]/strong')->item(0)->nodeValue,
-            'Export marker' => $xpath->query('.//ul[@class="list-summary"]/li[8]/span[2]/strong')->item(0)->nodeValue,
-            'Vehicle status' => $xpath->query('.//ul[@class="list-summary"]/li[9]/span[2]/strong')->item(0)->nodeValue,
-            'Vehicle colour' => $xpath->query('.//ul[@class="list-summary"]/li[10]/span[2]/strong')->item(0)->nodeValue,
-            'Vehicle type approval' => $xpath->query('.//ul[@class="list-summary"]/li[11]/span[2]/strong')->item(0)->nodeValue,
-            'Wheelplan' => $xpath->query('.//ul[@class="list-summary"]/li[12]/span[2]/strong')->item(0)->nodeValue,
-            'Revenue weight' => $xpath->query('.//ul[@class="list-summary"]/li[13]/span[2]/strong')->item(0)->nodeValue,
+            'Status' => trim($xpath->query('.//div[@class="column-half"][1]/descendant::h2')->item(0)->nodeValue, " :✗✓"),
+            'Tax due' => trim($xpath->query('.//div[@class="column-half"][1]/descendant::strong/text()[preceding-sibling::br]')->item(0)->nodeValue),
         ];
+        
+        for($i = 0; $i < $xpath->query('.//li[@class="list-summary-item"]')->count(); $i++) {  
+            
+            $info[trim($xpath->query('.//li[@class="list-summary-item"]/child::span[1]')->item($i)->nodeValue, " :")] = trim($xpath->query('.//li[@class="list-summary-item"]/child::span[2]')->item($i)->nodeValue, " :");
+        }
 
-        return json_encode($info);
+        // delete null and empty elements
+        $info = array_filter($info, function($value) { 
+            return !is_null($value) && $value !== ''; 
+        }); 
+        
+        var_dump($info);
+
+        return $info;
     } else {
         return '-1';
     }
 }
 
 function pushToDB(){
-
     $connect_string = "host=ninja.nix.ltd port=5372 dbname=car user=car password=Gbfh466578BBFFk#$";
     
     $dbconnect = pg_connect($connect_string) or die('connection failed');
@@ -112,28 +105,36 @@ function pushToDB(){
         echo "Query did not execute";
     }
     $numberplates = pg_fetch_all($result);
+    var_dump($numberplates);
+
 
     foreach ($numberplates as $value) {
         foreach ($value as $item) {
             
-            $json = curlNumberPlate($item);
+            $info = curlNumberPlate($item);
+            $co2 = preg_replace("/[^0-9]/", '', $info['CO₂Emissions']);
+            
+            if ($info !== '-1') {
+                $json = json_encode($info, JSON_UNESCAPED_UNICODE);
+            } else {
+                $json = $info;
+            }
 
-            $query2 = "update mot set t = '$json' where reg = '$item'";
-            //var_dump($query2);
+            $query2 = "update mot set t = '$json', co2 = '$co2' where reg = '$item'";
             $result2 = pg_query($dbconnect, $query2);
-            if  (!$result2) {
+            
+            if (!$result2) {
                 echo "Query did not execute";
             }
         }
         sleep(1);
     }
-
-    if  ($result2) {
+    if ($result2) {
         echo "Done";
     }
-
     pg_close($dbconnect);
 }
 
 pushToDB();
+
 ?>
