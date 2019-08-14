@@ -63,12 +63,9 @@ Route::group([
     ])->where('page', '[0-9]+');
 });
 
-Route::get('stripe', array(
-    'middleware' => 'cors', 
-    'uses' => 'StripeController@stripeGet'
-));
+Route::get('/confirm', array('middleware' => 'cors', 'uses' => 'StripeController@confirmPayment'));
 
-Route::get('getvdi', 'VdiController@index');
+Route::get('/getvdi', 'VdiController@index');
 
 Route::get('getmot', 'MotController@index');
 

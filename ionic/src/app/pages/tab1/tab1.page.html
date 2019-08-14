@@ -176,6 +176,7 @@
   </ion-grid>
   <ion-grid *ngIf="obj !== undefined && obj.m !== null">
     <div class="label">MOT</div>
+    <a [routerLink]="'/purchase/' + obj.m.registration"><h1>BUY</h1></a>
     <ion-row>
       <ion-col>Engine size</ion-col>
       <ion-col>{{obj.m.engineSize}}cc</ion-col>
@@ -256,6 +257,7 @@
   </ion-grid>
 
    <ion-grid *ngIf="tax !== undefined && tax['t'] !== undefined">
+
      <div class="label">TAX</div>
      <div class="status">
        <span><b>{{tax['t']['Status bar']['Status']}}</b></span>

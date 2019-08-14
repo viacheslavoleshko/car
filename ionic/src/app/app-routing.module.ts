@@ -5,6 +5,8 @@ const routes: Routes = [
   { path: '', loadChildren: './pages/tabs/tabs.module#TabsPageModule'},
   { path: 'details', loadChildren: './pages/mot-details/mot-details.module#MotDetailsPageModule' },
   { path: 'tax-details', loadChildren: './pages/tax-details/tax-details.module#TaxDetailsPageModule' },
+  { path: 'purchase/:regNumb', loadChildren: './pages/purchase/purchase.module#PurchasePageModule' },
+
 
 ];
 
