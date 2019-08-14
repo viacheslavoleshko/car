@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import { CarService } from '../../car.service';
 import {FinanceRecordList, Object, WriteOffRecordList} from "../../models/Mot";
 import {NavController} from "@ionic/angular";
+import {PurchaseService} from "../../purchase.service";
 
 @Component({
   selector: 'app-tab1',
@@ -17,8 +18,10 @@ export class Tab1Page implements OnInit {
     dvla;
     writeOffRecordList: WriteOffRecordList[] = [];
     financeList: FinanceRecordList[] = [];
+    show = false;
     constructor(private router: Router,
                 private carService: CarService,
+                private purchaseService: PurchaseService,
                 private route : ActivatedRoute) {
     }
 
@@ -28,7 +31,8 @@ export class Tab1Page implements OnInit {
         });
         if(this.regNumb !== null)
         this.search();
-
+        if (this.purchaseService.vdi)
+            this.showVdi(this.purchaseService.vdi);
     }
 
     search() {
@@ -44,13 +48,13 @@ export class Tab1Page implements OnInit {
             this.carService.getTax(this.regNumb).subscribe((res) => {
                 this.tax = res['object']['0'];
             });
-            this.carService.getVdi(this.regNumb).subscribe(res => {
-                this.vdi = res['object']['0'];
-                if(this.vdi !== undefined && this.vdi['vdi'] !== null && this.vdi['vdi'] !== undefined) {
-                    this.writeOffRecordList = this.vdi['vdi']['Response']['DataItems']['WriteOffRecordList'];
-                    this.financeList = this.vdi['vdi']['Response']['DataItems']['FinanceRecordList'];
-                }
-            });
+            // this.carService.getVdi(this.regNumb).subscribe(res => {
+            //             //     this.vdi = res['object']['0'];
+            //             //     if(this.vdi !== undefined && this.vdi['vdi'] !== null && this.vdi['vdi'] !== undefined) {
+            //             //         this.writeOffRecordList = this.vdi['vdi']['Response']['DataItems']['WriteOffRecordList'];
+            //             //         this.financeList = this.vdi['vdi']['Response']['DataItems']['FinanceRecordList'];
+            //             //     }
+            //             // });
             this.carService.getDvla(this.regNumb).subscribe((res) => {
                 this.dvla = res['object']['0'];
             });
@@ -67,6 +71,13 @@ export class Tab1Page implements OnInit {
             txt.innerText = '►';
         } else {
             txt.innerText = '▼';
+        }
+    }
+    showVdi(json) {
+        this.vdi = json['vdi']['0'];
+        if(this.vdi !== undefined && this.vdi['vdi'] !== null && this.vdi['vdi'] !== undefined) {
+            this.writeOffRecordList = this.vdi['vdi']['Response']['DataItems']['WriteOffRecordList'];
+            this.financeList = this.vdi['vdi']['Response']['DataItems']['FinanceRecordList'];
         }
     }
 }

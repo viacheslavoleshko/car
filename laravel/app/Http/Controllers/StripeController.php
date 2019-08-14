@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Vdi;
 use Illuminate\Support\Facades\Date;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
@@ -41,37 +42,33 @@ class StripeController extends Controller
                           );
                           //$intent->confirm();
                       }
-                      this . $this->generatePaymentResponse($intent);
+                      this . $this->generatePaymentResponse($intent, $regNumb);
                   } catch (\Stripe\Error\Base $e) {
                       return response()->json(['error' => $e]);
                   }
               } else abort(404);
           }
-    public function generatePaymentResponse($intent) {
+    public function generatePaymentResponse($intent, $regNumb) {
 
         if ($intent->status == 'requires_action' &&
             $intent->next_action->type == 'use_stripe_sdk') {
-                \App\Models\Stripe::where('payment_intent', $intent->id)->update([
-                    'status' => 'requires_action'
-                ]);
             echo json_encode([
                 'requires_action' => true,
                 'payment_intent_client_secret' => $intent->client_secret
             ]);
         } else if ($intent->status == 'succeeded') {
-            \App\Models\Stripe::where('payment_intent', $intent->id)->update([
-                'status' => 'payed'
-            ]);
+            VdiController::index();
             echo json_encode([
-                "success" => true
+                'success' => true,
+                'vdi' => VdiController::getVdi($regNumb),
             ]);
+
         } else {
-            # Invalid status
-            \App\Models\Stripe::where('payment_intent', $intent->id)->update([
-                'status' => 'cenceled'
-            ]);
             http_response_code(500);
             echo json_encode(['error' => 'Invalid PaymentIntent status']);
         }
+        \App\Models\Stripe::where('payment_intent', $intent->id)->update([
+            'status' => $intent->status
+        ]);
     }
 }
