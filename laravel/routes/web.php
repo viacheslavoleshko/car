@@ -45,7 +45,7 @@ Route::get('/vdi/{number}', function ($number) {
 
 Route::get('/dvla/{number}', function ($number) {
     return response()->json([
-        'object' => $data = Dvla::select('location', 'area')->where( 'first_reg', substr($number, 0, 2) )->get(),
+        'object' => $data = Models\Dvla::select('location', 'area')->where( 'first_reg', substr($number, 0, 2) )->get(),
     ]);
 });
 
