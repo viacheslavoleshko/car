@@ -51,27 +51,22 @@ class StripeController extends Controller
 
         if ($intent->status == 'requires_action' &&
             $intent->next_action->type == 'use_stripe_sdk') {
-                \App\Models\Stripe::where('payment_intent', $intent->id)->update([
-                    'status' => 'requires_action'
-                ]);
             echo json_encode([
                 'requires_action' => true,
                 'payment_intent_client_secret' => $intent->client_secret
             ]);
         } else if ($intent->status == 'succeeded') {
-            \App\Models\Stripe::where('payment_intent', $intent->id)->update([
-                'status' => 'payed'
-            ]);
+            VdiController::index();
             echo json_encode([
                 "success" => true
             ]);
         } else {
             # Invalid status
-            \App\Models\Stripe::where('payment_intent', $intent->id)->update([
-                'status' => 'cenceled'
-            ]);
             http_response_code(500);
             echo json_encode(['error' => 'Invalid PaymentIntent status']);
         }
+        \App\Models\Stripe::where('payment_intent', $intent->id)->update([
+            'status' => $intent->status
+        ]);
     }
 }
