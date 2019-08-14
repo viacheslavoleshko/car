@@ -65,4 +65,5 @@ Route::get('/getvdi', 'VdiController@index');
 
 Route::get('getmot', 'MotController@index');
 
+
 //Route::get('dvla', 'DvlaController@fill');

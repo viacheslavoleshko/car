@@ -64,7 +64,6 @@ class StripeController extends Controller
             ]);
 
         } else {
-            # Invalid status
             http_response_code(500);
             echo json_encode(['error' => 'Invalid PaymentIntent status']);
         }
