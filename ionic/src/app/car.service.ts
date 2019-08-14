@@ -20,4 +20,7 @@ export class CarService {
   getVdi(registration) {
     return this.http.get(`${this.basepath}/vdi/${registration}`);
   }
+  getDvla(registration) {
+    return this.http.get(`${this.basepath}/dvla/${registration}`);
+  }
 }

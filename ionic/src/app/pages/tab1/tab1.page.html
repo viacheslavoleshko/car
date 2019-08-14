@@ -315,7 +315,18 @@
        <ion-col>Year of manufacture</ion-col>
        <ion-col>{{tax['t']['Year of manufacture']}}</ion-col>
      </ion-row>
-
    </ion-grid>
+
+   <ion-grid *ngIf="dvla !== undefined && dvla !== null">
+    <div class="label">DVLA</div>
+    <ion-row>
+      <ion-col>Location</ion-col>
+      <ion-col>{{dvla.location}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Area</ion-col>
+      <ion-col>{{dvla.area}}</ion-col>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>

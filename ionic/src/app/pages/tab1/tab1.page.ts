@@ -14,6 +14,7 @@ export class Tab1Page implements OnInit {
     obj: Object = new Object();
     tax;
     vdi;
+    dvla;
     writeOffRecordList: WriteOffRecordList[] = [];
     financeList: FinanceRecordList[] = [];
     constructor(private router: Router,
@@ -35,6 +36,7 @@ export class Tab1Page implements OnInit {
         if (this.regNumb === '') {
             this.obj = undefined;
             this.tax = undefined;
+            this.dvla = undefined;
         } else {
             this.carService.getMot(this.regNumb).subscribe((res) => {
                 this.obj = res['object']['0'];
@@ -48,6 +50,9 @@ export class Tab1Page implements OnInit {
                     this.writeOffRecordList = this.vdi['vdi']['Response']['DataItems']['WriteOffRecordList'];
                     this.financeList = this.vdi['vdi']['Response']['DataItems']['FinanceRecordList'];
                 }
+            });
+            this.carService.getDvla(this.regNumb).subscribe((res) => {
+                this.dvla = res['object']['0'];
             });
         }
     }
