@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Vdi;
 use Illuminate\Support\Facades\Date;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
@@ -41,13 +42,13 @@ class StripeController extends Controller
                           );
                           //$intent->confirm();
                       }
-                      this . $this->generatePaymentResponse($intent);
+                      this . $this->generatePaymentResponse($intent, $regNumb);
                   } catch (\Stripe\Error\Base $e) {
                       return response()->json(['error' => $e]);
                   }
               } else abort(404);
           }
-    public function generatePaymentResponse($intent) {
+    public function generatePaymentResponse($intent, $regNumb) {
 
         if ($intent->status == 'requires_action' &&
             $intent->next_action->type == 'use_stripe_sdk') {
@@ -58,8 +59,10 @@ class StripeController extends Controller
         } else if ($intent->status == 'succeeded') {
             VdiController::index();
             echo json_encode([
-                "success" => true
+                'success' => true,
+                'vdi' => VdiController::getVdi($regNumb),
             ]);
+
         } else {
             # Invalid status
             http_response_code(500);

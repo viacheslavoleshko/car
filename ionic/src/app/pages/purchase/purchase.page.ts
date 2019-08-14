@@ -1,15 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import {PurchaseService} from "../../purchase.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {Tab1Page} from "../tab1/tab1.page";
 
 @Component({
   selector: 'app-purchase',
   templateUrl: './purchase.page.html',
   styleUrls: ['./purchase.page.scss'],
+  providers:[Tab1Page]
 })
 export class PurchasePage implements OnInit {
   message = '';
-  constructor( private purchaseServie: PurchaseService, private route: ActivatedRoute) { }
+  constructor( private purchaseServie: PurchaseService,
+               private route: ActivatedRoute,
+               private router: Router,
+               private tabPage: Tab1Page) { }
   stripe = Stripe('pk_test_DXtuhrwBCTqVo7v0OBaCzArG');
   cards = {
     number: '4242424242424242',
@@ -69,6 +74,12 @@ export class PurchasePage implements OnInit {
       //show in html
       this.message = 'SUCCESS';
       console.log("handle  success");
+      this.purchaseServie.vdi = response;
+       const numb = response['vdi']['0']['vdi'];
+       if (numb !== null) {
+         this.router.navigateByUrl('/vehicle/' + numb['Request']['DataKeys']['Vrm']);
+       } else
+      this.router.navigateByUrl('/vehicle/');
     }
   }
 }

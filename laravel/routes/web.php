@@ -37,11 +37,7 @@ Route::get('/mot/{number}', function ($number) {
     ]);
 });
 
-Route::get('/vdi/{number}', function ($number) {
-    return response()->json([
-        'object' => $data = Models\Vdi::select('vdi')->where('reg', $number)->get(),
-    ]);
-});
+Route::get('/vdi/{number}', 'VdiController@getVdi');
 
 Route::get('/dvla/{number}', function ($number) {
     return response()->json([
