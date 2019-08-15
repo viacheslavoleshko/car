@@ -1,5 +1,6 @@
 <?php
-//error_reporting(0);
+error_reporting(0);
+set_time_limit(0);
 
 
 
@@ -112,9 +113,14 @@ function pushToDB(){
         foreach ($value as $item) {
             
             $info = curlNumberPlate($item);
-            $co2 = preg_replace("/[^0-9]/", '', $info['CO₂Emissions']);
-            
-            if ($info !== '-1') {
+       
+            if(preg_replace("/[^0-9]/", '', $info['CO₂Emissions']) !== '') {
+                $co2 = preg_replace("/[^0-9]/", '', $info['CO₂Emissions']);
+            } else {
+                $co2 = '-1';
+            }
+
+            if($info !== '-1') {
                 $json = json_encode($info, JSON_UNESCAPED_UNICODE);
             } else {
                 $json = $info;

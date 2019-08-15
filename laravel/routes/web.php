@@ -45,6 +45,16 @@ Route::get('/dvla/{number}', function ($number) {
     ]);
 });
 
+Route::get('/co/{number}', function ($number) {
+    return response()->json([
+        'object' => $data = Models\Co::select('band', 'co2', 'tax12_single', 'tax6_single')
+            ->join('mot', 'mot.co2', '=', 'co2')
+            ->whereRaw('mot.co2 between year_tax.co_min and year_tax.co_max')
+            ->where('mot.reg', $number)
+            ->get(),
+    ]);
+});
+
 Route::group([
     'as' => 'gmaps::',
     'prefix' => 'gmaps',
@@ -63,7 +73,7 @@ Route::get('/confirm', array('middleware' => 'cors', 'uses' => 'StripeController
 
 Route::get('/getvdi', 'VdiController@index');
 
-Route::get('getmot', 'MotController@index');
+Route::get('/getmot', 'MotController@index');
 
-
-//Route::get('dvla', 'DvlaController@fill');
+// filling dvla table in database
+// Route::get('dvla', 'DvlaController@fill');
