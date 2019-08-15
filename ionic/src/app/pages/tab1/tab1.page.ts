@@ -16,6 +16,7 @@ export class Tab1Page implements OnInit {
     tax;
     vdi;
     dvla;
+    co;
     writeOffRecordList: WriteOffRecordList[] = [];
     financeList: FinanceRecordList[] = [];
     show = false;
@@ -41,6 +42,7 @@ export class Tab1Page implements OnInit {
             this.obj = undefined;
             this.tax = undefined;
             this.dvla = undefined;
+            this.co = undefined;
         } else {
             this.carService.getMot(this.regNumb).subscribe((res) => {
                 this.obj = res['object']['0'];
@@ -57,6 +59,9 @@ export class Tab1Page implements OnInit {
             //             // });
             this.carService.getDvla(this.regNumb).subscribe((res) => {
                 this.dvla = res['object']['0'];
+            });
+            this.carService.getCo(this.regNumb).subscribe((res) => {
+                this.co = res['object']['0'];
             });
         }
     }

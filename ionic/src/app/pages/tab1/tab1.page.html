@@ -259,10 +259,15 @@
    <ion-grid *ngIf="tax !== undefined && tax['t'] !== undefined">
 
      <div class="label">TAX</div>
-     <div class="status">
-       <span><b>{{tax['t']['Status bar']['Status']}}</b></span>
-       <span class="date"><b>{{tax['t']['Status bar']['Tax due']}}</b></span>
-     </div>
+      <ion-row>
+        <ion-col>Status</ion-col>
+        <ion-col>{{tax['t']['Status']}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>Tax due</ion-col>
+        <ion-col>{{tax['t']['Tax due']}}</ion-col>
+      </ion-row>
+      
      <ion-row>
        <ion-col>CO₂Emissions</ion-col>
        <ion-col>{{tax['t']['CO₂Emissions']}}</ion-col>
@@ -326,6 +331,26 @@
     <ion-row>
       <ion-col>Area</ion-col>
       <ion-col>{{dvla.area}}</ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="co !== undefined && co !== null">
+    <div class="label">Road Tax Information</div>
+    <ion-row>
+      <ion-col>Band</ion-col>
+      <ion-col>{{co.band}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>CO₂ Output</ion-col>
+      <ion-col>{{co.co2}} g/km</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>12 Months Cost</ion-col>
+      <ion-col>£{{co.tax12_single}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>6 Months Cost</ion-col>
+      <ion-col>£{{co.tax6_single}}</ion-col>
     </ion-row>
   </ion-grid>
 
