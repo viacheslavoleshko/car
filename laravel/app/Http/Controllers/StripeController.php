@@ -68,7 +68,7 @@ class StripeController extends Controller
             VdiController::index();
             echo json_encode([
                 'success' => true,
-                'vdi' => this.$this->selectVdi($regNumb),
+                'vdi' => $this->selectVdi($regNumb),
             ]);
         } else {
             http_response_code(500);
@@ -79,6 +79,6 @@ class StripeController extends Controller
         ]);
     }
     public function selectVdi($number) {
-        return Vdi::select('vdi')->where( 'reg', $number)->get();
+        return  \App\Models\Vdi::select('vdi')->where( 'reg', $number)->get();
 }
 }
