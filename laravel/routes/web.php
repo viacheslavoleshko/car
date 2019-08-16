@@ -31,13 +31,17 @@ Route::get('/tax/{number}', function ($number) {
     ]);
 });
 
-Route::get('/mot/{number}', function ($number) {
+// Route::get('/mot/{number}', function ($number) {
+//     return response()->json([
+//         'object' => $data = Models\Mot::select('m')->where('reg', $number)->get(),
+//     ]);
+// });
+
+Route::get('/vdi/{number}', function ($number) {
     return response()->json([
-        'object' => $data = Models\Mot::select('m')->where('reg', $number)->get(),
+        'object' => $data = Models\Vdi::select('vdi')->where( 'reg', $number)->get(),
     ]);
 });
-
-Route::get('/vdi/{number}', 'VdiController@getVdi');
 
 Route::get('/dvla/{number}', function ($number) {
     return response()->json([
@@ -73,7 +77,7 @@ Route::get('/confirm', array('middleware' => 'cors', 'uses' => 'StripeController
 
 Route::get('/getvdi', 'VdiController@index');
 
-Route::get('/getmot', 'MotController@index');
+Route::get('/mot/{number}', 'MotController@index');
 
 // filling dvla table in database
 // Route::get('dvla', 'DvlaController@fill');

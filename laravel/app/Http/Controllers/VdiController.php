@@ -36,9 +36,5 @@ class VdiController extends Controller
         $json = file_get_contents($info);
 
         return $json;
-    }
-    public function getVdi($number) {
-        return  $data = Vdi::select('vdi')->where('reg', $number)->get();
-
-    }
+    } 
 }
