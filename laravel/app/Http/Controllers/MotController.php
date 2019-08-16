@@ -10,20 +10,32 @@ class MotController extends Controller
 {
     public function index($number)
     {
-        $data = Mot::select('m')->where('reg', $number)->get();
+        $data = Mot::select('m')->where('reg', $number)->first();
 
-        if(!$data) {
+        if(!$data || is_null($data['m'])) {
             $pattern = '/^[A-Z]{2}[0-9]{2}[A-Z]{3}$/'; 
+            
             if (preg_match($pattern, $number)) {   
                 $res = self::get_car($number);
                 $json = ($res->httpStatus == "404") ? '-1' : json_encode($res[0]);
 
-                Mot::insert([
-                    'reg' => $number, 
-                    'updated_at' => now()->toDateTimeString('Y-m-d H:i:s'), 
-                    'm' => $json, 
-                    'priority' => '1'
-                ]);
+                if(!$data) {
+                    Mot::insert([
+                        'reg' => $number, 
+                        'updated_at' => now()->toDateTimeString('Y-m-d H:i:s'), 
+                        'm' => $json, 
+                        'priority' => '1'
+                    ]);
+                }
+
+                if(is_null($data['m'])) {
+                    Mot::where('reg', $number)
+                    ->update([
+                        'updated_at' => now()->toDateTimeString('Y-m-d H:i:s'), 
+                        'm' => $json, 
+                        'priority' => '1'
+                    ]);
+                }
                 $data = $res[0];
             }
         }
