@@ -68,7 +68,6 @@ export class PurchasePage implements OnInit {
       return;
     }
     if (response.error) {
-      console.log(response);
       console.log('RESPONSE ERROR');
       this.message = response.error['jsonBody']['error']['message'];;
     } else if (response.requires_action) {
@@ -89,11 +88,9 @@ export class PurchasePage implements OnInit {
     } else {
       console.log("handle  success");
       this.purchaseServie.vdi = response;
-      console.log(response);
       const numb = response['vdi']['0']['vdi'];
-       if (numb !== null) {
-         this.router.navigateByUrl('/vehicle/' + numb['Request']['DataKeys']['Vrm']);
-       } else
+       if (numb !== null)
+         this.purchaseServie.numberVdi = numb['Request']['DataKeys']['Vrm'];
       this.router.navigateByUrl('/vehicle/');
     }
   }
