@@ -12,7 +12,7 @@ let dhost;
 export class PurchaseService {
 
     vdi = null;
-
+    numberVdi = '';
     constructor(public http: HttpClient) {
     }
 

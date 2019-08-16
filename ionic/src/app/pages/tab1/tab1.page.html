@@ -9,6 +9,7 @@
       ></ion-input>
     </ion-col>
   </ion-item>
+  <ion-button *ngIf="vdi  || co || tax || dvla" [routerLink]="'/purchase/' + regNumb"><h3>BUY</h3></ion-button>
   <ion-grid *ngIf="vdi !== undefined && vdi['vdi'] !== undefined && vdi['vdi'] !== null">
     <div class="label">VDI</div>
     <ion-row>
@@ -176,7 +177,7 @@
   </ion-grid>
   <ion-grid *ngIf="obj !== undefined && obj.m !== null">
     <div class="label">MOT</div>
-    <a [routerLink]="'/purchase/' + obj.m.registration"><h1>BUY</h1></a>
+
     <ion-row>
       <ion-col>Engine size</ion-col>
       <ion-col>{{obj.m.engineSize}}cc</ion-col>
