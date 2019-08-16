@@ -26,7 +26,8 @@ class StripeController extends Controller
                               "currency" => "gbp",
                               'confirmation_method' => 'manual',
                               'payment_method_types' => ['card'],
-                              "statement_descriptor" => "Car Check LC67 GBG",
+                              "statement_descriptor" => "Car Check",
+                              "statement_descriptor_suffix" => $regNumb,
                               'confirm' => true,
                           ]);
                           $record = \App\Models\Stripe::select('*')->where('payment_intent', $intent->id)->first();
@@ -67,10 +68,8 @@ class StripeController extends Controller
             VdiController::index();
             echo json_encode([
                 'success' => true,
-                'vdi' => VdiController::getVdi($regNumb),
-                'intent' => $intent,
+                'vdi' => this.$this->selectVdi($regNumb),
             ]);
-
         } else {
             http_response_code(500);
             echo json_encode(['error' => 'Invalid PaymentIntent status']);
@@ -79,4 +78,7 @@ class StripeController extends Controller
             'status' => $intent->status
         ]);
     }
+    public function selectVdi($number) {
+        return Vdi::select('vdi')->where( 'reg', $number)->get();
+}
 }
