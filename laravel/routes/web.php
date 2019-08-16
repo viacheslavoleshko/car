@@ -25,6 +25,25 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Route::get('/mot/{number}', function ($number) {
+//     $data = Models\Mot::select('m')->where( 'reg', $number)->get();
+    
+//     // if(!$data[0]){
+//     //     $data = "pizdec";
+//     // }
+    
+//     // elseif($data[0]['m'] == null){
+//     //     $data = "m net";
+//     // }
+//     return response()->json(['object' => $data]);
+// });
+
+// Route::get('/mot/{number}', function ($number) {
+//     return response()->json([
+//         'object' => $data = Models\Mot::select('m')->where( 'reg', $number)->get(),
+//     ]);
+// });
+
 Route::get('/vdi/{number}', function ($number) {
     return response()->json([
         'object' => $data = Models\Vdi::select('vdi')->where( 'reg', $number)->get(),

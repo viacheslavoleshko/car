@@ -25,32 +25,22 @@ class TaxController extends Controller
                     $co2 = preg_replace("/[^0-9]/", '', $res['CO₂Emissions']);
                 } else { $json = $res; $co2 = '-1'; };
                 
-                if(!$data) {
-                    Tax::insert([
-                        'reg' => $number, 
+                Tax::updateOrInsert(['reg' => $number], 
+                [
                         'updated_at' => now()->toDateTimeString('Y-m-d H:i:s'), 
-                        't' => $json,
-                        'co2' => $co2, 
-                        'priority' => '1'
-                    ]);
-                }
-
-                if(is_null($data['t'])) {
-                    Tax::where('reg', $number)
-                    ->update([
-                        'updated_at' => now()->toDateTimeString('Y-m-d H:i:s'), 
-                        't' => $json, 
-                        'co2' => $co2, 
-                        'priority' => '1'
-                    ]);
-                }
-                $data = $res;
+                    't' => $json,
+                    'co2' => $co2, 
+                    'priority' => '1'
+                ]);
             }
         }
-        return response()->json(['object' => $data]);
+        return response()->json([
+            'object' => Tax::select('t')->where('reg', $number)->get()
+        ]);
     }
 
     function curlNumberPlate($vrm){
+        $start = microtime(true);
         $uagent = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)';
     
         $fields = [
@@ -105,11 +95,16 @@ class TaxController extends Controller
             for($i = 0; $i < $xpath->query('.//li[@class="list-summary-item"]')->count(); $i++) {  
                 $info[trim($xpath->query('.//li[@class="list-summary-item"]/child::span[1]')->item($i)->nodeValue, " :")] = trim($xpath->query('.//li[@class="list-summary-item"]/child::span[2]')->item($i)->nodeValue, " :");
             }
+
             // delete null and empty elements
             $info = array_filter($info, function($value) { 
                 return !is_null($value) && $value !== ''; 
             });
 
+            // JSON generation time
+            $time_elapsed_secs = round((microtime(true) - $start)*1000);
+            $info['Runtime'] = "$time_elapsed_secs ms";
+            
             return $info;
         } else {
             return '-1';
