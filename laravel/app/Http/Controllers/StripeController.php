@@ -14,43 +14,50 @@ class StripeController extends Controller
     public function confirmPayment(\Illuminate\Http\Request $request) {
               $paymentId = $request->header('token');
               $regNumb = $request->header('regnumb');
+              $intentId = $request->header('paymentIntent');
                $data =  \App\Models\Mot::select('reg')->where('reg', $regNumb)->get();
               if($data->first()) {
                   Stripe::setApiKey(env(BUY_REPORT_SERCET_KEY));
                   try {
-                      $intent = PaymentIntent::create([
-                          'payment_method' => $paymentId,
-                          "amount" => 1499,
-                          "currency" => "gbp",
-                          'payment_method' => 'pm_card_visa',
-                          'confirmation_method' => 'manual',
-                          'payment_method_types' => ['card'],
-                          "statement_descriptor" => "Car Check LC67 GBG",
-                          'confirm' => true,
-                      ]);
-                      $record = \App\Models\Stripe::select('*')->where('payment_intent', $intent->id)->first();
-                      if (!$record) {
-                          \App\Models\Stripe::insert([
-                              'status' => 'intent',
-                              'reg' => $regNumb,
-                              'payment_intent' => $intent->id
+                      if ($paymentId != '') {
+                          $intent = PaymentIntent::create([
+                              'payment_method' => $paymentId,
+                              "amount" => 1499,
+                              "currency" => "gbp",
+                              'confirmation_method' => 'manual',
+                              'payment_method_types' => ['card'],
+                              "statement_descriptor" => "Car Check LC67 GBG",
+                              'confirm' => true,
                           ]);
+                          $record = \App\Models\Stripe::select('*')->where('payment_intent', $intent->id)->first();
+                          if (!$record) {
+                              \App\Models\Stripe::insert([
+                                  'status' => 'intent',
+                                  'reg' => $regNumb,
+                                  'payment_intent' => $intent->id
+                              ]);
+                          }
                       }
-                      if (isset($intent->id)) {
+
+                      if ($intentId != '') {
                           $intent = PaymentIntent::retrieve(
-                              $intent->id
+                              $intentId
                           );
-                          //$intent->confirm();
+                          $intent->confirm();
                       }
                       this . $this->generatePaymentResponse($intent, $regNumb);
                   } catch (\Stripe\Error\Base $e) {
                       return response()->json(['error' => $e]);
                   }
-              } else abort(404);
+              } else {
+                      echo json_encode([
+                     'NotFound' => 'RegNumb not found',
+            ]);
+        }
           }
     public function generatePaymentResponse($intent, $regNumb) {
 
-        if ($intent->status == 'requires_action' &&
+        if ($intent->status == 'requires_source_action' &&
             $intent->next_action->type == 'use_stripe_sdk') {
             echo json_encode([
                 'requires_action' => true,
@@ -61,6 +68,7 @@ class StripeController extends Controller
             echo json_encode([
                 'success' => true,
                 'vdi' => VdiController::getVdi($regNumb),
+                'intent' => $intent,
             ]);
 
         } else {

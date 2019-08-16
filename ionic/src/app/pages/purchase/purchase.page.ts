@@ -16,27 +16,21 @@ export class PurchasePage implements OnInit {
                private router: Router,
                private tabPage: Tab1Page) { }
   stripe = Stripe('pk_test_DXtuhrwBCTqVo7v0OBaCzArG');
-  cards = {
-    number: '4242424242424242',
-    expMonth: '12',
-    expYear: '21',
-    cvc: '123',
-  };
+
   card = null;
   elements = null;
   token = null;
-  clientSecret;
   cardElement;
-  cardholderName;
   regNumb;
   async Submit() {
     this.message = '';
     const {paymentMethod, error} = await this.stripe.createPaymentMethod('card', this.cardElement);
     if (error) {
       console.log('ERROR' + error);
+      this.message = 'Incorrect data';
     } else {
       console.log(paymentMethod);
-      this.purchaseServie.confirm(paymentMethod.id, this.regNumb).subscribe((res) => {
+      this.purchaseServie.confirm(paymentMethod.id, this.regNumb, '').subscribe((res) => {
         console.log(res);
         this.handleServerResponse(res);
     })};
@@ -47,32 +41,54 @@ export class PurchasePage implements OnInit {
 
     });
     this.elements = this.stripe.elements();
-    this.cardElement = this.elements.create('card');
+    this.cardElement = this.elements.create('card',{
+      hidePostalCode: true,
+      style: {
+        base: {
+          color: '#32325d',
+          fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+          fontSmoothing: 'antialiased',
+          fontSize: '15px',
+          '::placeholder': {
+            color: '#aab7c4'
+          }
+        },
+        invalid: {
+          color: '#fa755a',
+          iconColor: '#fa755a'
+        }
+      }
+      });
     this.cardElement.mount('#card-element');
   }
 
   async handleServerResponse(response) {
+    if(response.NotFound) {
+      this.message = response.NotFound;
+      return;
+    }
     if (response.error) {
-      // Show error from server on payment form
-      console.log('response.error');
+      console.log(response);
+      console.log('RESPONSE ERROR');
+      if (response.error['declineCode'])
+      this.message = response.error['declineCode'];
+      else  this.message = response.error['stripeCode'];
     } else if (response.requires_action) {
       // Use Stripe.js to handle required card action
       console.log('require');
       const { error: errorAction, paymentIntent } =
           await this.stripe.handleCardAction(response.payment_intent_client_secret);
       if (errorAction) {
-        this.message = 'Err';
+        this.message = 'Fail authentication';
         console.log('ActionError');
       } else {
         // The card action has been handled
         // The PaymentIntent can be confirmed again on the server
-        this.purchaseServie.confirm(paymentIntent.id, this.regNumb).subscribe((servereResponse) => {
+        this.purchaseServie.confirm('', this.regNumb, paymentIntent.id).subscribe((servereResponse) => {
         this.handleServerResponse(servereResponse);
         });
       }
     } else {
-      //show in html
-      this.message = 'SUCCESS';
       console.log("handle  success");
       this.purchaseServie.vdi = response;
        const numb = response['vdi']['0']['vdi'];

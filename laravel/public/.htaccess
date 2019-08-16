@@ -1,6 +1,6 @@
 <IfModule mod_headers.c>
     Header set Access-Control-Allow-Origin "*"
-    Header set Access-Control-Allow-Headers "regnumb, token"
+    Header set Access-Control-Allow-Headers "regnumb, token, paymentintent"
 </IfModule>
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>

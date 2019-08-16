@@ -7,10 +7,11 @@
 <ion-content>
   <div id="card-element">
     A Stripe Element will be inserted here.
+    <p class="message">{{message}}</p>
   </div>
+  <div class="message">{{message}}</div>
   <div id="payment-request-button">
 
   </div>
-  <ion-button color="success" (click)="Submit()">Buy</ion-button>
-  <h1>{{message}}</h1>
+  <ion-button expand="block" color="success" (click)="Submit()">Buy</ion-button>
 </ion-content>
