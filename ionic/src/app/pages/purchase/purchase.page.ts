@@ -70,9 +70,7 @@ export class PurchasePage implements OnInit {
     if (response.error) {
       console.log(response);
       console.log('RESPONSE ERROR');
-      if (response.error['declineCode'])
-      this.message = response.error['declineCode'];
-      else  this.message = response.error['stripeCode'];
+      this.message = response.error['jsonBody']['error']['message'];;
     } else if (response.requires_action) {
       // Use Stripe.js to handle required card action
       console.log('require');
@@ -91,7 +89,8 @@ export class PurchasePage implements OnInit {
     } else {
       console.log("handle  success");
       this.purchaseServie.vdi = response;
-       const numb = response['vdi']['0']['vdi'];
+      console.log(response);
+      const numb = response['vdi']['0']['vdi'];
        if (numb !== null) {
          this.router.navigateByUrl('/vehicle/' + numb['Request']['DataKeys']['Vrm']);
        } else
