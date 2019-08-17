@@ -8,25 +8,25 @@ use App\Models\Mot;
 
 class MotController extends Controller
 {
-    public function index($number)
+    public function index(Request $request)
     {
+        $number = $request->input('number');
         $data = Mot::select('m')->where('reg', $number)->first();
 
         if(!$data || is_null($data['m'])) {
-            $pattern = '/^[A-Z]{2}[0-9]{2}[A-Z]{3}$/'; 
-            
-            if (preg_match($pattern, $number)) {   
-                $res = self::get_car($number);
-                $json = ($res->httpStatus == "404") ? '-1' : json_encode($res[0]);
+            $res = self::get_car($number);
+            $json = ($res->httpStatus == "404") ? '-1' : json_encode($res[0]);
 
-                Mot::updateOrInsert(['reg' => $number],
-                [
-                    'updated_at' => now()->toDateTimeString('Y-m-d H:i:s'), 
-                    'm' => $json,
-                    'priority' => '1'
-                ]);
-            }
+            Mot::updateOrInsert(['reg' => $number],
+            [
+                'updated_at' => now()->toDateTimeString('Y-m-d H:i:s'), 
+                'm' => $json,
+                'priority' => '1'
+            ]);
         }
+        Mot::where('reg', $number)
+            ->increment('cnt');
+
         return response()->json([
             'object' => Mot::select('m')->where('reg', $number)->get()
         ]);

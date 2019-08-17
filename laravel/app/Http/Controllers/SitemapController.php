@@ -28,7 +28,7 @@ class SitemapController extends Controller
 
         if ( $page <= ceil($count / getenv('SITEMAP_OFFSET')) && $page != 0 ) {
             $numbers = Mot::whereNotNull('updated_at')
-                ->orderBy("id", "asc")
+                ->orderBy("cnt", "desc")
                 ->skip(getenv('SITEMAP_OFFSET') * ($page - 1) )
                 ->take(getenv('SITEMAP_OFFSET'))
                 ->get();

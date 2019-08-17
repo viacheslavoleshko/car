@@ -5,14 +5,23 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Vdi;
-use DB;
 
 class VdiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $numbers = DB::table('mot')
-            ->distinct()
+        $number = $request->input('number');
+
+        return response()->json([
+            'object' => Vdi::select('vdi')
+                ->where( 'reg', $number)
+                ->get(),
+        ]);
+    }
+
+    public function fill()
+    {
+        $numbers = Vdi::distinct()
             ->join('stripe', 'mot.reg', '=', 'stripe.reg')
             ->whereNull('mot.vdi')
             ->where('stripe.status', 'payed')

@@ -25,47 +25,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('/mot/{number}', function ($number) {
-//     $data = Models\Mot::select('m')->where( 'reg', $number)->get();
-    
-//     // if(!$data[0]){
-//     //     $data = "pizdec";
-//     // }
-    
-//     // elseif($data[0]['m'] == null){
-//     //     $data = "m net";
-//     // }
-//     return response()->json(['object' => $data]);
-// });
-
-// Route::get('/mot/{number}', function ($number) {
-//     return response()->json([
-//         'object' => $data = Models\Mot::select('m')->where( 'reg', $number)->get(),
-//     ]);
-// });
-
-Route::get('/vdi/{number}', function ($number) {
-    return response()->json([
-        'object' => $data = Models\Vdi::select('vdi')->where( 'reg', $number)->get(),
-    ]);
-});
-
-Route::get('/dvla/{number}', function ($number) {
-    return response()->json([
-        'object' => $data = Models\Dvla::select('location', 'area')->where( 'first_reg', substr($number, 0, 2) )->get(),
-    ]);
-});
-
-Route::get('/co/{number}', function ($number) {
-    return response()->json([
-        'object' => $data = Models\Co::select('band', 'co2', 'tax12_single', 'tax6_single')
-            ->join('mot', 'mot.co2', '=', 'co2')
-            ->whereRaw('mot.co2 between year_tax.co_min and year_tax.co_max')
-            ->where('mot.reg', $number)
-            ->get(),
-    ]);
-});
-
 Route::group([
     'as' => 'gmaps::',
     'prefix' => 'gmaps',
@@ -80,13 +39,20 @@ Route::group([
     ])->where('page', '[0-9]+');
 });
 
+Route::group([
+    'middleware' => 'correct'
+], function () {
+    Route::get('/mot/{number}', 'MotController@index');
+    Route::get('/tax/{number}', 'TaxController@index');
+    Route::get('/co/{number}', 'CO2Controller@index');
+    Route::get('/dvla/{number}', 'DvlaController@index');
+    Route::get('/vdi/{number}', 'VdiController@index');
+});
+
 Route::get('/confirm', array('middleware' => 'cors', 'uses' => 'StripeController@confirmPayment'));
 
-Route::get('/getvdi', 'VdiController@index');
-
-Route::get('/mot/{number}', 'MotController@index');
-
-Route::get('/tax/{number}', 'TaxController@index');
+// filling vdi column for all regs where is null
+// Route::get('/getvdi', 'VdiController@fill');
 
 // filling dvla table in database
 // Route::get('dvla', 'DvlaController@fill');

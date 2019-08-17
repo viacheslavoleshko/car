@@ -4,10 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use DB;
+use App\Models\Dvla;
 
 class DvlaController extends Controller
 {
+    public function index(Request $request) 
+    {
+        $number = $request->input('number');
+        
+        return response()->json([
+            'object' => Dvla::select('location', 'area')
+                ->where('first_reg', substr($number, 0, 2))
+                ->get(),
+        ]);
+    }
+    
     public function fill()
     {
         set_time_limit(0);
@@ -96,8 +107,7 @@ class DvlaController extends Controller
         foreach($area_location as $area => $location) {
             foreach($location as $location => $regs) {
                 foreach($regs as $reg) {
-                    $query = DB::table('dvla')
-                    ->insert([
+                    $query = Dvla::insert([
                         ['first_reg' => $reg, 'location' => $location, 'area' => $area],
                     ]);
                 }

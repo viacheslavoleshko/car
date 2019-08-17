@@ -10,29 +10,26 @@ use DOMXpath;
 
 class TaxController extends Controller
 {
-    public function index($number)
+    public function index(Request $request)
     {
+        $number = $request->input('number');
         $data = Tax::select('t')->where('reg', $number)->first();
         
         if(!$data || is_null($data['t'])) {
-            $pattern = '/^[A-Z]{2}[0-9]{2}[A-Z]{3}$/';
+            $res = self::curlNumberPlate($number);
 
-            if (preg_match($pattern, $number)) {
-                $res = self::curlNumberPlate($number);
-
-                if($res !== '-1') {
-                    $json = json_encode($res);
-                    $co2 = preg_replace("/[^0-9]/", '', $res['CO₂Emissions']);
-                } else { $json = $res; $co2 = '-1'; };
-                
-                Tax::updateOrInsert(['reg' => $number], 
-                [
-                        'updated_at' => now()->toDateTimeString('Y-m-d H:i:s'), 
-                    't' => $json,
-                    'co2' => $co2, 
-                    'priority' => '1'
-                ]);
-            }
+            if($res !== '-1') {
+                $json = json_encode($res);
+                $co2 = preg_replace("/[^0-9]/", '', $res['CO₂Emissions']);
+            } else { $json = $res; $co2 = '-1'; };
+            
+            Tax::updateOrInsert(['reg' => $number], 
+            [
+                'updated_at' => now()->toDateTimeString('Y-m-d H:i:s'), 
+                't' => $json,
+                'co2' => $co2, 
+                'priority' => '1'
+            ]);
         }
         return response()->json([
             'object' => Tax::select('t')->where('reg', $number)->get()
