@@ -87,7 +87,7 @@ export class PurchasePage implements OnInit {
       }
     } else {
       console.log("handle  success");
-      this.purchaseServie.vdi = response;
+      this.purchaseServie.vdimap.set(this.regNumb, response);
       this.purchaseServie.numberVdi = this.regNumb;
       this.router.navigateByUrl('/vehicle/');
     }
