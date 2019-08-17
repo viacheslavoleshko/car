@@ -47,9 +47,12 @@ Route::group([
     Route::get('/co/{number}', 'CO2Controller@index');
     Route::get('/dvla/{number}', 'DvlaController@index');
     Route::get('/vdi/{number}', 'VdiController@index');
+    Route::get('/stolen/{number}', 'StealController@index');
 });
 
 Route::get('/confirm', array('middleware' => 'cors', 'uses' => 'StripeController@confirmPayment'));
+
+
 
 // filling vdi column for all regs where is null
 // Route::get('/getvdi', 'VdiController@fill');
