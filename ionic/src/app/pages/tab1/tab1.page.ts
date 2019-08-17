@@ -33,6 +33,7 @@ export class Tab1Page implements OnInit {
         if(this.regNumb !== null)
         this.search();
         if (this.purchaseService.vdi) {
+
             this.showVdi(this.purchaseService.vdi);
             this.regNumb = this.purchaseService.numberVdi;
         }
