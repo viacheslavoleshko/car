@@ -82,6 +82,7 @@ class StealController extends Controller
         curl_setopt_array($ch2, $options);
 
         // COOKIE
+        curl_setopt($ch1, CURLOPT_COOKIEJAR, 'cookies.txt');
         curl_setopt($ch2, CURLOPT_COOKIEFILE, 'cookies.txt');
 
         $result = curl_exec($ch2);
