@@ -67,7 +67,7 @@ class StripeController extends Controller
                 'payment_intent_client_secret' => $intent->client_secret
             ]);
         } else if ($intent->status == 'succeeded') {
-            VdiController::index();
+            VdiController::fill();
             echo json_encode([
                 'success' => true,
                 'vdi' => $this->selectVdi($regNumb),
@@ -78,7 +78,7 @@ class StripeController extends Controller
         }
 
     }
-
+  // delete
     public function selectVdi($number) {
         return  \App\Models\Vdi::select('vdi')->where( 'reg', $number)->get();
 }
