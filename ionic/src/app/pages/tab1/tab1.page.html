@@ -1,15 +1,16 @@
-<ion-content>
+<ion-content  (ionScrollStart)="scroll($event)">
   <ion-item>
     <ion-col size="12">
       <ion-input
         color="primary"
+        style="text-transform:uppercase"
         placeholder="Enter reg number"
         [(ngModel)]="regNumb"
         (ionChange) = "search()"
       ></ion-input>
     </ion-col>
   </ion-item>
-  <ion-button *ngIf="vdi  || co || tax || dvla" [routerLink]="'/purchase/' + regNumb"><h3>BUY</h3></ion-button>
+  <ion-button *ngIf="co || tax || dvla" [routerLink]="'/purchase/' + regNumb"><h3>BUY</h3></ion-button>
   <ion-grid *ngIf="vdi !== undefined && vdi['vdi'] !== undefined && vdi['vdi'] !== null">
     <div class="label">VDI</div>
     <ion-row>
@@ -354,5 +355,20 @@
       <ion-col>£{{co.tax6_single}}</ion-col>
     </ion-row>
   </ion-grid>
-
+  <dialog id="dialog">
+    <a id="closeT"  (click)="close()">X</a>
+    <h1>Deal Of The Day</h1>
+    <div id="span1" class="orange mb-15">Get peace of mind - Get full check</div>
+    <del class="cost">£14.99 </del> <span></span>
+    <del class="cost">£9.99 </del>
+    <span class="cost orange">£7.99</span>
+    <b id="strong1" class="mb-15">Claim instant discount.</b>
+    <b id="strong2" class="mb-15">Further discount follows😋</b>
+    <form>
+      <ion-input style="border: 1px solid gainsboro; border-radius: 5px;
+               margin-bottom: 15px"
+                 type="email" color="medium" placeholder="Enter your email address here..."></ion-input>
+      <ion-button (click)="close()" [routerLink]="'/purchase/' + regNumb" expand="block" color="secondary">Claim Now</ion-button>
+    </form>
+  </dialog>
 </ion-content>

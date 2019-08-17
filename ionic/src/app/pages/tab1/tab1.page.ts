@@ -4,6 +4,7 @@ import { CarService } from '../../car.service';
 import {FinanceRecordList, Object, WriteOffRecordList} from "../../models/Mot";
 import {NavController} from "@ionic/angular";
 import {PurchaseService} from "../../purchase.service";
+import {log} from "util";
 
 @Component({
   selector: 'app-tab1',
@@ -11,7 +12,8 @@ import {PurchaseService} from "../../purchase.service";
   styleUrls: ['./tab1.page.scss'],
 })
 export class Tab1Page implements OnInit {
-    regNumb;
+    regNumb = '';
+    showModal;
     obj: Object = new Object();
     tax;
     vdi;
@@ -30,23 +32,24 @@ export class Tab1Page implements OnInit {
         this.route.params.subscribe((params) => {
             this.regNumb = params['regNumb'];
         });
-        if(this.regNumb !== null)
-        this.search();
-        if (this.purchaseService.vdi) {
-            this.showVdi(this.purchaseService.vdi);
+        if(this.regNumb === '') {
             this.regNumb = this.purchaseService.numberVdi;
         }
+        this.search();
+
 
     }
 
     search() {
         //this.router.navigate(['tabs/tab1', `${this.regNumb}`] );
-        if (this.regNumb === '') {
+        if (this.regNumb === '' || this.regNumb === undefined) {
             this.obj = undefined;
             this.tax = undefined;
             this.dvla = undefined;
             this.co = undefined;
+            this.vdi = undefined;
         } else {
+            this.regNumb = this.regNumb.toUpperCase();
             this.carService.getMot(this.regNumb).subscribe((res) => {
                 this.obj = res['object']['0'];
             });
@@ -60,6 +63,7 @@ export class Tab1Page implements OnInit {
             //             //         this.financeList = this.vdi['vdi']['Response']['DataItems']['FinanceRecordList'];
             //             //     }
             //             // });
+             this.showVdi(this.purchaseService.vdimap, this.regNumb.toUpperCase());
             this.carService.getDvla(this.regNumb).subscribe((res) => {
                 this.dvla = res['object']['0'];
             });
@@ -81,11 +85,31 @@ export class Tab1Page implements OnInit {
             txt.innerText = '▼';
         }
     }
-    showVdi(json) {
-        this.vdi = json['vdi']['0'];
-        if(this.vdi !== undefined && this.vdi['vdi'] !== null && this.vdi['vdi'] !== undefined) {
-            this.writeOffRecordList = this.vdi['vdi']['Response']['DataItems']['WriteOffRecordList'];
-            this.financeList = this.vdi['vdi']['Response']['DataItems']['FinanceRecordList'];
-        }
+    showVdi(json, numb) {
+        if (json.get(numb)) {
+            this.vdi = json.get(numb)['vdi']['0'];
+            if (this.vdi !== undefined && this.vdi['vdi'] !== null && this.vdi['vdi'] !== undefined) {
+                this.writeOffRecordList = this.vdi['vdi']['Response']['DataItems']['WriteOffRecordList'];
+                this.financeList = this.vdi['vdi']['Response']['DataItems']['FinanceRecordList'];
+            }
+        } else this.vdi = undefined;
+    }
+    OpenDialog() {
+        const dialog = document.querySelector('dialog');
+        dialog.showModal();
+    }
+    close() {
+        const dialog = document.querySelector('dialog');
+        dialog.close();
+    }
+
+    scroll(event) {
+        setTimeout(() => {
+            if (!this.showModal) {
+                this.showModal = true;
+                this.OpenDialog();
+            }
+        },2000);
+
     }
 }
