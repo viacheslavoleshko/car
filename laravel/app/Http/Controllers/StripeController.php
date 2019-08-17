@@ -57,7 +57,9 @@ class StripeController extends Controller
         }
           }
     public function generatePaymentResponse($intent, $regNumb) {
-
+        \App\Models\Stripe::where('payment_intent', $intent->id)->update([
+            'status' => $intent->status
+        ]);
         if ($intent->status == 'requires_source_action' &&
             $intent->next_action->type == 'use_stripe_sdk') {
             echo json_encode([
@@ -74,10 +76,9 @@ class StripeController extends Controller
             http_response_code(500);
             echo json_encode(['error' => 'Invalid PaymentIntent status']);
         }
-        \App\Models\Stripe::where('payment_intent', $intent->id)->update([
-            'status' => $intent->status
-        ]);
+
     }
+
     public function selectVdi($number) {
         return  \App\Models\Vdi::select('vdi')->where( 'reg', $number)->get();
 }

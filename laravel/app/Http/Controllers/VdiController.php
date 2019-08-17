@@ -15,13 +15,13 @@ class VdiController extends Controller
             ->distinct()
             ->join('stripe', 'mot.reg', '=', 'stripe.reg')
             ->whereNull('mot.vdi')
-            ->where('stripe.status', 'payed')
+            ->where('stripe.status', 'succeeded')
             ->whereRaw("(stripe.created_at + interval '10 minute') > now()")
             ->limit(3)
             ->pluck('mot.reg');
 
         foreach ($numbers as $number) {
-            var_dump($number);
+          //  var_dump($number);
             $json = self::curlNumberPlate($number);
         
             Vdi::where('reg', $number)
