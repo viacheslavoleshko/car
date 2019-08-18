@@ -154,6 +154,7 @@ export class Tab1Page implements OnInit {
                     this.motTable.push(this.motTest[i]);
             }
         }
+        this.motTable = this.motTable.reverse();
         const data = {
             labels: this.data,
             datasets: [{
