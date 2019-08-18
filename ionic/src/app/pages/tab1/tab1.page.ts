@@ -22,12 +22,13 @@ export class Tab1Page implements OnInit {
     co;
     writeOffRecordList: WriteOffRecordList[] = [];
     financeList: FinanceRecordList[] = [];
-    show = false;
+    //show = false;
     motTest: MotTests[];
+    motTable: MotTests[] = [];
     data: string[] = [];
     odometerValues: string[] = [];
     canvas;
-    lineChart
+    lineChart;
     constructor(private router: Router,
                 private carService: CarService,
                 private purchaseService: PurchaseService,
@@ -36,14 +37,13 @@ export class Tab1Page implements OnInit {
     }
 
     ngOnInit() {
+        this.search();
         this.route.params.subscribe((params) => {
             this.regNumb = params['regNumb'];
+            if(this.regNumb === undefined)
+                this.regNumb = this.purchaseService.numberVdi;
+            this.search();
         });
-        if(this.regNumb === '') {
-            this.regNumb = this.purchaseService.numberVdi;
-        }
-
-        this.search();
 
     }
 
@@ -66,7 +66,6 @@ export class Tab1Page implements OnInit {
                 if (this.obj !== undefined) {
                 if (this.obj['m']['motTests'] !== undefined) {
                     this.createChart();
-
                 }
                 }
             });
@@ -138,6 +137,7 @@ export class Tab1Page implements OnInit {
         document.querySelector('#chartContainer').innerHTML = '<canvas id="Chart" width="600" height="500"></canvas>';
         this.data = [];
         this.odometerValues = [];
+        this.motTable = [];
         this.motTest = this.obj['m']['motTests'];
         const canvas = document.getElementById('Chart');
         Chart.defaults.global.defaultFontFamily = 'Lato';
@@ -147,8 +147,11 @@ export class Tab1Page implements OnInit {
             this.odometerValues.push(this.motTest[i].odometerValue);
             if (i === this.motTest.length - 1) {
                 this.motTest[i].yearTotal = 0;
+                this.motTable.push(this.motTest[i]);
             } else {
                 this.motTest[i].yearTotal = Number(this.motTest[i].odometerValue) - Number(this.motTest[i + 1].odometerValue);
+                if (this.motTest[i].yearTotal > 50)
+                    this.motTable.push(this.motTest[i]);
             }
         }
         const data = {
@@ -177,6 +180,7 @@ export class Tab1Page implements OnInit {
             options: chartOptions
         });
     }
+
 
 
 

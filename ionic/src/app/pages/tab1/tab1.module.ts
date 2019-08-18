@@ -22,7 +22,8 @@ const routes: Routes = [
   {
     path: ':/component:/regNumb',
     component : MotDetailsPageModule
-  }
+  },
+
 ];
 
 @NgModule({

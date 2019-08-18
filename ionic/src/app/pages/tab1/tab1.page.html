@@ -367,10 +367,12 @@
       <th>Mileage recorded</th>
       <th>Yearly total</th>
     </tr>
-    <tr *ngFor="let test of motTest">
+
+    <tr *ngFor="let test of motTable.reverse()">
       <td>{{test.completedDate.slice(0, 4)}}</td>
       <td>{{test.odometerValue}}</td>
       <td>{{test.yearTotal}}</td>
     </tr>
+
   </table>
 </ion-content>
