@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { Tab1Page } from './tab1.page';
 import { MotDetailsPage } from '../mot-details/mot-details.page';
 import { MotDetailsPageModule } from '../mot-details/mot-details.module';
+import {DiscountComponent} from "../discount/discount.component";
 
 const routes: Routes = [
   {
@@ -31,6 +32,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [Tab1Page]
+  declarations: [Tab1Page, DiscountComponent],
+  entryComponents: [DiscountComponent]
 })
 export class Tab1PageModule {}

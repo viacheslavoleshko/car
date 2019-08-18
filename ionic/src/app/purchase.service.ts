@@ -12,6 +12,7 @@ let dhost;
 export class PurchaseService {
     vdimap = new Map();
     numberVdi = '';
+    showModal = false;
     constructor(public http: HttpClient) {
     }
 

@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import { CarService } from '../../car.service';
-import {FinanceRecordList, Object, WriteOffRecordList} from "../../models/Mot";
-import {NavController} from "@ionic/angular";
+import {FinanceRecordList, MotTests, Object, WriteOffRecordList} from "../../models/Mot";
+import {ModalController, NavController} from "@ionic/angular";
 import {PurchaseService} from "../../purchase.service";
 import {log} from "util";
+import {DiscountComponent} from "../discount/discount.component";
+import {element} from "protractor";
 
 @Component({
   selector: 'app-tab1',
@@ -13,7 +15,6 @@ import {log} from "util";
 })
 export class Tab1Page implements OnInit {
     regNumb = '';
-    showModal;
     obj: Object = new Object();
     tax;
     vdi;
@@ -22,10 +23,16 @@ export class Tab1Page implements OnInit {
     writeOffRecordList: WriteOffRecordList[] = [];
     financeList: FinanceRecordList[] = [];
     show = false;
+    motTest: MotTests[];
+    data: string[] = [];
+    odometerValues: string[] = [];
+    canvas;
+    lineChart
     constructor(private router: Router,
                 private carService: CarService,
                 private purchaseService: PurchaseService,
-                private route : ActivatedRoute) {
+                private route : ActivatedRoute,
+                private modalController: ModalController) {
     }
 
     ngOnInit() {
@@ -35,23 +42,33 @@ export class Tab1Page implements OnInit {
         if(this.regNumb === '') {
             this.regNumb = this.purchaseService.numberVdi;
         }
-        this.search();
 
+        this.search();
 
     }
 
     search() {
-        //this.router.navigate(['tabs/tab1', `${this.regNumb}`] );
+        this.canvas = document.querySelector('#Chart');
+        if(this.canvas)
+        this.canvas.remove();
+        this.motTest = undefined;
         if (this.regNumb === '' || this.regNumb === undefined) {
             this.obj = undefined;
             this.tax = undefined;
             this.dvla = undefined;
             this.co = undefined;
             this.vdi = undefined;
+
         } else {
             this.regNumb = this.regNumb.toUpperCase();
             this.carService.getMot(this.regNumb).subscribe((res) => {
                 this.obj = res['object']['0'];
+                if (this.obj !== undefined) {
+                if (this.obj['m']['motTests'] !== undefined) {
+                    this.createChart();
+
+                }
+                }
             });
             this.carService.getTax(this.regNumb).subscribe((res) => {
                 this.tax = res['object']['0'];
@@ -94,22 +111,73 @@ export class Tab1Page implements OnInit {
             }
         } else this.vdi = undefined;
     }
-    OpenDialog() {
-        const dialog = document.querySelector('dialog');
-        dialog.showModal();
-    }
-    close() {
-        const dialog = document.querySelector('dialog');
-        dialog.close();
+    dialog(state) {
+        document.getElementById('dialog').style.display = state;
+        document.getElementById('filter').style.display = state;
+
+
     }
 
-    scroll(event) {
-        setTimeout(() => {
-            if (!this.showModal) {
-                this.showModal = true;
-                this.OpenDialog();
+    async scroll(event) {
+        setTimeout(async () => {
+            if (!this.purchaseService.showModal) {
+                this.purchaseService.showModal = true;
+                const modal = await this.modalController.create({
+                    componentProps: {
+                        data: this.regNumb
+                    },
+                    cssClass: 'modal',
+                    component: DiscountComponent
+
+                });
+                await modal.present();
             }
-        },2000);
-
+            },2000);
     }
+    createChart() {
+        document.querySelector('#chartContainer').innerHTML = '<canvas id="Chart" width="600" height="500"></canvas>';
+        this.data = [];
+        this.odometerValues = [];
+        this.motTest = this.obj['m']['motTests'];
+        const canvas = document.getElementById('Chart');
+        Chart.defaults.global.defaultFontFamily = 'Lato';
+        Chart.defaults.global.defaultFontSize = 18;
+        for (let i = this.motTest.length - 1; i >= 0; i--) {
+            this.data.push(this.motTest[i].completedDate.slice(0, 4));
+            this.odometerValues.push(this.motTest[i].odometerValue);
+            if (i === this.motTest.length - 1) {
+                this.motTest[i].yearTotal = 0;
+            } else {
+                this.motTest[i].yearTotal = Number(this.motTest[i].odometerValue) - Number(this.motTest[i + 1].odometerValue);
+            }
+        }
+        const data = {
+            labels: this.data,
+            datasets: [{
+                label: 'Mileage history',
+                data: this.odometerValues,
+                borderColor: '#67d1ff',
+            }]
+        };
+
+        const chartOptions = {
+            legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                    boxWidth: 80,
+                    fontColor: '#67d1ff'
+                }
+            }
+        };
+
+        this.lineChart = new Chart(canvas, {
+            type: 'line',
+            data: data,
+            options: chartOptions
+        });
+    }
+
+
+
 }

@@ -24,7 +24,8 @@ export class Mot {
         public odometerResultType = '',
         public odometerUnit = '',
         public odometerValue = '',
-        public rfrAndComments: RfrAndComments[] = []
+        public rfrAndComments: RfrAndComments[] = [],
+        public yearTotal = 0
     ) {}
 }
 export class RfrAndComments {

@@ -69,7 +69,7 @@ export class PurchasePage implements OnInit {
     }
     if (response.error) {
       console.log('RESPONSE ERROR');
-      this.message = response.error['jsonBody']['error']['message'];;
+      this.message = response.error['jsonBody']['error']['message'];
     } else if (response.requires_action) {
       // Use Stripe.js to handle required card action
       console.log('require');

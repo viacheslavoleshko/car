@@ -1,0 +1,18 @@
+
+  <div id="dialog">
+    <a (click)="close()" id="closeT">X</a>
+    <h1>Deal Of The Day</h1>
+    <div id="span1" class="orange mb-15">Get peace of mind - Get full check</div>
+    <del class="cost">£14.99 </del> <span></span>
+    <del class="cost">£9.99 </del>
+    <span class="cost orange">£7.99</span>
+    <b id="strong1" class="mb-15">Claim instant discount.</b>
+    <b id="strong2" class="mb-15">Further discount follows😋</b>
+    <form>
+      <ion-input style="border: 1px solid gainsboro; border-radius: 5px;
+               margin-bottom: 15px"
+                 type="email" color="medium" placeholder="Enter your email address here..."></ion-input>
+      <ion-button (click)="close()" [routerLink]="'/purchase/' + data" expand="block" color="secondary">Claim Now</ion-button>
+    </form>
+  </div>
+
