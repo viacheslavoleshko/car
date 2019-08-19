@@ -16,6 +16,10 @@ class StripeController extends Controller
               $paymentId = $request->header('token');
               $regNumb = $request->header('regnumb');
               $intentId = $request->header('paymentIntent');
+              $product = $request->header('product');
+              if ($product == '1')
+                  $price = 700;
+              else $price = 1499;
                $data =  \App\Models\Mot::select('reg')->where('reg', $regNumb)->get();
               if($data->first()) {
                   Stripe::setApiKey(env(BUY_REPORT_SERCET_KEY));
@@ -23,7 +27,7 @@ class StripeController extends Controller
                       if ($paymentId != '') {
                           $intent = PaymentIntent::create([
                               'payment_method' => $paymentId,
-                              "amount" => 1499,
+                              "amount" => $price,
                               "currency" => "gbp",
                               'confirmation_method' => 'manual',
                               'payment_method_types' => ['card'],
@@ -36,7 +40,9 @@ class StripeController extends Controller
                               \App\Models\Stripe::insert([
                                   'status' => 'intent',
                                   'reg' => $regNumb,
-                                  'payment_intent' => $intent->id
+                                  'payment_intent' => $intent->id,
+                                  'product' => $product,
+                                  'price' => $price
                               ]);
                           }
                       }
@@ -47,7 +53,7 @@ class StripeController extends Controller
                           );
                           $intent->confirm();
                       }
-                      this . $this->generatePaymentResponse($intent, $regNumb);
+                       $this->generatePaymentResponse($intent,$product);
                   } catch (\Stripe\Error\Base $e) {
                       return response()->json(['error' => $e]);
                   }
@@ -57,7 +63,7 @@ class StripeController extends Controller
             ]);
         }
           }
-    public function generatePaymentResponse($intent, $regNumb) {
+    public function generatePaymentResponse($intent, $product) {
         \App\Models\Stripe::where('payment_intent', $intent->id)->update([
             'status' => $intent->status
         ]);
@@ -71,7 +77,8 @@ class StripeController extends Controller
             VdiController::fill();
 
             echo json_encode([
-              'success' => true
+              'success' => true,
+                'product' => $product
             ]);
         } else {
             http_response_code(500);
@@ -79,8 +86,5 @@ class StripeController extends Controller
         }
 
     }
-  // delete
-    public function selectVdi($number) {
-        return  \App\Models\Vdi::select('vdi')->where( 'reg', $number)->get();
-}
+
 }
