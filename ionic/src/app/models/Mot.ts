@@ -55,3 +55,11 @@ export class FinanceRecordList {
     ) {
     }
 }
+export class StolenMiaftrRecordList {
+    constructor (
+        public Category = '',
+        public LossDate = '',
+        public LossType = '',
+        public MiaftrEntryDate = ''
+    ) {}
+}

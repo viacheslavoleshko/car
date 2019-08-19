@@ -1,12 +1,10 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component,OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import { CarService } from '../../car.service';
-import {FinanceRecordList, MotTests, Object, WriteOffRecordList} from "../../models/Mot";
-import {ModalController, NavController} from "@ionic/angular";
+import {FinanceRecordList, MotTests, Object, StolenMiaftrRecordList, WriteOffRecordList} from "../../models/Mot";
+import {ModalController} from "@ionic/angular";
 import {PurchaseService} from "../../purchase.service";
-import {log} from "util";
 import {DiscountComponent} from "../discount/discount.component";
-import {element} from "protractor";
 
 @Component({
   selector: 'app-tab1',
@@ -22,7 +20,7 @@ export class Tab1Page implements OnInit {
     co;
     writeOffRecordList: WriteOffRecordList[] = [];
     financeList: FinanceRecordList[] = [];
-    //show = false;
+    stolen: StolenMiaftrRecordList[] = [];
     motTest: MotTests[];
     motTable: MotTests[] = [];
     data: string[] = [];
@@ -40,7 +38,7 @@ export class Tab1Page implements OnInit {
 
         this.route.params.subscribe((params) => {
             this.regNumb = params['regNumb'];
-            if(this.regNumb === undefined)
+            if(this.purchaseService.numberVdi !== '')
                 this.regNumb = this.purchaseService.numberVdi;
             if(this.router.url !== '/vehicle')
             this.purchaseService.url = this.router.url;
@@ -109,6 +107,7 @@ export class Tab1Page implements OnInit {
             if (this.vdi !== undefined && this.vdi['vdi'] !== null && this.vdi['vdi'] !== undefined) {
                 this.writeOffRecordList = this.vdi['vdi']['Response']['DataItems']['WriteOffRecordList'];
                 this.financeList = this.vdi['vdi']['Response']['DataItems']['FinanceRecordList'];
+                this.stolen = this.vdi['vdi']['Response']['DataItems']['StolenMiaftrRecordList'];
             }
         } else this.vdi = undefined;
     }
