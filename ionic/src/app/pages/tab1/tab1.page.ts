@@ -6,6 +6,7 @@ import {ModalController} from "@ionic/angular";
 import {PurchaseService} from "../../purchase.service";
 import {DiscountComponent} from "../discount/discount.component";
 import {log} from "util";
+import * as moment from 'moment'
 
 @Component({
   selector: 'app-tab1',
@@ -19,6 +20,8 @@ export class Tab1Page implements OnInit {
     vdi;
     dvla;
     co;
+    taxDays;
+    motDays;
     stolen: string[] = [];
     writeOffRecordList: WriteOffRecordList[] = [];
     financeList: FinanceRecordList[] = [];
@@ -58,6 +61,8 @@ export class Tab1Page implements OnInit {
         this.dvla = undefined;
         this.co = undefined;
         this.vdi = undefined;
+        this.taxDays = undefined;
+        this.motDays = undefined;
         this.stolen = [];
         if (this.regNumb !== '' && this.regNumb !== undefined) {
             this.showDiscount();
@@ -66,12 +71,18 @@ export class Tab1Page implements OnInit {
                 this.obj = res['object']['0'];
                 if (this.obj !== undefined) {
                     if (this.obj['m']['motTests'] !== undefined) {
-                    this.createChart();
-                }
+                        this.createChart();
+                        var motDate = new Date(moment(this.obj['m']['motTests']['0']['expiryDate']).format('YYYY-MM-DD'));
+                        var today = new Date();
+                        this.motDays = this.diffdate(motDate, today);
+                    }
                 }
             });
             this.carService.getTax(this.regNumb).subscribe((res) => {
                 this.tax = res['object']['0'];
+                var taxDate = new Date(moment(res['object']['0']['t']['Tax due']).format('YYYY-MM-DD'));
+                var today = new Date();
+                this.taxDays = this.diffdate(taxDate, today);
             });
             // this.carService.getVdi(this.regNumb).subscribe(res => {
             //             //     this.vdi = res['object']['0'];
@@ -89,6 +100,15 @@ export class Tab1Page implements OnInit {
             });
             this.showStolen(this.purchaseService.stolen, this.regNumb)
         }
+    }
+
+    diffdate(date1, date2) {
+        var _MS_PER_DAY = 1000 * 60 * 60 * 24;
+        // Discard the time and time-zone information.
+        var utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+        var utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+      
+        return Math.floor((utc1 - utc2) / _MS_PER_DAY);
     }
 
     showList(id: string, name: string) {
