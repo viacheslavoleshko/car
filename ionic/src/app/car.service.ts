@@ -26,4 +26,7 @@ export class CarService {
   getCo(registration) {
     return this.http.get(`${this.basepath}/co/${registration}`);
   }
+  getStolen(registration) {
+    return this.http.get(`${this.basepath}/stolen/${registration}`);
+  }
 }

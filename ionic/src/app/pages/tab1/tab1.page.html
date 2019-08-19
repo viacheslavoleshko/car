@@ -115,8 +115,8 @@
     <ion-row>
       <ion-col (click)="showList('stolen', 'stolenList')"><span id="stolen">►</span>Stolen Miaftr Record List</ion-col>
     </ion-row>
-    <span *ngIf="stolen !== []" class="hidden" name="stolenList">
-    <div class="mleft" *ngFor="let item of stolen">
+    <span *ngIf="stolenList !== []" class="hidden" name="stolenList">
+    <div class="mleft" *ngFor="let item of stolenList">
       <ion-row>
         <ion-col>Loss Date</ion-col>
         <ion-col>{{item.LossDate}}</ion-col>
@@ -200,6 +200,13 @@
       <ion-col>{{vdi['vdi']['Response']['DataItems']['FinanceRecordCount']}}</ion-col>
     </ion-row>
   </ion-grid>
+    <ion-grid *ngIf="stolen.length !== 0">
+        <div class="label">STOLEN</div>
+        <ion-row *ngFor="let item of stolen">
+            <ion-label style="color: red;">{{item}}</ion-label>
+            <br/>
+        </ion-row>
+    </ion-grid>
   <ion-grid *ngIf="obj !== undefined && obj.m !== null">
     <div class="label">MOT</div>
 

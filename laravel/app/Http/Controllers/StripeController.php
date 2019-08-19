@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Vdi;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
@@ -68,9 +69,9 @@ class StripeController extends Controller
             ]);
         } else if ($intent->status == 'succeeded') {
             VdiController::fill();
+
             echo json_encode([
-                'success' => true,
-                'vdi' => $this->selectVdi($regNumb),
+              'success' => true
             ]);
         } else {
             http_response_code(500);

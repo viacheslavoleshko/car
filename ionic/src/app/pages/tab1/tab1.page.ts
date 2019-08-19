@@ -5,6 +5,7 @@ import {FinanceRecordList, MotTests, Object, StolenMiaftrRecordList, WriteOffRec
 import {ModalController} from "@ionic/angular";
 import {PurchaseService} from "../../purchase.service";
 import {DiscountComponent} from "../discount/discount.component";
+import {log} from "util";
 
 @Component({
   selector: 'app-tab1',
@@ -18,9 +19,10 @@ export class Tab1Page implements OnInit {
     vdi;
     dvla;
     co;
+    stolen: string[] = [];
     writeOffRecordList: WriteOffRecordList[] = [];
     financeList: FinanceRecordList[] = [];
-    stolen: StolenMiaftrRecordList[] = [];
+    stolenList: StolenMiaftrRecordList[] = [];
     motTest: MotTests[];
     motTable: MotTests[] = [];
     data: string[] = [];
@@ -35,7 +37,6 @@ export class Tab1Page implements OnInit {
     }
 
     ngOnInit() {
-
         this.route.params.subscribe((params) => {
             this.regNumb = params['regNumb'];
             if(this.purchaseService.numberVdi !== '')
@@ -44,7 +45,7 @@ export class Tab1Page implements OnInit {
             this.purchaseService.url = this.router.url;
             this.search();
         });
-           this.showDiscount();
+
     }
 
     search() {
@@ -52,19 +53,19 @@ export class Tab1Page implements OnInit {
         if(this.canvas)
         this.canvas.remove();
         this.motTest = undefined;
-        if (this.regNumb === '' || this.regNumb === undefined) {
-            this.obj = undefined;
-            this.tax = undefined;
-            this.dvla = undefined;
-            this.co = undefined;
-            this.vdi = undefined;
-
-        } else {
+        this.obj = undefined;
+        this.tax = undefined;
+        this.dvla = undefined;
+        this.co = undefined;
+        this.vdi = undefined;
+        this.stolen = [];
+        if (this.regNumb !== '' && this.regNumb !== undefined) {
+            this.showDiscount();
             this.regNumb = this.regNumb.toUpperCase();
             this.carService.getMot(this.regNumb).subscribe((res) => {
                 this.obj = res['object']['0'];
                 if (this.obj !== undefined) {
-                if (this.obj['m']['motTests'] !== undefined) {
+                    if (this.obj['m']['motTests'] !== undefined) {
                     this.createChart();
                 }
                 }
@@ -86,6 +87,7 @@ export class Tab1Page implements OnInit {
             this.carService.getCo(this.regNumb).subscribe((res) => {
                 this.co = res['object']['0'];
             });
+            this.showStolen(this.purchaseService.stolen, this.regNumb)
         }
     }
 
@@ -103,13 +105,24 @@ export class Tab1Page implements OnInit {
     }
     showVdi(json, numb) {
         if (json.get(numb)) {
-            this.vdi = json.get(numb)['vdi']['0'];
+            this.vdi = json.get(numb);
             if (this.vdi !== undefined && this.vdi['vdi'] !== null && this.vdi['vdi'] !== undefined) {
                 this.writeOffRecordList = this.vdi['vdi']['Response']['DataItems']['WriteOffRecordList'];
                 this.financeList = this.vdi['vdi']['Response']['DataItems']['FinanceRecordList'];
-                this.stolen = this.vdi['vdi']['Response']['DataItems']['StolenMiaftrRecordList'];
+                this.stolenList = this.vdi['vdi']['Response']['DataItems']['StolenMiaftrRecordList'];
             }
         } else this.vdi = undefined;
+    }
+
+    showStolen(map, numb) {
+        if (map.get(numb)) {
+            const temp = map.get(numb);
+            let i = 0;
+            while (temp[`line${i}`] !== undefined) {
+                this.stolen.push(temp[`line${i}`]);
+                i++;
+            }
+        }
     }
     dialog(state) {
         document.getElementById('dialog').style.display = state;
@@ -120,6 +133,11 @@ export class Tab1Page implements OnInit {
 
     async showDiscount() {
         setTimeout(async () => {
+            if ( this.obj !== undefined ||
+            this.tax !== undefined ||
+            this.dvla !== undefined ||
+            this.co !== undefined ||
+            this.vdi !== undefined)
             if (!this.purchaseService.showModal) {
                 this.purchaseService.showModal = true;
                 const modal = await this.modalController.create({
@@ -133,7 +151,9 @@ export class Tab1Page implements OnInit {
                 await modal.present();
             }
             },30000);
+
     }
+
     createChart() {
         document.querySelector('#chartContainer').innerHTML = '<canvas id="Chart" width="600" height="500"></canvas>';
         this.data = [];
