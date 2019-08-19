@@ -13,6 +13,7 @@ export class PurchaseService {
     vdimap = new Map();
     numberVdi = '';
     showModal = false;
+    url = '';
     constructor(public http: HttpClient) {
     }
 

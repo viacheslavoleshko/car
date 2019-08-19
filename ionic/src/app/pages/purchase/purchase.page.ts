@@ -7,14 +7,12 @@ import {Tab1Page} from "../tab1/tab1.page";
   selector: 'app-purchase',
   templateUrl: './purchase.page.html',
   styleUrls: ['./purchase.page.scss'],
-  providers:[Tab1Page]
 })
 export class PurchasePage implements OnInit {
   message = '';
   constructor( private purchaseServie: PurchaseService,
                private route: ActivatedRoute,
-               private router: Router,
-               private tabPage: Tab1Page) { }
+               private router: Router) { }
   stripe = Stripe('pk_test_DXtuhrwBCTqVo7v0OBaCzArG');
 
   card = null;
@@ -89,7 +87,8 @@ export class PurchasePage implements OnInit {
       console.log("handle  success");
       this.purchaseServie.vdimap.set(this.regNumb, response);
       this.purchaseServie.numberVdi = this.regNumb;
-      this.router.navigate(['/vehicle/']);
+      this.purchaseServie.showModal = true;
+        this.router.navigate([this.purchaseServie.url]);
     }
   }
 }

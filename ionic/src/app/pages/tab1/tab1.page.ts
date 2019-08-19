@@ -37,14 +37,16 @@ export class Tab1Page implements OnInit {
     }
 
     ngOnInit() {
-        this.search();
+
         this.route.params.subscribe((params) => {
             this.regNumb = params['regNumb'];
             if(this.regNumb === undefined)
                 this.regNumb = this.purchaseService.numberVdi;
+            if(this.router.url !== '/vehicle')
+            this.purchaseService.url = this.router.url;
             this.search();
         });
-
+           this.showDiscount();
     }
 
     search() {
@@ -117,7 +119,7 @@ export class Tab1Page implements OnInit {
 
     }
 
-    async scroll(event) {
+    async showDiscount() {
         setTimeout(async () => {
             if (!this.purchaseService.showModal) {
                 this.purchaseService.showModal = true;
@@ -131,7 +133,7 @@ export class Tab1Page implements OnInit {
                 });
                 await modal.present();
             }
-            },2000);
+            },30000);
     }
     createChart() {
         document.querySelector('#chartContainer').innerHTML = '<canvas id="Chart" width="600" height="500"></canvas>';
@@ -143,15 +145,18 @@ export class Tab1Page implements OnInit {
         Chart.defaults.global.defaultFontFamily = 'Lato';
         Chart.defaults.global.defaultFontSize = 18;
         for (let i = this.motTest.length - 1; i >= 0; i--) {
-            this.data.push(this.motTest[i].completedDate.slice(0, 4));
-            this.odometerValues.push(this.motTest[i].odometerValue);
             if (i === this.motTest.length - 1) {
                 this.motTest[i].yearTotal = 0;
                 this.motTable.push(this.motTest[i]);
+                this.data.push(this.motTest[i].completedDate.slice(0, 4));
+                this.odometerValues.push(this.motTest[i].odometerValue);
             } else {
                 this.motTest[i].yearTotal = Number(this.motTest[i].odometerValue) - Number(this.motTest[i + 1].odometerValue);
-                if (this.motTest[i].yearTotal > 50)
+                if (Math.abs(this.motTest[i].yearTotal) > 50) {
+                    this.data.push(this.motTest[i].completedDate.slice(0, 4));
+                    this.odometerValues.push(this.motTest[i].odometerValue);
                     this.motTable.push(this.motTest[i]);
+                }
             }
         }
         this.motTable = this.motTable.reverse();
