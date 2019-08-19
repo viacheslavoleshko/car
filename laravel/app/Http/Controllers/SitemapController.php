@@ -25,6 +25,7 @@ class SitemapController extends Controller
     {
         $count = Mot::whereNotNull('updated_at')->count();
         $style = getenv('APP_URL') . '/sitemap/styles/xml.xsl';
+        $pwa = preg_replace('/car\./', '',  getenv('APP_URL'));
 
         if ( $page <= ceil($count / getenv('SITEMAP_OFFSET')) && $page != 0 ) {
             $numbers = Mot::whereNotNull('updated_at')
@@ -36,6 +37,7 @@ class SitemapController extends Controller
             return response()->view('sitemap/mot', [
                 'numbers' => $numbers,
                 'style' => $style,
+                'pwa' => $pwa,
             ])->header('Content-Type', 'text/xml');
         } else {
             abort(404);
