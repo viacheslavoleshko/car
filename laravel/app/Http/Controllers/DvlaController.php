@@ -54,7 +54,10 @@ class DvlaController extends Controller
             ),
             'Hampshire & Dorset' => array( 
                 'Bournemouth' => self::prefix('H', 0, 9),
-                'Brighton' => self::prefix('H', 9, 14),
+                'Portsmouth' => explode(" ", "HK HL HM HN HO HP HR HS HT HU HV HX HY"),
+            ),
+            'Isle of Wight' => array( 
+                'Isle of Wight' => explode(" ", "HW"), 
             ),
             NULL => array( 
                 'Borehamwood' => self::prefix('K', 0, 11),
@@ -66,8 +69,11 @@ class DvlaController extends Controller
                 'Sidcup' => self::prefix('L', 18, 5),
             ),
             'Manchester & Merseyside' => array( 
-                'Chelmsford' => self::prefix('M', 0),
+                'Manchester' => explode(" ", "MA MB MC MD ME MF MG MH MJ MK ML MM MO MP MR MS MT MU MV MW MX MY"),
             ),
+            'Isle of Man' => array( 
+                'Isle of Man' => explode(" ", "MN"),
+            ), 
             'North' => array( 
                 'Newcastle' => explode(" ", "NA NB NC ND NE NG NH NJ NK NL NM NN NO"),
                 'Stockton' => self::prefix('N', 14, 9),
@@ -80,7 +86,7 @@ class DvlaController extends Controller
                 'Carlisle' => self::prefix('P', 18, 5),
             ),
             'Reading' => array( 
-                'Theale' => self::prefix('R', 0),
+                'Reading' => self::prefix('R', 0),
             ),
             'Scotland' => array( 
                 'Glasgow' => self::prefix('S', 0, 9),
@@ -98,9 +104,9 @@ class DvlaController extends Controller
                 'Bristol' => self::prefix('W', 11, 12),
             ),
             'Yorkshire' => array( 
-                'Leeds' => self::prefix('Y', 0, 10),
+                'Leeds' => self::prefix('Y', 0, 11),
                 'Sheffield' => self::prefix('Y', 10, 9),
-                'Beverley' => self::prefix('Y', 19, 4),
+                'Beverley' => self::prefix('Y', 19, 3),
             ),
         );
 

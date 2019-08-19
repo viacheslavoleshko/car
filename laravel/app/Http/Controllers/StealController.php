@@ -17,14 +17,15 @@ class StealController extends Controller
         
         if(!$data || is_null($data['stolen'])) {
             $res = self::ifStolen($number);
-
+            $is_stolen = ($res["line0"] == "STOLEN VEHICLE") ? '1' : '0';
             $json = ($res !== '-1') ? json_encode($res) : $res;
             
             Stolen::updateOrInsert(['reg' => $number], 
             [
                 'updated_at' => now()->toDateTimeString('Y-m-d H:i:s'), 
                 'stolen' => $json,
-                'priority' => '1'
+                'priority' => '1',
+                'is_stolen' => $is_stolen,
             ]);
         }
         return response()->json([
@@ -66,8 +67,8 @@ class StealController extends Controller
         curl_setopt_array($ch1, $options);
         
         // COOKIE
-        curl_setopt($ch1, CURLOPT_COOKIEJAR, 'cookies.txt');
-        curl_setopt($ch1, CURLOPT_COOKIEFILE, 'cookies.txt');
+        curl_setopt($ch1, CURLOPT_COOKIEJAR, '/tmp/cookies.txt');
+        curl_setopt($ch1, CURLOPT_COOKIEFILE, '/tmp/cookies.txt');
         curl_exec($ch1);
     
         $nodes = [
@@ -82,8 +83,7 @@ class StealController extends Controller
         curl_setopt_array($ch2, $options);
 
         // COOKIE
-        curl_setopt($ch1, CURLOPT_COOKIEJAR, 'cookies.txt');
-        curl_setopt($ch2, CURLOPT_COOKIEFILE, 'cookies.txt');
+        curl_setopt($ch2, CURLOPT_COOKIEFILE, '/tmp/cookies.txt');
 
         $result = curl_exec($ch2);
         //var_dump($result);
@@ -97,15 +97,11 @@ class StealController extends Controller
             $info["line$i"] = trim($xpath->query('.//div[contains(@class,"stolen")]/descendant::div[@class="centre_text"]')->item($i)->nodeValue, " ✓");
         }
 
-        
-
         // delete null and empty elements
         $info = array_filter($info, function($value) { 
             return !is_null($value) && $value !== ''; 
         });
 
-
-        
         if(!empty($info)){
             // JSON generation time
             $time_elapsed_secs = round((microtime(true) - $start)*1000);
