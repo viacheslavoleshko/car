@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {PurchaseService} from "../../purchase.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Tab1Page} from "../tab1/tab1.page";
 import {CarService} from "../../car.service";
 import {LoadingController} from "@ionic/angular";
 
@@ -25,25 +24,29 @@ export class PurchasePage implements OnInit {
   cardElement;
   regNumb;
   load;
+  product = 0;
   async Submit() {
-    this.message = '';
-    this.loadingController.create({
-      message: 'Please wait...'
-    }).then((overlay) => {
-      this.load = overlay;
-      this.load.present();
-    });
-    const {paymentMethod, error} = await this.stripe.createPaymentMethod('card', this.cardElement);
-    if (error) {
-      console.log('ERROR' + error);
-      this.message = 'Incorrect data';
-      this.loadingController.dismiss();
-    } else {
-      console.log(paymentMethod);
-      this.purchaseServie.confirm(paymentMethod.id, this.regNumb, '').subscribe((res) => {
-        console.log(res);
-        this.handleServerResponse(res);
-    })};
+    if (this.product !== 0) {
+      this.message = '';
+      await this.loadingController.create({
+        message: 'Please wait...'
+      }).then((overlay) => {
+        this.load = overlay;
+        this.load.present();
+      });
+      const {paymentMethod, error} = await this.stripe.createPaymentMethod('card', this.cardElement);
+      if (error) {
+        this.loadingController.dismiss();
+        console.log('ERROR' + error);
+        this.message = 'Incorrect data';
+      } else {
+        console.log(paymentMethod);
+        this.purchaseServie.confirm(paymentMethod.id, this.regNumb, '', this.product.toString()).subscribe((res) => {
+          console.log(res);
+          this.handleServerResponse(res);
+        });
+      }
+    } else this.message = 'Select product'
   }
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -80,6 +83,7 @@ export class PurchasePage implements OnInit {
     }
     if (response.error) {
       console.log('RESPONSE ERROR');
+      this.loadingController.dismiss();
       this.message = response.error['jsonBody']['error']['message'];
     } else if (response.requires_action) {
       console.log('require');
@@ -90,25 +94,46 @@ export class PurchasePage implements OnInit {
         console.log('ActionError');
         this.loadingController.dismiss();
       } else {
-        this.purchaseServie.confirm('', this.regNumb, paymentIntent.id).subscribe((servereResponse) => {
+        this.purchaseServie.confirm('', this.regNumb, paymentIntent.id, this.product.toString()).subscribe((servereResponse) => {
         this.handleServerResponse(servereResponse);
         });
       }
     } else {
       console.log("handle  success");
-      this.carService.getVdi(this.regNumb).subscribe((res) => {
-        this.purchaseServie.vdimap.set(this.regNumb, res['object'][0]);
-        this.purchaseServie.numberVdi = this.regNumb;
-        this.carService.getStolen(this.regNumb).subscribe((stln) => {
-          const stolen: string[] = stln['object'][0]['stolen'];
-          this.purchaseServie.stolen.set(this.regNumb, stolen);
-          this.loadingController.dismiss();
-          this.router.navigate([this.purchaseServie.url]);
-        });
-
-      });
-
+         if (response['product'] === '2')
+             this.tariffVdi();
+         else
+           this.tariffStolen();
     }
   }
+
+  tariffVdi() {
+    this.carService.getVdi(this.regNumb).subscribe((res) => {
+      this.purchaseServie.vdimap.set(this.regNumb, res['object'][0]);
+      this.purchaseServie.numberVdi = this.regNumb;
+      this.carService.getStolen(this.regNumb).subscribe((stln) => {
+        const stolen: string[] = stln['object'][0]['stolen'];
+        this.purchaseServie.stolen.set(this.regNumb, stolen);
+        this.loadingController.dismiss();
+        this.router.navigate([this.purchaseServie.url]);
+      });
+    });
+  }
+
+  tariffStolen() {
+    this.purchaseServie.numberVdi = this.regNumb;
+    this.carService.getStolen(this.regNumb).subscribe((stln) => {
+      const stolen: string[] = stln['object'][0]['stolen'];
+      this.purchaseServie.stolen.set(this.regNumb, stolen);
+      this.loadingController.dismiss();
+      this.router.navigate([this.purchaseServie.url]);
+    });
+  }
+
+  setCost(cost) {
+    this.message = '';
+    this.product = cost;
+
 }
 
+}

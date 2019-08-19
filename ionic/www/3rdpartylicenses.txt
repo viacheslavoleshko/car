@@ -41,15 +41,6 @@ MIT
 @angular/service-worker
 MIT
 
-@ionic-native/core
-MIT
-
-@ionic-native/splash-screen
-MIT
-
-@ionic-native/status-bar
-MIT
-
 @ionic/angular
 MIT
 

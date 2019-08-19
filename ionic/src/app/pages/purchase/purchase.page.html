@@ -1,9 +1,45 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>purchase</ion-title>
+    <ion-title>{{regNumb}}</ion-title>
   </ion-toolbar>
 </ion-header>
+<ion-radio-group>
+  <ion-item>
+    <h2 >Silver
+      <span style="color: #2adc11">7£</span>
+    </h2>
+    <div  style="margin-left: 10px">
+      <div>Clocked mileage</div>
+      <div>Stolen check</div>
+      <div>Check mot and  road tax</div>
+      <div>check gaps in MOT</div>
+    </div>
 
+    <ion-radio (ionSelect)="setCost(1)" slot="end" color="success" id="stolen"></ion-radio>
+  </ion-item>
+  <ion-item>
+    <h1>Gold
+    <span style="color:#2adc11">14.99£</span>
+    </h1>
+    <div style="margin-left: 10px">
+      <span>Clocked mileage,</span>
+      <span>Stolen check, </span>
+      <span>Check mot and  road tax, </span>
+      <span>check gaps in MOT, </span>
+      <span> HP check - oustanding finance check , </span>
+      <span> Scrapped check, </span>
+      <span> VIN check, </span>
+      <span> Export check, </span>
+      <span> Import check, </span>
+      <span> Write off check, </span>
+      <span> Color change check, </span>
+      <span> Number of owners check, </span>
+      <span> Previous period of ownership, </span>
+      <span> Plate change count, </span>
+    </div>
+    <ion-radio  (ionSelect)="setCost(2)" slot="end" color="success" id="vdi"></ion-radio>
+  </ion-item>
+</ion-radio-group>
 <ion-content>
   <div id="card-element">
     A Stripe Element will be inserted here.
