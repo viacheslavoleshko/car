@@ -17,7 +17,7 @@ class Correct
     public function handle($request, Closure $next)
     {
         $number = strtoupper(preg_replace("/\s+/", "", $request->route('number')));
-        $pattern = '/^[A-Z]{2}[0-9]{2}[A-Z]{3}$/';
+        $pattern = '/(?=[A-Z]{2}[0-9]{2}[A-Z]{3})[^JTUIQZ]{2}[0-9]{2}[^IQ]{3}/';
         
         if (preg_match($pattern, $number)) {
             $request->replace(array('number' => $number));

@@ -94,7 +94,7 @@ class StealController extends Controller
             
         $info = array();
         for($i = 0; $i < $xpath->query('.//div[@class="header_notstolen" or @class="header_stolen"]/div[@class="centre_text"]')->count(); $i++) {  
-            $info["line$i"] = trim($xpath->query('.//div[contains(@class,"stolen")]/descendant::div[@class="centre_text"]')->item($i)->nodeValue, " ✓");
+            $info["line$i"] = trim($xpath->query('.//div[@class="header_notstolen" or @class="header_stolen"]/descendant::div[@class="centre_text"]')->item($i)->nodeValue, " ✓");
         }
 
         // delete null and empty elements
