@@ -1,12 +1,20 @@
 import {Component,OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import { CarService } from '../../car.service';
-import {FinanceRecordList, MotTests, Object, StolenMiaftrRecordList, WriteOffRecordList} from "../../models/Mot";
+import {
+    FinanceRecordList,
+    MotTests,
+    Object,
+    PlateChangeList,
+    StolenMiaftrRecordList,
+    WriteOffRecordList
+} from "../../models/Mot";
 import {ModalController} from "@ionic/angular";
 import {PurchaseService} from "../../purchase.service";
 import {DiscountComponent} from "../discount/discount.component";
 import {log} from "util";
 import * as moment from 'moment'
+import {months} from "moment";
 
 @Component({
   selector: 'app-tab1',
@@ -26,12 +34,14 @@ export class Tab1Page implements OnInit {
     writeOffRecordList: WriteOffRecordList[] = [];
     financeList: FinanceRecordList[] = [];
     stolenList: StolenMiaftrRecordList[] = [];
+    plateChangeList: PlateChangeList[] = [];
     motTest: MotTests[];
     motTable: MotTests[] = [];
     data: string[] = [];
     odometerValues: string[] = [];
     canvas;
     lineChart;
+    mileage = false;
     constructor(private router: Router,
                 private carService: CarService,
                 private purchaseService: PurchaseService,
@@ -64,6 +74,7 @@ export class Tab1Page implements OnInit {
         this.taxDays = undefined;
         this.motDays = undefined;
         this.stolen = [];
+        this.mileage = false;
         if (this.regNumb !== '' && this.regNumb !== undefined) {
             this.showDiscount();
             this.regNumb = this.regNumb.toUpperCase();
@@ -80,6 +91,7 @@ export class Tab1Page implements OnInit {
             });
             this.carService.getTax(this.regNumb).subscribe((res) => {
                 this.tax = res['object']['0'];
+                this.redTax();
                 var taxDate = new Date(moment(res['object']['0']['t']['Tax due']).format('YYYY-MM-DD'));
                 var today = new Date();
                 this.taxDays = this.diffdate(taxDate, today);
@@ -126,10 +138,12 @@ export class Tab1Page implements OnInit {
     showVdi(json, numb) {
         if (json.get(numb)) {
             this.vdi = json.get(numb);
+            this.redVdi();
             if (this.vdi !== undefined && this.vdi['vdi'] !== null && this.vdi['vdi'] !== undefined) {
                 this.writeOffRecordList = this.vdi['vdi']['Response']['DataItems']['WriteOffRecordList'];
                 this.financeList = this.vdi['vdi']['Response']['DataItems']['FinanceRecordList'];
                 this.stolenList = this.vdi['vdi']['Response']['DataItems']['StolenMiaftrRecordList'];
+                this.plateChangeList = this.vdi['vdi']['Response']['DataItems']['PlateChangeList'];
             }
         } else this.vdi = undefined;
     }
@@ -196,6 +210,8 @@ export class Tab1Page implements OnInit {
                     this.odometerValues.push(this.motTest[i].odometerValue);
                     this.motTable.push(this.motTest[i]);
                 }
+                if (this.motTest[i].yearTotal < 0)
+                    this.mileage = true;
             }
         }
         this.motTable = this.motTable.reverse();
@@ -226,7 +242,75 @@ export class Tab1Page implements OnInit {
         });
     }
 
+    redVdi() {
+        let today = new Date();
+        setTimeout(() => {
+           today = new Date();
+           if(this.vdi['vdi']['Response']['DataItems']['WrittenOff'])
+           document.getElementById('writtenOff').classList.add('red');
+           if(this.vdi['vdi']['Response']['DataItems']['LatestKeeperChangeDate']) {
+               let changeData = this.transferData(this.vdi['vdi']['Response']['DataItems']['LatestKeeperChangeDate']);
+               if(this.monthsDiff(changeData, today) < 6)
+               document.getElementById('LatestKeeperChangeDate').classList.add('red');
+           }
+           if(this.vdi['vdi']['Response']['DataItems']['LatestV5cIssuedDate']) {
+               let changeData = this.transferData(this.vdi['vdi']['Response']['DataItems']['LatestV5cIssuedDate']);
+               if(this.monthsDiff(changeData, today) < 6)
+                   document.getElementById('LatestV5cIssuedDate').classList.add('red');
+           }
+            if(this.vdi['vdi']['Response']['DataItems']['StolenStatus'])
+            if(this.vdi['vdi']['Response']['DataItems']['StolenStatus'].toLowerCase() === 'stolen')
+                document.getElementById('StolenStatus').classList.add('red');
+            if(this.vdi['vdi']['Response']['DataItems']['PreviousColour'])
+                document.getElementById('PreviousColour').classList.add('red');
+            if(this.vdi['vdi']['Response']['DataItems']['ScrapDate'])
+                document.getElementById('ScrapDate').classList.add('red');
+            if(this.vdi['vdi']['Response']['DataItems']['imported'])
+                document.getElementById('imported').classList.add('red');
+            if(this.vdi['vdi']['Response']['DataItems']['StolenDate'])
+                document.getElementById('StolenDate').classList.add('red');
+            if(this.vdi['vdi']['Response']['DataItems']['WriteOffRecordCount'])
+            if(this.vdi['vdi']['Response']['DataItems']['WriteOffRecordCount'] !== '0')
+                document.getElementById('WriteOffRecordCount').classList.add('red');
+            if(this.vdi['vdi']['Response']['DataItems']['FinanceRecordCount'])
+                if(this.vdi['vdi']['Response']['DataItems']['FinanceRecordCount'] !== '0')
+                    document.getElementById('FinanceRecordCount').classList.add('red')
+            if(this.vdi['vdi']['Response']['DataItems']['ImportUsedBeforeUkRegistration'])
+                document.getElementById('ImportUsedBeforeUkRegistration').classList.add('red');
+            if(this.vdi['vdi']['Response']['DataItems']['MileageAnomalyDetected'])
+                document.getElementById('MileageAnomalyDetected').classList.add('red');
+            if(this.vdi['vdi']['Response']['DataItems']['Scrapped'])
+                document.getElementById('Scrapped').classList.add('red');
+            if(this.vdi['vdi']['Response']['DataItems']['HighRiskRecordCount'])
+                if(this.vdi['vdi']['Response']['DataItems']['HighRiskRecordCount'] !== '0')
+                    document.getElementById('HighRiskRecordCountt').classList.add('red')
+            if(this.vdi['vdi']['Response']['DataItems']['ImportDate'])
+                document.getElementById('ImportDate').classList.add('red');
+            if(this.vdi['vdi']['Response']['DataItems']['Exported'])
+                document.getElementById('Exported').classList.add('red');
+            if(this.vdi['vdi']['Response']['DataItems']['ExportDate'])
+                document.getElementById('ExportDate').classList.add('red');
+            if(this.vdi['vdi']['Response']['DataItems']['WriteOffCategory'])
+                document.getElementById('WriteOffCategory').classList.add('red');
 
-
-
+       },500);
+    }
+  monthsDiff(d1, d2) {
+      var diff =(d2.getTime() - d1.getTime()) / 1000;
+      diff /= (60 * 60 * 24 * 7 * 4);
+      return Math.abs(Math.round(diff));
+  }
+  transferData(data) {
+      let latestChange = data.split('/');
+      let string = latestChange[2] + '.' + latestChange[1] + '.' + latestChange[0];
+      return new Date(moment(string).format('YYYY-MM-DD'));
+  }
+  redTax() {
+      if(this.tax['t']['Status'])
+      if(this.tax['t']['Status'].toLowerCase() === 'untaxed' || this.tax['t']['Status'].toLowerCase() === 'sorn')
+          document.getElementById('taxStatus').classList.add('red');
+      if(this.tax['t']['Export marker'])
+          if(this.tax['t']['Export marker'].toLowerCase() === 'yes')
+              document.getElementById('exportMarker').classList.add('red');
+  }
 }

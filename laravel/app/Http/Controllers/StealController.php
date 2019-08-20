@@ -38,8 +38,8 @@ class StealController extends Controller
         $uagent = 'Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36';
     
         $fields = [
-            'login_username' => get_env('STOLEN_LOGIN'),
-            'login_password' => get_env('STOLEN_PASSWORD'),
+            'login_username' => getenv('STOLEN_LOGIN'),
+            'login_password' => getenv('STOLEN_PASSWORD'),
             'vrm' => '',
             'vin' => '',
             'login' => 'login',
@@ -66,6 +66,13 @@ class StealController extends Controller
         curl_setopt_array($ch1, $options);
         
         // COOKIE
+        if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
+            curl_setopt($ch1, CURLOPT_COOKIEJAR, 'cookies.txt');
+            curl_setopt($ch1, CURLOPT_COOKIEFILE, 'cookies.txt');
+        } else {
+            curl_setopt($ch1, CURLOPT_COOKIEJAR, '/tmp/cookies.txt');
+            curl_setopt($ch1, CURLOPT_COOKIEFILE, '/tmp/cookies.txt');
+        }
         curl_setopt($ch1, CURLOPT_COOKIEJAR, '/tmp/cookies.txt');
         curl_setopt($ch1, CURLOPT_COOKIEFILE, '/tmp/cookies.txt');
         curl_exec($ch1);
@@ -82,7 +89,11 @@ class StealController extends Controller
         curl_setopt_array($ch2, $options);
 
         // COOKIE
-        curl_setopt($ch2, CURLOPT_COOKIEFILE, '/tmp/cookies.txt');
+        if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
+            curl_setopt($ch2, CURLOPT_COOKIEFILE, 'cookies.txt');
+        } else {
+            curl_setopt($ch2, CURLOPT_COOKIEFILE, '/tmp/cookies.txt');
+        }
 
         $result = curl_exec($ch2);
 

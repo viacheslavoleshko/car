@@ -63,3 +63,9 @@ export class StolenMiaftrRecordList {
         public MiaftrEntryDate = ''
     ) {}
 }
+export class PlateChangeList {
+    constructor(
+      public PreviousVrm = '',
+      public DateChanged = ''
+    ) {}
+}
