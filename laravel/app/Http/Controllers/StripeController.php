@@ -13,44 +13,6 @@ use Illuminate\Database\Eloquent\Model;
 class StripeController extends Controller
 {
     public function confirmPayment(\Illuminate\Http\Request $request) {
-<<<<<<< HEAD
-        $paymentId = $request->header('token');
-        $regNumb = $request->header('regnumb');
-        $intentId = $request->header('paymentIntent');
-        $product = $request->header('product');
-        
-        $price = ($product == '1') ? 700 : 1499;
-
-        $data =  \App\Models\Mot::select('reg')->where('reg', $regNumb)->get();
-
-        if($data->first()) {
-            
-            Stripe::setApiKey(env(BUY_REPORT_SERCET_KEY));
-            try {
-                if ($paymentId != '') {
-                    $intent = PaymentIntent::create([
-                        'payment_method' => $paymentId,
-                        "amount" => $price,
-                        "currency" => "gbp",
-                        'confirmation_method' => 'manual',
-                        'payment_method_types' => ['card'],
-                        "statement_descriptor" => "Car Check",
-                        "statement_descriptor_suffix" => $regNumb,
-                        'confirm' => true,
-                    ]);
-                    $record = \App\Models\Stripe::select('*')->where('payment_intent', $intent->id)->first();
-                    
-                    if (!$record) {
-                        \App\Models\Stripe::insert([
-                            'status' => 'intent',
-                            'reg' => $regNumb,
-                            'payment_intent' => $intent->id,
-                            'product' => $product,
-                            'price' => $price
-                        ]);
-                    }
-                }
-=======
               $paymentId = $request->header('token');
               $regNumb = $request->header('regnumb');
               $intentId = $request->header('paymentIntent');
@@ -87,7 +49,6 @@ class StripeController extends Controller
                               ]);
                           }
                       }
->>>>>>> 48c50d77c84daf66c3da768df8ef0bde78a4ba82
 
                 if ($intentId != '') {
                     $intent = PaymentIntent::retrieve(
