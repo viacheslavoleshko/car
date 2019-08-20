@@ -13,9 +13,9 @@ class StealController extends Controller
     public function index(Request $request)
     {
         $number = $request->input('number');
-        $data = Stolen::select('stolen')->where('reg', $number)->first();
+        $data = Stolen::all()->where('reg', $number)->first();
         
-        if(!is_null($data['reg']) && is_null($data['stolen'])) {
+        if(isset($data['reg']) && is_null($data['stolen'])) {
             $res = self::ifStolen($number);
             $is_stolen = ($res["line0"] == "STOLEN VEHICLE") ? '1' : '0';
             $json = ($res !== '-1') ? json_encode($res) : $res;

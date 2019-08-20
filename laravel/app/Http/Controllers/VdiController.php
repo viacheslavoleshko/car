@@ -11,7 +11,7 @@ class VdiController extends Controller
     public function index(Request $request)
     {
         $number = $request->input('number');
-        $data = Vdi::select('vdi')->where('reg', $number)->first();
+        $data = Vdi::all()->where('reg', $number)->first();
 
         if(!is_null($data['reg']) && is_null($data['vdi'])) {
             $res = self::curlNumberPlate($number);
