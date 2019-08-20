@@ -11,31 +11,21 @@ class VdiController extends Controller
     public function index(Request $request)
     {
         $number = $request->input('number');
+        $data = Vdi::select('vdi')->where('reg', $number)->first();
 
-        return response()->json([
-            'object' => Vdi::select('vdi')
-                ->where( 'reg', $number)
-                ->get(),
-        ]);
-    }
-
-    public function fill()
-    {
-        $numbers = Vdi::distinct()
-            ->join('stripe', 'mot.reg', '=', 'stripe.reg')
-            ->whereNull('mot.vdi')
-            ->where('stripe.status', 'succeeded')
-            ->whereRaw("(stripe.created_at + interval '10 minute') > now()")
-            ->limit(3)
-            ->pluck('mot.reg');
-
-        foreach ($numbers as $number) {
-          //  var_dump($number);
-            $json = self::curlNumberPlate($number);
-        
-            Vdi::where('reg', $number)
-                ->update(['vdi' => $json]);
+        if(is_null($data['vdi'])) {
+            $res = self::curlNumberPlate($number);
+            $json = ($res !== '-1') ? json_encode($res) : $res;
+            
+            Stolen::where('reg', $number)
+            ->update([
+                'updated_at' => now()->toDateTimeString('Y-m-d H:i:s'), 
+                'vdi' => $json,
+            ]);
         }
+        return response()->json([
+            'object' => Vdi::select('vdi')->where( 'reg', $number)->get()
+        ]);
     }
 
     public function curlNumberPlate($vrm)

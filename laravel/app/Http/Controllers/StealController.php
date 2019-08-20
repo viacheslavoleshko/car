@@ -15,16 +15,15 @@ class StealController extends Controller
         $number = $request->input('number');
         $data = Stolen::select('stolen')->where('reg', $number)->first();
         
-        if(!$data || is_null($data['stolen'])) {
+        if(is_null($data['stolen'])) {
             $res = self::ifStolen($number);
             $is_stolen = ($res["line0"] == "STOLEN VEHICLE") ? '1' : '0';
             $json = ($res !== '-1') ? json_encode($res) : $res;
             
-            Stolen::updateOrInsert(['reg' => $number], 
-            [
+            Stolen::where('reg', $number)
+            ->update([
                 'updated_at' => now()->toDateTimeString('Y-m-d H:i:s'), 
                 'stolen' => $json,
-                'priority' => '1',
                 'is_stolen' => $is_stolen,
             ]);
         }
@@ -36,11 +35,11 @@ class StealController extends Controller
     function ifStolen($vrm){
         $start = microtime(true);
         $proxy = 'proxy.nix.ltd:9123';
-        $uagent = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)';
+        $uagent = 'Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36';
     
         $fields = [
-            'login_username' => 'car-check@efi5.com',
-            'login_password' => '1Kerfhgyt!',
+            'login_username' => get_env('STOLEN_LOGIN'),
+            'login_password' => get_env('STOLEN_PASSWORD'),
             'vrm' => '',
             'vin' => '',
             'login' => 'login',
@@ -86,7 +85,6 @@ class StealController extends Controller
         curl_setopt($ch2, CURLOPT_COOKIEFILE, '/tmp/cookies.txt');
 
         $result = curl_exec($ch2);
-        //var_dump($result);
 
         $dom = new DOMDocument();
         $dom->loadHTML($result);

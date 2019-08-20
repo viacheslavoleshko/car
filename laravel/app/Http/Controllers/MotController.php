@@ -21,7 +21,6 @@ class MotController extends Controller
             [
                 'updated_at' => now()->toDateTimeString('Y-m-d H:i:s'), 
                 'm' => $json,
-                'priority' => '1'
             ]);
         }
         Mot::where('reg', $number)

@@ -100,10 +100,11 @@ export class PurchasePage implements OnInit {
       }
     } else {
       console.log("handle  success");
-         if (response['product'] === '2')
-             this.tariffVdi();
-         else
-           this.tariffStolen();
+         if (response['product'] == '2') {
+            this.tariffVdi();
+         } else {
+            this.tariffStolen();
+         }
     }
   }
 
@@ -111,12 +112,13 @@ export class PurchasePage implements OnInit {
     this.carService.getVdi(this.regNumb).subscribe((res) => {
       this.purchaseServie.vdimap.set(this.regNumb, res['object'][0]);
       this.purchaseServie.numberVdi = this.regNumb;
-      this.carService.getStolen(this.regNumb).subscribe((stln) => {
-        const stolen: string[] = stln['object'][0]['stolen'];
-        this.purchaseServie.stolen.set(this.regNumb, stolen);
-        this.loadingController.dismiss();
-        this.router.navigate([this.purchaseServie.url]);
-      });
+      // this.carService.getStolen(this.regNumb).subscribe((stln) => {
+      //   const stolen: string[] = stln['object'][0]['stolen'];
+      //   this.purchaseServie.stolen.set(this.regNumb, stolen);
+        
+      // });
+      this.loadingController.dismiss();
+      this.router.navigate([this.purchaseServie.url]);
     });
   }
 

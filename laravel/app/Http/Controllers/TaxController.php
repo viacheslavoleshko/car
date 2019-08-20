@@ -28,7 +28,6 @@ class TaxController extends Controller
                 'updated_at' => now()->toDateTimeString('Y-m-d H:i:s'), 
                 't' => $json,
                 'co2' => $co2, 
-                'priority' => '1'
             ]);
         }
         return response()->json([

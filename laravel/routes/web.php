@@ -51,11 +51,3 @@ Route::group([
 });
 
 Route::get('/confirm', array('middleware' => 'cors', 'uses' => 'StripeController@confirmPayment'));
-
-
-
-// filling vdi column for all regs where is null
-// Route::get('/getvdi', 'VdiController@fill');
-
-// filling dvla table in database
-// Route::get('dvla', 'DvlaController@fill');
