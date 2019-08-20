@@ -313,6 +313,7 @@
   </ion-grid>
 
    <ion-grid *ngIf="tax !== undefined && tax['t'] !== undefined">
+     <div class="label">TAX</div>
      <ion-row *ngIf="taxDays < 0" >
        <ion-col>Days Left</ion-col>
        <ion-col class="fail">{{-taxDays}} days overdue</ion-col>
@@ -321,7 +322,6 @@
        <ion-col>Days Left</ion-col>
        <ion-col>{{taxDays}} days left</ion-col>
      </ion-row>
-    <div class="label">TAX</div>
     <ion-row>
       <ion-col>Status</ion-col>
       <ion-col id="taxStatus">{{tax['t']['Status']}}</ion-col>
