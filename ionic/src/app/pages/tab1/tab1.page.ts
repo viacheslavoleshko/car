@@ -74,6 +74,7 @@ export class Tab1Page implements OnInit {
         this.taxDays = undefined;
         this.motDays = undefined;
         this.stolen = [];
+        this.mileage = false;
         if (this.regNumb !== '' && this.regNumb !== undefined) {
             this.showDiscount();
             this.regNumb = this.regNumb.toUpperCase();
