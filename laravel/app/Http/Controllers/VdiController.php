@@ -13,14 +13,13 @@ class VdiController extends Controller
         $number = $request->input('number');
         $data = Vdi::select('vdi')->where('reg', $number)->first();
 
-        if(is_null($data['vdi'])) {
+        if(!is_null($data['reg']) && is_null($data['vdi'])) {
             $res = self::curlNumberPlate($number);
-            $json = ($res !== '-1') ? json_encode($res) : $res;
             
-            Stolen::where('reg', $number)
+            Vdi::where('reg', $number)
             ->update([
                 'updated_at' => now()->toDateTimeString('Y-m-d H:i:s'), 
-                'vdi' => $json,
+                'vdi' => $res,
             ]);
         }
         return response()->json([
