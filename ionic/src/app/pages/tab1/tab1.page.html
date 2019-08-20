@@ -313,7 +313,14 @@
   </ion-grid>
 
    <ion-grid *ngIf="tax !== undefined && tax['t'] !== undefined">
-
+     <ion-row *ngIf="taxDays < 0" >
+       <ion-col>Days Left</ion-col>
+       <ion-col class="fail">{{-taxDays}} days overdue</ion-col>
+     </ion-row>
+     <ion-row *ngIf="taxDays > 0" >
+       <ion-col>Days Left</ion-col>
+       <ion-col>{{taxDays}} days left</ion-col>
+     </ion-row>
     <div class="label">TAX</div>
     <ion-row>
       <ion-col>Status</ion-col>
@@ -323,14 +330,7 @@
       <ion-col>Tax due</ion-col>
       <ion-col>{{tax['t']['Tax due']}}</ion-col>
     </ion-row>
-    <ion-row *ngIf="taxDays < 0" >
-      <ion-col>Days Left</ion-col>
-      <ion-col class="fail">{{-taxDays}} days overdue</ion-col>
-    </ion-row>
-    <ion-row *ngIf="taxDays > 0" >
-      <ion-col>Days Left</ion-col>
-      <ion-col>{{taxDays}} days left</ion-col>
-    </ion-row>
+
 
      <ion-row>
        <ion-col>CO₂Emissions</ion-col>
@@ -434,5 +434,5 @@
       <td *ngIf="test.yearTotal >= 0">{{test.yearTotal}}</td>
     </tr>
     </table>
-      <h4 *ngIf="mileage" style="text-align: center">Possible clocked car</h4>
+      <div *ngIf="mileage" class="red">*Possible clocked car</div>
 </ion-content>
