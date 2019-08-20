@@ -19,7 +19,10 @@ class StripeController extends Controller
               $product = $request->header('product');
               if ($product == '1')
                   $price = 700;
-              else $price = 1499;
+
+
+                   else $price = 1499;
+
                $data =  \App\Models\Mot::select('reg')->where('reg', $regNumb)->get();
               if($data->first()) {
                   Stripe::setApiKey(env(BUY_REPORT_SERCET_KEY));
