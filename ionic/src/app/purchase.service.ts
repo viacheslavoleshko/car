@@ -25,5 +25,4 @@ export class PurchaseService {
             .set('product', product);
         return this.http.get('https://car.hpcheck.co.uk/confirm', {headers: headers});
     }
-
 }

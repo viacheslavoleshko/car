@@ -15,6 +15,7 @@ import {DiscountComponent} from "../discount/discount.component";
 import {log} from "util";
 import * as moment from 'moment'
 import {months} from "moment";
+import set = Reflect.set;
 
 @Component({
   selector: 'app-tab1',
@@ -306,11 +307,13 @@ export class Tab1Page implements OnInit {
       return new Date(moment(string).format('YYYY-MM-DD'));
   }
   redTax() {
-      if(this.tax['t']['Status'])
-      if(this.tax['t']['Status'].toLowerCase() === 'untaxed' || this.tax['t']['Status'].toLowerCase() === 'sorn')
-          document.getElementById('taxStatus').classList.add('red');
-      if(this.tax['t']['Export marker'])
-          if(this.tax['t']['Export marker'].toLowerCase() === 'yes')
-              document.getElementById('exportMarker').classList.add('red');
+      setTimeout(() => {
+          if(this.tax['t']['Status'])
+              if(this.tax['t']['Status'].toLowerCase() === 'untaxed' || this.tax['t']['Status'].toLowerCase() === 'sorn')
+                  document.getElementById('taxStatus').classList.add('red');
+          if(this.tax['t']['Export marker'])
+              if(this.tax['t']['Export marker'].toLowerCase() === 'yes')
+                  document.getElementById('exportMarker').classList.add('red');
+      },300);
   }
 }
