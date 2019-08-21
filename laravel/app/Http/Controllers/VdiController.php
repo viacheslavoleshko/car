@@ -13,7 +13,7 @@ class VdiController extends Controller
         $number = $request->input('number');
 
 
-        if(!is_null($data['reg']) && is_null($data['vdi'])) {
+        if(isset($data['reg']) && is_null($data['vdi'])) {
             $res = self::curlNumberPlate($number);
             
             Vdi::where('reg', $number)

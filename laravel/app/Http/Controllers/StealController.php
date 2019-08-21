@@ -36,68 +36,62 @@ class StealController extends Controller
             $ch1 = curl_init("https://isitnicked.com/login.php");
             $ch2 = curl_init("https://isitnicked.com/customer/vehicle_search.php");
 
-            $options = [
-                CURLOPT_HEADER => false,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_USERAGENT => $uagent,
-                CURLOPT_VERBOSE => true,
-                CURLOPT_SSL_VERIFYHOST => false,
-                CURLOPT_SSL_VERIFYPEER => false,
+        $options = [
+            CURLOPT_HEADER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_USERAGENT => $uagent,
+            CURLOPT_VERBOSE => true,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_SSL_VERIFYPEER => false,
+        ];
 
-                // PROXY
-                CURLOPT_PROXYTYPE => CURLPROXY_SOCKS5,
-                CURLOPT_PROXY => $proxy,
-            ];
+        curl_setopt($ch1, CURLOPT_POSTFIELDS, http_build_query($fields));
+        curl_setopt_array($ch1, $options);
 
-            curl_setopt($ch1, CURLOPT_POSTFIELDS, http_build_query($fields));
-            curl_setopt_array($ch1, $options);
-
-            // COOKIE
-            if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
-                curl_setopt($ch1, CURLOPT_COOKIEJAR, 'cookies.txt');
-                curl_setopt($ch1, CURLOPT_COOKIEFILE, 'cookies.txt');
-            } else {
-                curl_setopt($ch1, CURLOPT_COOKIEJAR, '/tmp/cookies.txt');
-                curl_setopt($ch1, CURLOPT_COOKIEFILE, '/tmp/cookies.txt');
-            }
+        // COOKIE
+        if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
+            curl_setopt($ch1, CURLOPT_COOKIEJAR, 'cookies.txt');
+            curl_setopt($ch1, CURLOPT_COOKIEFILE, 'cookies.txt');
+        } else {
             curl_setopt($ch1, CURLOPT_COOKIEJAR, '/tmp/cookies.txt');
             curl_setopt($ch1, CURLOPT_COOKIEFILE, '/tmp/cookies.txt');
-            curl_exec($ch1);
-
-            $nodes = [
-                'vrm' => $number,
-                'vin' => '',
-                'required_entered' => 'yes',
-                'form_post' => 'true',
-                'submitvrm' => 'search'
-            ];
+        }
+        curl_exec($ch1);
+    
+        $nodes = [
+            'vrm' => $number,
+            'vin' => '', 
+            'required_entered' => 'yes',
+            'form_post' => 'true',
+            'submitvrm' => 'search'
+        ];
 
             curl_setopt($ch2, CURLOPT_POSTFIELDS, http_build_query($nodes));
             curl_setopt_array($ch2, $options);
 
-            // COOKIE
-            if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
-                curl_setopt($ch2, CURLOPT_COOKIEFILE, 'cookies.txt');
-            } else {
-                curl_setopt($ch2, CURLOPT_COOKIEFILE, '/tmp/cookies.txt');
-            }
+        // COOKIE
+        if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
+            curl_setopt($ch2, CURLOPT_COOKIEFILE, 'cookies.txt');
+        } else {
+            curl_setopt($ch2, CURLOPT_COOKIEFILE, '/tmp/cookies.txt');
+        }
 
-            $result = curl_exec($ch2);
+        $result = curl_exec($ch2);
 
-            $dom = new DOMDocument();
-            $dom->loadHTML($result);
-            $xpath = new DOMXpath($dom);
+        $dom = new DOMDocument();
+        $dom->loadHTML($result);
+        $xpath = new DOMXpath($dom);
+            
+        $info = array();
+        for($i = 0; $i < $xpath->query('.//div[@class="header_notstolen" or @class="header_stolen"]/div[@class="centre_text"]')->count(); $i++) {  
+            $info["line$i"] = trim($xpath->query('.//div[@class="header_notstolen" or @class="header_stolen"]/descendant::div[@class="centre_text"]')->item($i)->nodeValue, " ✓");
+        }
 
-            $info = array();
-            for ($i = 0; $i < $xpath->query('.//div[@class="header_notstolen" or @class="header_stolen"]/div[@class="centre_text"]')->count(); $i++) {
-                $info["line$i"] = trim($xpath->query('.//div[@class="header_notstolen" or @class="header_stolen"]/descendant::div[@class="centre_text"]')->item($i)->nodeValue, " ✓");
-            }
-
-            // delete null and empty elements
-            $info = array_filter($info, function ($value) {
-                return !is_null($value) && $value !== '';
-            });
+        // delete null and empty elements
+        $info = array_filter($info, function($value) { 
+            return !is_null($value) && $value !== ''; 
+        });
 
             if (!empty($info)) {
                 // JSON generation time
@@ -115,5 +109,6 @@ class StealController extends Controller
                     'is_stolen' => $is_stolen,
                 ]);
         }
+
     }
 }
