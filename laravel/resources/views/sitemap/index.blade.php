@@ -3,7 +3,7 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     @for ($i = 1; $i <= $pages; $i++ )
     <sitemap>
-        <loc>{{ url("gmaps/car/{$i}") }}</loc>
+        <loc>{{ $pwa . "gmaps/car/{$i}.xml" }}</loc>
     </sitemap>
     @endfor
 </sitemapindex>
