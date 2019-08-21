@@ -12,7 +12,7 @@ log.txt
 .vscode/
 npm-debug.log*
 www/.htaccess
-www/gmaps
+www/gmaps/
 .idea/
 .ionic/
 .sourcemaps/

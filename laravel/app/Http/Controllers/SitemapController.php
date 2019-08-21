@@ -13,13 +13,15 @@ class SitemapController extends Controller
         $count = Mot::whereNotNull('updated_at')->count();
         $style = getenv('APP_URL') . '/sitemap/styles/index.xsl';
         $pages = ceil($count / getenv('SITEMAP_OFFSET'));
+        $pwa = preg_replace('/car\./', '',  getenv('APP_URL'));
 
         $file = view('sitemap/index', [
             'count' => $count,
             'pages' => $pages,
             'style' => $style,
+            'pwa' => $pwa,
         ]);
-        
+
         Storage::disk('index')->put("sitemap.xml", $file);
         
         for($i = 1; $i <= $pages; $i++) {
