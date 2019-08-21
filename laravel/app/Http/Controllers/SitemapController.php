@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Mot;
+use Illuminate\Support\Facades\Response;
 
 class SitemapController extends Controller
 {
@@ -13,11 +14,17 @@ class SitemapController extends Controller
         $style = getenv('APP_URL') . '/sitemap/styles/index.xsl';
         $pages = ceil($count / getenv('SITEMAP_OFFSET'));
 
-        return response()->view('sitemap/index', [
+        $file = view('sitemap/index', [
             'count' => $count,
             'pages' => $pages,
             'style' => $style,
-        ])->header('Content-Type', 'text/xml');
+        ]);
+        
+        Storage::disk('index')->put("sitemap.xml", $file);
+        
+        for($i = 1; $i <= $pages; $i++) {
+            self::numbers($i);
+        }
     }
 
     public function numbers($page)
@@ -33,13 +40,13 @@ class SitemapController extends Controller
                 ->take(getenv('SITEMAP_OFFSET'))
                 ->get();
 
-            $file = response()->view('sitemap/mot', [
+            $file = view('sitemap/mot', [
                 'numbers' => $numbers,
                 'style' => $style,
                 'pwa' => $pwa,
-            ])->header('Content-Type', 'text/xml');
+            ]);
 
-            Storage::disk('pwa')->put("$page.xml", $file);
+            Storage::disk('car')->put("$page.xml", $file);
         } else {
             abort(404);
         }
