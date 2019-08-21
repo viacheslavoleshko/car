@@ -66,7 +66,7 @@ return [
 
         'pwa' => [
             'driver' => 'local',
-            'root' => $_SERVER['DOCUMENT_ROOT'] . getenv('SITEMAP_PATH'),
+            'root' => getenv('SITEMAP_PATH'),
         ],
 
     ],
