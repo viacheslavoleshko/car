@@ -94,7 +94,7 @@ export class PurchasePage implements OnInit {
         console.log('ActionError');
         this.loadingController.dismiss();
       } else {
-        this.purchaseServie.confirm('', this.regNumb, paymentIntent.id, this.product.toString()).subscribe((servereResponse) => {
+        this.purchaseServie.confirm('', this.regNumb, paymentIntent.id, '').subscribe((servereResponse) => {
         this.handleServerResponse(servereResponse);
         });
       }
@@ -102,7 +102,7 @@ export class PurchasePage implements OnInit {
       console.log("handle  success");
          if (response['product'] == '2') {
             this.tariffVdi();
-         } else {
+         } if (response['product'] == '1') {
             this.tariffStolen();
          }
     }

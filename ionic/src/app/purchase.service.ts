@@ -18,9 +18,9 @@ export class PurchaseService {
     constructor(public http: HttpClient) {
     }
 
-    confirm(id, regNumb, paymentIntent, product) {
+    confirm(id, number, paymentIntent, product) {
         let headers = new HttpHeaders()
-            .set('token',id).set('number', regNumb)
+            .set('token',id).set('number', number)
             .set('paymentIntent',paymentIntent )
             .set('product', product);
         return this.http.get('https://car.hpcheck.co.uk/confirm', {headers: headers});

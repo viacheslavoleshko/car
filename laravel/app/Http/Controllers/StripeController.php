@@ -17,13 +17,9 @@ class StripeController extends Controller
         $regNumb = $request->header('number');
         $intentId = $request->header('paymentIntent');
         $product = $request->header('product');
-        
-        $price = ($product == '1') ? 700 : 1499;
-
         $data =  \App\Models\Mot::select('reg')->where('reg', $regNumb)->get();
-
+        $price = ($product == '1') ? 700 : 1499;
         if($data->first()) {
-            
             Stripe::setApiKey(env(BUY_REPORT_SERCET_KEY));
             try {
                 if ($paymentId != '') {
@@ -38,7 +34,6 @@ class StripeController extends Controller
                         'confirm' => true,
                     ]);
                     $record = \App\Models\Stripe::select('*')->where('payment_intent', $intent->id)->first();
-                    
                     if (!$record) {
                         \App\Models\Stripe::insert([
                             'status' => 'intent',
@@ -47,7 +42,9 @@ class StripeController extends Controller
                             'product' => $product,
                             'price' => $price
                         ]);
+                        $record = \App\Models\Stripe::select('*')->where('payment_intent', $intent->id)->first();
                     }
+                    $request->replace(['number' => $record->reg]);
                 }
 
                 if ($intentId != '') {
@@ -56,7 +53,7 @@ class StripeController extends Controller
                     );
                     $intent->confirm();
                 }
-                $this->generatePaymentResponse($intent, $product, $request);
+                $this->generatePaymentResponse($intent, $request, $record);
             } catch (\Stripe\Error\Base $e) {
                 return response()->json(['error' => $e]);
             }
@@ -67,7 +64,7 @@ class StripeController extends Controller
         }
     }    
     
-    public function generatePaymentResponse($intent, $product, $request)
+    public function generatePaymentResponse($intent, $request, $record)
     {
         \App\Models\Stripe::where('payment_intent', $intent->id)->update([
             'status' => $intent->status
@@ -75,20 +72,21 @@ class StripeController extends Controller
         if ($intent->status == 'requires_source_action' && $intent->next_action->type == 'use_stripe_sdk') {
             echo json_encode([
                 'requires_action' => true,
-                'payment_intent_client_secret' => $intent->client_secret
+                'payment_intent_client_secret' => $intent->client_secret,
+
             ]);
         } else if ($intent->status == 'succeeded') {
             
-             if($product == '1') {
+             if($record->product == '1') {
                  StealController::index($request);
              }
-             if($product == '2') {
+             if($record->product == '2') {
                  VdiController::index($request);
              }
 
             echo json_encode([
               'success' => true,
-                'product' => $product
+                'product' => $record->product
             ]);
         } else {
             http_response_code(500);
