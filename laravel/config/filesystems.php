@@ -64,9 +64,14 @@ return [
             'url' => env('AWS_URL'),
         ],
 
-        'pwa' => [
+        'index' => [
             'driver' => 'local',
             'root' => getenv('SITEMAP_PATH'),
+        ],
+
+        'car' => [
+            'driver' => 'local',
+            'root' => getenv('SITEMAP_PATH') . '/car',
         ],
 
     ],
