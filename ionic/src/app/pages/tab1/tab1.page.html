@@ -18,20 +18,20 @@
   </div>
   <div class="colourRed" *ngIf="danger
    && purchaseService.product === 2 && purchaseService.purchased">
-    Based on our checks this car DOESN'T looks safe to buy. Please see items in red that should raise a concern.
+    Based on our checks this car DOESN'T look safe to buy. Please see items in red that should raise a concern.
     Please see our smart tips how to stay safe while buying car
   </div>
   <div class="colourRed" *ngIf="!danger
    && purchaseService.product === 1 && purchaseService.purchased">  <!--//silver-->
     Base on our basic checks this car is not stolen, is not clocked, is not exported, has valid mot, has valid tax.
-    We would recommend to buy our 'Gold' product that has VIN verification, oustanding finance check, scapped check,
+    We would recommend to buy our 'Gold' product that has VIN verification, outstanding finance check, scrapped check,
     import check, colour change check, and more. These additional checks are key to stay safe.
     Please see our smart tips how to stay safe while buying car.
   </div>
   <div class="colourRed" *ngIf="danger
    && purchaseService.product === 1 && purchaseService.purchased">
     Base on our basic checks this car is not safe to buy. Please see items in red that should raise a concern.
-    We would recommend to buy our 'Gold' product that has VIN verification, oustanding finance check, scapped check,
+     We would recommend to buy our 'Gold' product that has VIN verification, outstanding finance check, scrapped check,
     import check, colour change check, and more. These additional checks are key to stay safe.
     Also please see our smart tips how to stay safe while buying car.
   </div>

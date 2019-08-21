@@ -226,8 +226,10 @@ export class Tab1Page implements OnInit {
                     this.odometerValues.push(this.motTest[i].odometerValue);
                     this.motTable.push(this.motTest[i]);
                 }
-                if (this.motTest[i].yearTotal < 0)
+                if (this.motTest[i].yearTotal < 0) {
                     this.mileage = true;
+                    this.danger = true;
+                }
             }
         }
         this.motTable = this.motTable.reverse();
