@@ -78,10 +78,10 @@ class StripeController extends Controller
         } else if ($intent->status == 'succeeded') {
             
              if($record->product == '1') {
-                 StealController::index($request);
+                 StealController::ifStolen($request);
              }
              if($record->product == '2') {
-                 VdiController::index($request);
+                 VdiController::curlNumberPlate($request);
              }
 
             echo json_encode([
