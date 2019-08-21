@@ -64,6 +64,11 @@ return [
             'url' => env('AWS_URL'),
         ],
 
+        'pwa' => [
+            'driver' => 'local',
+            'root' => $_SERVER['DOCUMENT_ROOT'] . getenv('SITEMAP_PATH'),
+        ],
+
     ],
 
 ];

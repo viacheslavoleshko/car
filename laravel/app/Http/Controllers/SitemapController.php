@@ -1,10 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Mot;
-//use View;
 
 class SitemapController extends Controller
 {
@@ -33,12 +32,14 @@ class SitemapController extends Controller
                 ->skip(getenv('SITEMAP_OFFSET') * ($page - 1) )
                 ->take(getenv('SITEMAP_OFFSET'))
                 ->get();
-            
-            return response()->view('sitemap/mot', [
+
+            $file = response()->view('sitemap/mot', [
                 'numbers' => $numbers,
                 'style' => $style,
                 'pwa' => $pwa,
             ])->header('Content-Type', 'text/xml');
+
+            Storage::disk('pwa')->put("$page.xml", $file);
         } else {
             abort(404);
         }
