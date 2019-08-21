@@ -15,6 +15,8 @@ export class PurchaseService {
     showModal = false;
     url = '';
     stolen = new Map();
+    product = 0;
+    purchased = false;
     constructor(public http: HttpClient) {
     }
 

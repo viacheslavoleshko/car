@@ -101,10 +101,15 @@ export class PurchasePage implements OnInit {
     } else {
       console.log("handle  success");
          if (response['product'] == '2') {
-            this.tariffVdi();
-         } if (response['product'] == '1') {
-            this.tariffStolen();
+           this.purchaseServie.product = 2;
+
+           this.tariffVdi();
          }
+         if (response['product'] == '1') {
+           this.purchaseServie.product = 1;
+           this.tariffStolen();
+         }
+         this.purchaseServie.purchased = true;
     }
   }
 

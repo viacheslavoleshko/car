@@ -43,9 +43,10 @@ export class Tab1Page implements OnInit {
     canvas;
     lineChart;
     mileage = false;
+    danger = false;
     constructor(private router: Router,
                 private carService: CarService,
-                private purchaseService: PurchaseService,
+                public purchaseService: PurchaseService,
                 private route : ActivatedRoute,
                 private modalController: ModalController) {
     }
@@ -76,6 +77,8 @@ export class Tab1Page implements OnInit {
         this.motDays = undefined;
         this.stolen = [];
         this.mileage = false;
+        this.danger = false;
+        this.purchaseService.product = 0;
         if (this.regNumb !== '' && this.regNumb !== undefined) {
             this.showDiscount();
             this.regNumb = this.regNumb.toUpperCase();
@@ -104,14 +107,15 @@ export class Tab1Page implements OnInit {
             //             //         this.financeList = this.vdi['vdi']['Response']['DataItems']['FinanceRecordList'];
             //             //     }
             //             // });
+            this.showStolen(this.purchaseService.stolen, this.regNumb);
              this.showVdi(this.purchaseService.vdimap, this.regNumb.toUpperCase());
-            this.carService.getDvla(this.regNumb).subscribe((res) => {
+             this.carService.getDvla(this.regNumb).subscribe((res) => {
                 this.dvla = res['object']['0'];
             });
             this.carService.getCo(this.regNumb).subscribe((res) => {
                 this.co = res['object']['0'];
             });
-            this.showStolen(this.purchaseService.stolen, this.regNumb)
+
         }
     }
 
@@ -145,6 +149,7 @@ export class Tab1Page implements OnInit {
                 this.financeList = this.vdi['vdi']['Response']['DataItems']['FinanceRecordList'];
                 this.stolenList = this.vdi['vdi']['Response']['DataItems']['StolenMiaftrRecordList'];
                 this.plateChangeList = this.vdi['vdi']['Response']['DataItems']['PlateChangeList'];
+                this.purchaseService.product = 2;
             }
         } else this.vdi = undefined;
     }
@@ -157,6 +162,16 @@ export class Tab1Page implements OnInit {
                 this.stolen.push(temp[`line${i}`]);
                 i++;
             }
+           setTimeout(() => {
+               if (this.stolen[0] !== 'There is no PNC Stolen record') {
+                   let stolens = document.getElementsByClassName('stolen');
+                   for (let i = 0; i < stolens.length; i++) {
+                       stolens[i].classList.add('colourRed');
+                   }
+                   this.danger = true;
+               }
+           },200);
+            this.purchaseService.product = 1;
         }
     }
     dialog(state) {
@@ -251,50 +266,83 @@ export class Tab1Page implements OnInit {
            document.getElementById('writtenOff').classList.add('red');
            if(this.vdi['vdi']['Response']['DataItems']['LatestKeeperChangeDate']) {
                let changeData = this.transferData(this.vdi['vdi']['Response']['DataItems']['LatestKeeperChangeDate']);
-               if(this.monthsDiff(changeData, today) < 6)
-               document.getElementById('LatestKeeperChangeDate').classList.add('red');
+               if(this.monthsDiff(changeData, today) < 6) {
+                   document.getElementById('LatestKeeperChangeDate').classList.add('red');
+                   this.danger = true;
+               }
            }
            if(this.vdi['vdi']['Response']['DataItems']['LatestV5cIssuedDate']) {
                let changeData = this.transferData(this.vdi['vdi']['Response']['DataItems']['LatestV5cIssuedDate']);
-               if(this.monthsDiff(changeData, today) < 6)
+               if(this.monthsDiff(changeData, today) < 6) {
                    document.getElementById('LatestV5cIssuedDate').classList.add('red');
+                   this.danger = true;
+               }
            }
             if(this.vdi['vdi']['Response']['DataItems']['StolenStatus'])
-            if(this.vdi['vdi']['Response']['DataItems']['StolenStatus'].toLowerCase() === 'stolen')
+            if(this.vdi['vdi']['Response']['DataItems']['StolenStatus'].toLowerCase() === 'stolen') {
                 document.getElementById('StolenStatus').classList.add('red');
-            if(this.vdi['vdi']['Response']['DataItems']['PreviousColour'])
+                this.danger = true;
+            }
+            if(this.vdi['vdi']['Response']['DataItems']['PreviousColour']) {
                 document.getElementById('PreviousColour').classList.add('red');
-            if(this.vdi['vdi']['Response']['DataItems']['ScrapDate'])
+                this.danger = true;
+            }
+            if(this.vdi['vdi']['Response']['DataItems']['ScrapDate']) {
                 document.getElementById('ScrapDate').classList.add('red');
-            if(this.vdi['vdi']['Response']['DataItems']['imported'])
+                this.danger = true;
+            }
+            if(this.vdi['vdi']['Response']['DataItems']['imported']) {
                 document.getElementById('imported').classList.add('red');
-            if(this.vdi['vdi']['Response']['DataItems']['StolenDate'])
+                this.danger = true;
+            }
+            if(this.vdi['vdi']['Response']['DataItems']['StolenDate']) {
                 document.getElementById('StolenDate').classList.add('red');
+                this.danger = true;
+            }
             if(this.vdi['vdi']['Response']['DataItems']['WriteOffRecordCount'])
-            if(this.vdi['vdi']['Response']['DataItems']['WriteOffRecordCount'] !== '0')
+            if(this.vdi['vdi']['Response']['DataItems']['WriteOffRecordCount'] !== '0') {
                 document.getElementById('WriteOffRecordCount').classList.add('red');
+                this.danger = true;
+            }
             if(this.vdi['vdi']['Response']['DataItems']['FinanceRecordCount'])
-                if(this.vdi['vdi']['Response']['DataItems']['FinanceRecordCount'] !== '0')
-                    document.getElementById('FinanceRecordCount').classList.add('red')
-            if(this.vdi['vdi']['Response']['DataItems']['ImportUsedBeforeUkRegistration'])
+                if(this.vdi['vdi']['Response']['DataItems']['FinanceRecordCount'] !== '0') {
+                    document.getElementById('FinanceRecordCount').classList.add('red');
+                    this.danger = true;
+                }
+            if(this.vdi['vdi']['Response']['DataItems']['ImportUsedBeforeUkRegistration']) {
                 document.getElementById('ImportUsedBeforeUkRegistration').classList.add('red');
-            if(this.vdi['vdi']['Response']['DataItems']['MileageAnomalyDetected'])
+                this.danger = true;
+            }
+            if(this.vdi['vdi']['Response']['DataItems']['MileageAnomalyDetected']) {
                 document.getElementById('MileageAnomalyDetected').classList.add('red');
-            if(this.vdi['vdi']['Response']['DataItems']['Scrapped'])
+                this.danger = true;
+            }
+            if(this.vdi['vdi']['Response']['DataItems']['Scrapped']) {
                 document.getElementById('Scrapped').classList.add('red');
+                this.danger = true;
+            }
             if(this.vdi['vdi']['Response']['DataItems']['HighRiskRecordCount'])
-                if(this.vdi['vdi']['Response']['DataItems']['HighRiskRecordCount'] !== '0')
+                if(this.vdi['vdi']['Response']['DataItems']['HighRiskRecordCount'] !== '0') {
                     document.getElementById('HighRiskRecordCountt').classList.add('red')
-            if(this.vdi['vdi']['Response']['DataItems']['ImportDate'])
+                    this.danger = true;
+                }
+            if(this.vdi['vdi']['Response']['DataItems']['ImportDate']) {
                 document.getElementById('ImportDate').classList.add('red');
-            if(this.vdi['vdi']['Response']['DataItems']['Exported'])
+                this.danger = true;
+            }
+            if(this.vdi['vdi']['Response']['DataItems']['Exported']) {
                 document.getElementById('Exported').classList.add('red');
-            if(this.vdi['vdi']['Response']['DataItems']['ExportDate'])
+            }
+            if(this.vdi['vdi']['Response']['DataItems']['ExportDate']) {
                 document.getElementById('ExportDate').classList.add('red');
-            if(this.vdi['vdi']['Response']['DataItems']['WriteOffCategory'])
+                this.danger = true;
+            }
+            if(this.vdi['vdi']['Response']['DataItems']['WriteOffCategory']) {
                 document.getElementById('WriteOffCategory').classList.add('red');
+                this.danger = true;
+            }
 
-       },500);
+       },200);
     }
   monthsDiff(d1, d2) {
       var diff =(d2.getTime() - d1.getTime()) / 1000;
@@ -309,11 +357,15 @@ export class Tab1Page implements OnInit {
   redTax() {
       setTimeout(() => {
           if(this.tax['t']['Status'])
-              if(this.tax['t']['Status'].toLowerCase() === 'untaxed' || this.tax['t']['Status'].toLowerCase() === 'sorn')
+              if(this.tax['t']['Status'].toLowerCase() === 'untaxed' || this.tax['t']['Status'].toLowerCase() === 'sorn') {
                   document.getElementById('taxStatus').classList.add('red');
+                  this.danger = true;
+              }
           if(this.tax['t']['Export marker'])
-              if(this.tax['t']['Export marker'].toLowerCase() === 'yes')
+              if(this.tax['t']['Export marker'].toLowerCase() === 'yes') {
                   document.getElementById('exportMarker').classList.add('red');
-      },300);
+                  this.danger = true;
+              }
+      },200);
   }
 }
