@@ -34,7 +34,6 @@ class StealController extends Controller
 
     function ifStolen($vrm){
         $start = microtime(true);
-        $proxy = 'proxy.nix.ltd:9123';
         $uagent = 'Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36';
     
         $fields = [
@@ -56,10 +55,6 @@ class StealController extends Controller
             CURLOPT_VERBOSE => true,
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_SSL_VERIFYPEER => false,
-
-             // PROXY
-            CURLOPT_PROXYTYPE => CURLPROXY_SOCKS5,
-            CURLOPT_PROXY => $proxy,
         ];
         
         curl_setopt($ch1, CURLOPT_POSTFIELDS, http_build_query($fields));
@@ -73,8 +68,6 @@ class StealController extends Controller
             curl_setopt($ch1, CURLOPT_COOKIEJAR, '/tmp/cookies.txt');
             curl_setopt($ch1, CURLOPT_COOKIEFILE, '/tmp/cookies.txt');
         }
-        curl_setopt($ch1, CURLOPT_COOKIEJAR, '/tmp/cookies.txt');
-        curl_setopt($ch1, CURLOPT_COOKIEFILE, '/tmp/cookies.txt');
         curl_exec($ch1);
     
         $nodes = [
@@ -94,7 +87,6 @@ class StealController extends Controller
         } else {
             curl_setopt($ch2, CURLOPT_COOKIEFILE, '/tmp/cookies.txt');
         }
-
         $result = curl_exec($ch2);
 
         $dom = new DOMDocument();
@@ -113,7 +105,7 @@ class StealController extends Controller
 
         if(!empty($info)){
             // JSON generation time
-            $time_elapsed_secs = round((microtime(true) - $start)*1000);
+            $time_elapsed_secs = round((microtime(true) - $start) * 1000);
             $info[] = "$time_elapsed_secs ms";
         } else { 
             $info = '-1';
