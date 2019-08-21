@@ -14,7 +14,7 @@ class StripeController extends Controller
 {
     public function confirmPayment(\Illuminate\Http\Request $request) {
         $paymentId = $request->header('token');
-        $regNumb = $request->header('regnumb');
+        $regNumb = $request->header('number');
         $intentId = $request->header('paymentIntent');
         $product = $request->header('product');
         
@@ -56,7 +56,7 @@ class StripeController extends Controller
                     );
                     $intent->confirm();
                 }
-                $this->generatePaymentResponse($intent,$product);
+                $this->generatePaymentResponse($intent, $product, $request);
             } catch (\Stripe\Error\Base $e) {
                 return response()->json(['error' => $e]);
             }
@@ -67,7 +67,7 @@ class StripeController extends Controller
         }
     }    
     
-    public function generatePaymentResponse($intent, $product) 
+    public function generatePaymentResponse($intent, $product, $request)
     {
         \App\Models\Stripe::where('payment_intent', $intent->id)->update([
             'status' => $intent->status
@@ -79,12 +79,12 @@ class StripeController extends Controller
             ]);
         } else if ($intent->status == 'succeeded') {
             
-            if($product == '1') {
-                StealController::index($this->regNumb);
-            }
-            if($product == '2') {
-                VdiController::index($this->regNumb);
-            }
+             if($product == '1') {
+                 StealController::index($request);
+             }
+             if($product == '2') {
+                 VdiController::index($request);
+             }
 
             echo json_encode([
               'success' => true,
