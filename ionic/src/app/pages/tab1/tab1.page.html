@@ -11,6 +11,30 @@
       ></ion-input>
     </ion-col>
   </ion-item>
+  <div class="colourGreen"*ngIf="!danger
+   && purchaseService.product === 2 && purchaseService.purchased">
+    Based on our checks this car looks safe to buy.
+    Please see our smart tips how to stay safe while buying car.
+  </div>
+  <div class="colourRed" *ngIf="danger
+   && purchaseService.product === 2 && purchaseService.purchased">
+    Based on our checks this car DOESN'T looks safe to buy. Please see items in red that should raise a concern.
+    Please see our smart tips how to stay safe while buying car
+  </div>
+  <div class="colourRed" *ngIf="!danger
+   && purchaseService.product === 1 && purchaseService.purchased">  <!--//silver-->
+    Base on our basic checks this car is not stolen, is not clocked, is not exported, has valid mot, has valid tax.
+    We would recommend to buy our 'Gold' product that has VIN verification, oustanding finance check, scapped check,
+    import check, colour change check, and more. These additional checks are key to stay safe.
+    Please see our smart tips how to stay safe while buying car.
+  </div>
+  <div class="colourRed" *ngIf="danger
+   && purchaseService.product === 1 && purchaseService.purchased">
+    Base on our basic checks this car is not safe to buy. Please see items in red that should raise a concern.
+    We would recommend to buy our 'Gold' product that has VIN verification, oustanding finance check, scapped check,
+    import check, colour change check, and more. These additional checks are key to stay safe.
+    Also please see our smart tips how to stay safe while buying car.
+  </div>
   <ion-button *ngIf="co || tax || dvla" [routerLink]="'/purchase/' + regNumb"><h3>Buy Report</h3></ion-button>
   <ion-grid *ngIf="vdi !== undefined && vdi['vdi'] !== undefined && vdi['vdi'] !== null">
     <div class="label">HP Checks</div>
@@ -212,12 +236,7 @@
     <ion-grid *ngIf="stolen.length !== 0">
         <div class="label">STOLEN</div>
         <ion-row *ngFor="let item of stolen">
-          <ion-label *ngIf="item === 'There is no PNC Stolen record' else stl ">{{item}}</ion-label>
-          <ng-template #stl>
-            <ion-label style="color: red;">{{item}}</ion-label>
-            <br/>
-          </ng-template>
-            <br/>
+          <ion-label class="stolen">{{item}}</ion-label>
         </ion-row>
     </ion-grid>
   <ion-grid *ngIf="obj !== undefined && obj.m !== null">

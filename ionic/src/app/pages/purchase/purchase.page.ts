@@ -94,17 +94,22 @@ export class PurchasePage implements OnInit {
         console.log('ActionError');
         this.loadingController.dismiss();
       } else {
-        this.purchaseServie.confirm('', this.regNumb, paymentIntent.id, this.product.toString()).subscribe((servereResponse) => {
+        this.purchaseServie.confirm('', this.regNumb, paymentIntent.id, '').subscribe((servereResponse) => {
         this.handleServerResponse(servereResponse);
         });
       }
     } else {
       console.log("handle  success");
          if (response['product'] == '2') {
-            this.tariffVdi();
-         } else {
-            this.tariffStolen();
+           this.purchaseServie.product = 2;
+
+           this.tariffVdi();
          }
+         if (response['product'] == '1') {
+           this.purchaseServie.product = 1;
+           this.tariffStolen();
+         }
+         this.purchaseServie.purchased = true;
     }
   }
 
