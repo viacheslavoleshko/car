@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Mot;
+use Illuminate\Support\Facades\Storage;
 
 class MotController extends Controller
 {
@@ -23,13 +24,16 @@ class MotController extends Controller
                 'm' => $json,
             ]);
         }
+
         Mot::where('reg', $number)
             ->increment('cnt');
         $record = Mot::select('m')->where('reg', $number)->get();
+         $path = file_exists(env('PWA_LOCATION').'/www/assets/logos/'.$record[0]['m']['make'].'.png') ?
+               "assets/logos/{$record[0]['m']['make']}.png" :  null;
         return response()->json([
             'object' => $record,
-            'carMake' => "https://hpcheck.co.uk/assets/logos/{$record[0]['m']['make']}.png"
-        ]);
+            'carMake' => $path
+            ]);
     }
 
     function get_car($car) 
