@@ -13,7 +13,10 @@ class MotController extends Controller
     {
         $number = $request->input('number');
         $data = Mot::select('m')->where('reg', $number)->first();
-
+         $list = ['bmw', 'seat', 'audi', 'mercedes-benz', 'yamaha', 'alfa romeo', 'bentley', 'citroen', 'dacia', 'darracq',
+            'ducati', 'ferrari', 'fiat', 'ford', 'harley davidson', 'honda', 'hyundai', 'jaguar', 'kawasaki', 'jeep', 'kia',
+             'land rover', 'lexus', 'mazda', 'mitsubishi', 'mini', 'peugeot', 'nissan', 'porsche', 'reva', 'rover', 'saab',
+             'seat', 'skoda', 'smart', 'subaru', 'suzuki', 'toyota', 'triumph', 'vauxhall', 'volkswagen', 'volvo'];
         if(!$data || is_null($data['m'])) {
             $res = self::get_car($number);
             $json = ($res->httpStatus == "404") ? '-1' : json_encode($res[0]);
@@ -28,11 +31,11 @@ class MotController extends Controller
         Mot::where('reg', $number)
             ->increment('cnt');
         $record = Mot::select('m')->where('reg', $number)->get();
-         $path = file_exists(env('PWA_LOCATION').'/www/assets/logos/'.$record[0]['m']['make'].'.png') ?
-               "assets/logos/{$record[0]['m']['make']}.png" :  null;
+        $path = in_array(strtolower($record[0]['m']['make']), $list) ?  "assets/logos/{$record[0]['m']['make']}.png" : null;
+
         return response()->json([
             'object' => $record,
-            'carMake' => $path
+            'carMake' => $path,
             ]);
     }
 
