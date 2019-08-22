@@ -28,7 +28,7 @@ class MotController extends Controller
         Mot::where('reg', $number)
             ->increment('cnt');
         $record = Mot::select('m')->where('reg', $number)->get();
-         $path = file_exists(env('PWA_LOCATION').'/www/assets/logos/'.$record[0]['m']['make'].'.png') ?
+         $path = file_exists(public_path().'/www/assets/logos/'.$record[0]['m']['make'].'.png') ?
                "assets/logos/{$record[0]['m']['make']}.png" :  null;
         return response()->json([
             'object' => $record,
