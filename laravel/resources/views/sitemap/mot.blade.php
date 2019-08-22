@@ -5,7 +5,7 @@ xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http:
     @foreach ($numbers as $number)
         <url>
             <priority>0.8</priority>
-            <loc>{{ $pwa . "/vehicle/{$number->reg}" }}</loc>
+            <loc>{{ $pwa . "/vehicle/check/{$number->reg}" }}</loc>
             <lastmod>{{ $number->updated_at->tz('UTC')->toAtomString() }}</lastmod>
             <changefreq>monthly</changefreq>
         </url>
