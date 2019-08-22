@@ -66,14 +66,13 @@ return [
 
         'index' => [
             'driver' => 'local',
-            'root' => getenv('PWA_LOCATION'). '/gmaps/car/',
+            'root' => getenv('PWA_LOCATION'). 'www/gmaps/car/',
         ],
 
         'car' => [
             'driver' => 'local',
-            'root' => getenv('PWA_LOCATION') . '/gmaps/car' . '/car',
+            'root' => getenv('PWA_LOCATION') . 'www/gmaps/car' . '/car',
         ],
-
     ],
 
 ];
