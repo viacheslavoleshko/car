@@ -25,9 +25,10 @@ class MotController extends Controller
         }
         Mot::where('reg', $number)
             ->increment('cnt');
-
+        $record = Mot::select('m')->where('reg', $number)->get();
         return response()->json([
-            'object' => Mot::select('m')->where('reg', $number)->get()
+            'object' => $record,
+            'carMake' => "https://hpcheck.co.uk/assets/logos/{$record[0]['m']['make']}.png"
         ]);
     }
 

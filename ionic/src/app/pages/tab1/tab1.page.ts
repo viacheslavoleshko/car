@@ -44,6 +44,7 @@ export class Tab1Page implements OnInit {
     lineChart;
     mileage = false;
     danger = false;
+    carLogo = '';
     constructor(private router: Router,
                 private carService: CarService,
                 public purchaseService: PurchaseService,
@@ -78,12 +79,17 @@ export class Tab1Page implements OnInit {
         this.stolen = [];
         this.mileage = false;
         this.danger = false;
+        this.carLogo = '';
         this.purchaseService.product = 0;
         if (this.regNumb !== '' && this.regNumb !== undefined) {
             this.showDiscount();
             this.regNumb = this.regNumb.toUpperCase();
             this.carService.getMot(this.regNumb).subscribe((res) => {
                 this.obj = res['object']['0'];
+                if(res['carMake'])
+                    this.carLogo = res['carMake'].toLowerCase();
+                //if (this.carLogo === 'https://hpcheck.co.uk/assets/logos/ford.png')
+                  //  this.carLogo = 'https://hpcheck.co.uk/assets/logos/1.png';
                 if (this.obj !== undefined) {
                     if (this.obj['m']['motTests'] !== undefined) {
                         this.createChart();
@@ -96,9 +102,11 @@ export class Tab1Page implements OnInit {
             this.carService.getTax(this.regNumb).subscribe((res) => {
                 this.tax = res['object']['0'];
                 this.redTax();
-                var taxDate = new Date(moment(res['object']['0']['t']['Tax due']).format('YYYY-MM-DD'));
-                var today = new Date();
-                this.taxDays = this.diffdate(taxDate, today);
+                if (res['object']['0']) {
+                    var taxDate = new Date(moment(res['object']['0']['t']['Tax due']).format('YYYY-MM-DD'));
+                    var today = new Date();
+                    this.taxDays = this.diffdate(taxDate, today);
+                }
             });
             // this.carService.getVdi(this.regNumb).subscribe(res => {
             //             //     this.vdi = res['object']['0'];
@@ -358,11 +366,13 @@ export class Tab1Page implements OnInit {
   }
   redTax() {
       setTimeout(() => {
+          if(this.tax)
           if(this.tax['t']['Status'])
               if(this.tax['t']['Status'].toLowerCase() === 'untaxed' || this.tax['t']['Status'].toLowerCase() === 'sorn') {
                   document.getElementById('taxStatus').classList.add('red');
                   this.danger = true;
               }
+          if(this.tax)
           if(this.tax['t']['Export marker'])
               if(this.tax['t']['Export marker'].toLowerCase() === 'yes') {
                   document.getElementById('exportMarker').classList.add('red');
