@@ -1,0 +1,24 @@
+.textArea {
+  border: 1px solid #18d6ff;
+  margin: 0 10px;
+}
+.buttons {
+  margin: 0 10px 10px ;
+}
+ion-content {
+  form{
+    ion-buttons {
+      .submit {
+        margin: 5px 10px;
+      }
+    }
+      .list-ios {
+          margin: 0;
+      }
+    }
+  }
+.error {
+    text-align: center;
+    background: rgba(255, 12, 0, 0.44);
+  margin: 5px 10px;
+}

@@ -12,16 +12,16 @@ const routes: Routes = [
     path: "vehicle",
     component: TabsPage,
     children: [
-      { path: "",
+      { path: "check",
       loadChildren: "../tab1/tab1.module#Tab1PageModule" 
       },
 
-      { path: "tab2", 
+      { path: "review",
       loadChildren: "../tab2/tab2.module#Tab2PageModule" 
       }
     ]
   },
-  {path: '', redirectTo: '/vehicle', pathMatch: 'full'}
+  {path: '', redirectTo: '/vehicle/check', pathMatch: 'full'}
 ];
 
 @NgModule({

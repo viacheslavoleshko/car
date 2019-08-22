@@ -1,22 +1,41 @@
 <ion-header>
     <ion-toolbar>
-      <ion-title>Welcome on TAX tab</ion-title>
+      <ion-title>Review</ion-title>
     </ion-toolbar>
   </ion-header>
   
   <ion-content>
-    <ion-item>
-      <ion-col size="12">
-        <h3>
-          <ion-label position="floating">Find you TAX car with reg number</ion-label>
-        </h3>
-        <ion-input
-          color="primary"
-          placeholder="Enter reg number"
-          [(ngModel)]="regNumb"
-        ></ion-input>
-      </ion-col>
-    </ion-item>
-    <ion-button (click)="toTaxDetails()">Go to tax!</ion-button>
+    <form #form ="ngForm">
+
+      <ion-list>
+        <ion-radio-group>
+        <ion-item>
+          <ion-label>I am looking to buy this car</ion-label>
+          <ion-radio (ionSelect) = "setType('I am looking to buy this car')"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>This is my own car</ion-label>
+          <ion-radio (ionSelect) = "setType('This is my own car')"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label (ionSelect) = "setType('Other')">Other</ion-label>
+          <ion-radio></ion-radio>
+        </ion-item>
+    </ion-radio-group>
+      </ion-list>
+
+      <ion-buttons class="buttons">
+        <ion-button *ngFor="let n of [1,2,3,4,5]" (click)="rate(n)">
+          <ion-icon name="star-outline" color="warning" size="large" class="stars"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+
+      <div class="textArea">
+      <ion-textarea ngModel name="message" rows="3" placeholder="Enter your car review here. This can be anything that you wish to share with other people..."></ion-textarea>
+      </div>
+      <div class = 'error'>{{error}}</div>
+      <ion-buttons slot="primary">
+      <ion-button class="submit"(click)="leaveReview(form)" fill="solid" size="large" color="success">Leave review</ion-button>
+      </ion-buttons>
+    </form>
   </ion-content>
-  

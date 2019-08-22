@@ -82,6 +82,7 @@ export class Tab1Page implements OnInit {
         this.carLogo = '';
         this.purchaseService.product = 0;
         if (this.regNumb !== '' && this.regNumb !== undefined) {
+            this.purchaseService.numberInInput = this.regNumb;
             this.showDiscount();
             this.regNumb = this.regNumb.toUpperCase();
             this.carService.getMot(this.regNumb).subscribe((res) => {

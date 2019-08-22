@@ -17,6 +17,7 @@ export class PurchaseService {
     stolen = new Map();
     product = 0;
     purchased = false;
+    numberInInput = '';
     constructor(public http: HttpClient) {
     }
 
