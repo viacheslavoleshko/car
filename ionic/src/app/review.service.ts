@@ -8,7 +8,6 @@ import {Review} from "./models/Review";
   providedIn: 'root'
 })
 export class ReviewService {
- //path = 'http://localhost';
  path = 'https://car.hpcheck.co.uk';
   constructor(private http : HttpClient) { }
   leaveReview(review) {
