@@ -2,8 +2,7 @@ export class Review {
     constructor(
         public reg = '',
         public message = '',
-        public star = '',
-        public type = 0,
-
+        public star = 0,
+        public type = 0
     ) {}
 }

@@ -38,4 +38,12 @@
       <ion-button class="submit"(click)="leaveReview(form)" fill="solid" size="large" color="success">Leave review</ion-button>
       </ion-buttons>
     </form>
+    <ion-card *ngFor="let item of reviews">
+      <ion-card-header >
+        <div [class]="'star' + item.star" >
+
+        </div>
+        <div style="font-size: large"><b>{{item.message}}</b></div>
+      </ion-card-header>
+    </ion-card>
   </ion-content>

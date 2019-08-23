@@ -17,6 +17,7 @@ export class Tab2Page implements OnInit {
   type = 0;
   star;
   error = '';
+  reviews: Review[] = [];
   constructor(private carService: CarService,
               private activatedRoute: ActivatedRoute,
               private reviewService: ReviewService,
@@ -30,9 +31,8 @@ export class Tab2Page implements OnInit {
     setTimeout(() => {
       this.rate(4);
     },100);
-    this.reviewService.getReviews(this.regNumb).subscribe((res) => {
-      console.log(res);
-    });
+    this.getReviews();
+    this.setStars();
   }
 
    leaveReview(form: NgForm) {
@@ -45,6 +45,8 @@ export class Tab2Page implements OnInit {
              if (res['error']) {
                this.error = res['error'];
              } else {
+               this.getReviews();
+               this.setStars();
                this.presentAlert();
              }
            });
@@ -79,5 +81,33 @@ export class Tab2Page implements OnInit {
     });
 
     await alert.present();
+  }
+  getReviews() {
+    this.reviewService.getReviews(this.regNumb).subscribe((res) => {
+      this.reviews = res['reviews'];
+      if(this.reviews)
+      this.reviews = this.reviews.reverse();
+      console.log(this.reviews);
+
+      console.log(this.reviews);
+    });
+  }
+
+  setStars() {
+    setTimeout(() => {
+      this.showStar(5);
+      this.showStar(4);
+      this.showStar(3);
+      this.showStar(2);
+      this.showStar(1);
+    },500);
+  }
+
+  showStar(n) {
+    const icon = '<ion-icon  color="warning" name="star"></ion-icon>';
+    const strar = document.getElementsByClassName(`star${n}`);
+    if (strar)
+      for (let i = 0; i < strar.length; i++)
+        strar[i].innerHTML = icon.repeat(n);
   }
 }

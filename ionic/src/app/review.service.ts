@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {path} from "@angular-devkit/core";
 import {Observable} from "rxjs";
+import {Review} from "./models/Review";
 
 @Injectable({
   providedIn: 'root'
@@ -18,4 +19,5 @@ export class ReviewService {
       let header = new HttpHeaders().set('number', number);
    return this.http.get(this.path + '/getreviews', {headers: header});
   }
+
 }
