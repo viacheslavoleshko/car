@@ -50,5 +50,7 @@ Route::group([
     Route::get('/stolen/{number}', 'StealController@index');
 });
 
+Route::get('/recall', 'RecallController@index');
+
 Route::get('/confirm', array('middleware' => 'cors', 'uses' => 'StripeController@confirmPayment'));
 Route::post('/leavereview', 'ReviewController@addReview');
