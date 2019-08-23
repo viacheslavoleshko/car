@@ -381,4 +381,8 @@ export class Tab1Page implements OnInit {
               }
       },200);
   }
+  goToPurchase(n) {
+        this.purchaseService.numberPurchase = n;
+        this.router.navigateByUrl('/purchase/' + this.regNumb);
+  }
 }

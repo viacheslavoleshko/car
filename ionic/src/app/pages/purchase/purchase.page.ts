@@ -73,6 +73,14 @@ export class PurchasePage implements OnInit {
       }
       });
     this.cardElement.mount('#card-element');
+    if (this.purchaseServie.numberPurchase === 1) {
+      document.getElementById('stolen').setAttribute('checked', 'true');
+      this.product = 1;
+    }
+    if (this.purchaseServie.numberPurchase === 2) {
+      document.getElementById('vdi').setAttribute('checked', 'true');
+      this.product = 2;
+    }
   }
 
   async handleServerResponse(response) {
@@ -102,7 +110,6 @@ export class PurchasePage implements OnInit {
       console.log("handle  success");
          if (response['product'] == '2') {
            this.purchaseServie.product = 2;
-
            this.tariffVdi();
          }
          if (response['product'] == '1') {

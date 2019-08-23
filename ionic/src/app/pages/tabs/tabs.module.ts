@@ -21,7 +21,7 @@ const routes: Routes = [
       }
     ]
   },
-  {path: '', redirectTo: '/vehicle/check', pathMatch: 'full'}
+  {path: '', redirectTo: '/vehicle/check', pathMatch: 'full'},
 ];
 
 @NgModule({

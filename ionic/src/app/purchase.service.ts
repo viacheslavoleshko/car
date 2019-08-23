@@ -18,6 +18,7 @@ export class PurchaseService {
     product = 0;
     purchased = false;
     numberInInput = '';
+    numberPurchase = 0;
     constructor(public http: HttpClient) {
     }
 

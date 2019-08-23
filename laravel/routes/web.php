@@ -54,3 +54,5 @@ Route::group([
 Route::get('/getrecall', 'RecallController@fill');
 
 Route::get('/confirm', array('middleware' => 'cors', 'uses' => 'StripeController@confirmPayment'));
+Route::post('/leavereview', 'ReviewController@addReview');
+Route::get('/getreviews', 'ReviewController@getReview');

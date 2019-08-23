@@ -4,6 +4,7 @@ import { CarService } from '../../car.service';
 import {NgForm} from "@angular/forms";
 import {Review} from "../../models/Review";
 import {ReviewService} from "../../review.service";
+import {AlertController} from "@ionic/angular";
 @Component({
   selector: 'app-tab2',
   templateUrl: './tab2.page.html',
@@ -13,30 +14,42 @@ export class Tab2Page implements OnInit {
 
   regNumb = '';
   other = false;
-  type = '';
+  type = 0;
   star;
   error = '';
+  reviews: Review[] = [];
   constructor(private carService: CarService,
               private activatedRoute: ActivatedRoute,
-              private reviewService: ReviewService) {
+              private reviewService: ReviewService,
+              private alertController: AlertController) {
   }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe((params) => {
       this.regNumb = params['regNumb'];
-    })
+    });
     setTimeout(() => {
       this.rate(4);
     },100);
+    this.getReviews();
+    this.setStars();
   }
 
    leaveReview(form: NgForm) {
+    this.error = '';
      if (this.regNumb !== '' && this.regNumb !== undefined) {
-       if (this.type !== '') {
+       if (this.type !== 0) {
          if (form.value.message !== '') {
            let review: Review = new Review(this.regNumb, form.value.message, this.star, this.type);
-           //this.reviewService.leaveReview(review).subscribe();
-           console.log(review);
+           this.reviewService.leaveReview(review).subscribe((res) => {
+             if (res['error']) {
+               this.error = res['error'];
+             } else {
+               this.getReviews();
+               this.setStars();
+               this.presentAlert();
+             }
+           });
          } else {
            this.error = 'Enter your car review';
          }
@@ -57,8 +70,44 @@ export class Tab2Page implements OnInit {
     this.star = n;
   }
 
-  setType(msg: string) {
+  setType(msg) {
     this.error = '';
     this.type = msg;
+  }
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      header: 'Review left',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+  getReviews() {
+    this.reviewService.getReviews(this.regNumb).subscribe((res) => {
+      this.reviews = res['reviews'];
+      if(this.reviews)
+      this.reviews = this.reviews.reverse();
+      console.log(this.reviews);
+
+      console.log(this.reviews);
+    });
+  }
+
+  setStars() {
+    setTimeout(() => {
+      this.showStar(5);
+      this.showStar(4);
+      this.showStar(3);
+      this.showStar(2);
+      this.showStar(1);
+    },500);
+  }
+
+  showStar(n) {
+    const icon = '<ion-icon  color="warning" name="star"></ion-icon>';
+    const strar = document.getElementsByClassName(`star${n}`);
+    if (strar)
+      for (let i = 0; i < strar.length; i++)
+        strar[i].innerHTML = icon.repeat(n);
   }
 }

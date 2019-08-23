@@ -37,6 +37,7 @@
   </div>
   <ion-button *ngIf="co || tax || dvla" [routerLink]="'/purchase/' + regNumb"><h3>Buy Report</h3></ion-button>
   <img  class="logo" *ngIf="carLogo" [src]="carLogo" alt="logo" width="120px" height="120px">
+
   <ion-grid *ngIf="vdi !== undefined && vdi['vdi'] !== undefined && vdi['vdi'] !== null">
     <div class="label">HP Checks</div>
     <ion-row>
@@ -240,6 +241,29 @@
           <ion-label class="stolen">{{item}}</ion-label>
         </ion-row>
     </ion-grid>
+  <ion-grid *ngIf="(co || tax || dvla) &&  purchaseService.product !== 2">
+    <div class="label" >Legal History</div>
+    <ion-row>
+      <ion-col>Outstanding finance</ion-col>
+      <ion-col><a (click)="goToPurchase(2)">View</a></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Scrapped</ion-col>
+      <ion-col><a (click)="goToPurchase(2)">View</a></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Vin</ion-col>
+      <ion-col><a (click)="goToPurchase(2)">View</a></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Export\Import</ion-col>
+      <ion-col><a (click)="goToPurchase(2)">View</a></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Write off</ion-col>
+      <ion-col><a (click)="goToPurchase(2)">View</a></ion-col>
+    </ion-row>
+  </ion-grid>
   <ion-grid *ngIf="obj !== undefined && obj.m !== null">
     <div class="label">MOT</div>
     <ion-row *ngIf="motDays < 0" >
@@ -327,11 +351,14 @@
         </div>
         <hr/>
       </div>
-
-
-
   </ion-grid>
-
+   <ion-grid *ngIf="(co || tax || dvla) && purchaseService.product === 0">
+     <div class="label">Stolen</div>
+     <ion-row >
+       <ion-col>Stolen</ion-col>
+       <ion-col><a (click)="goToPurchase(1)">View</a></ion-col>
+     </ion-row>
+   </ion-grid>
    <ion-grid *ngIf="tax !== undefined && tax['t'] !== undefined">
      <div class="label">TAX</div>
      <ion-row *ngIf="taxDays < 0" >
@@ -405,7 +432,25 @@
        <ion-col>{{tax['t']['Year of manufacture']}}</ion-col>
      </ion-row>
    </ion-grid>
-
+  <ion-grid *ngIf="(co || tax || dvla) && purchaseService.product !== 2" >
+    <div class="label">Ownership History</div>
+    <ion-row>
+      <ion-col>Previous color</ion-col>
+      <ion-col><a (click)="goToPurchase(2)">View</a></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Number of owners</ion-col>
+      <ion-col><a (click)="goToPurchase(2)">View</a></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Previous period of ownership</ion-col>
+      <ion-col><a (click)="goToPurchase(2)">View</a></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Plate change count and previous plates</ion-col>
+      <ion-col><a (click)="goToPurchase(2)">View</a></ion-col>
+    </ion-row>
+  </ion-grid>
    <ion-grid *ngIf="dvla !== undefined && dvla !== null">
     <div class="label">DVLA</div>
     <ion-row>

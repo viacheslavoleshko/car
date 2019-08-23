@@ -1,7 +1,8 @@
 <IfModule mod_headers.c>
     Header set Access-Control-Allow-Origin "*"
-    Header set Access-Control-Allow-Headers "number, token, paymentintent, product"
-</IfModule>
+    Header set Access-Control-Allow-Methods "POST, GET"
+    Header set Access-Control-Allow-Headers "number, token, paymentintent, product,x-requested-with, Content-Type, origin"
+   </IfModule>
 
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>

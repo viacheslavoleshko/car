@@ -9,17 +9,17 @@
 
       <ion-list>
         <ion-radio-group>
+          <ion-item>
+            <ion-label>This is my own car</ion-label>
+            <ion-radio (ionSelect) = "setType(1)"></ion-radio>
+          </ion-item>
         <ion-item>
           <ion-label>I am looking to buy this car</ion-label>
-          <ion-radio (ionSelect) = "setType('I am looking to buy this car')"></ion-radio>
+          <ion-radio (ionSelect) = "setType(2)"></ion-radio>
         </ion-item>
-        <ion-item>
-          <ion-label>This is my own car</ion-label>
-          <ion-radio (ionSelect) = "setType('This is my own car')"></ion-radio>
-        </ion-item>
-        <ion-item>
-          <ion-label (ionSelect) = "setType('Other')">Other</ion-label>
-          <ion-radio></ion-radio>
+          <ion-item>
+          <ion-label>Other</ion-label>
+          <ion-radio  (ionSelect) = "setType(3)" ></ion-radio>
         </ion-item>
     </ion-radio-group>
       </ion-list>
@@ -38,4 +38,12 @@
       <ion-button class="submit"(click)="leaveReview(form)" fill="solid" size="large" color="success">Leave review</ion-button>
       </ion-buttons>
     </form>
+    <ion-card *ngFor="let item of reviews">
+      <ion-card-header >
+        <div [class]="'star' + item.star" >
+
+        </div>
+        <div style="font-size: large"><b>{{item.message}}</b></div>
+      </ion-card-header>
+    </ion-card>
   </ion-content>
