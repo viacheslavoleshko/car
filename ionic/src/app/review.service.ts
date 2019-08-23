@@ -6,7 +6,8 @@ import {path} from "@angular-devkit/core";
   providedIn: 'root'
 })
 export class ReviewService {
-path = 'http://localhost';
+ //path = 'http://localhost';
+ path = 'https://car.hpcheck.co.uk';
   constructor(private http : HttpClient) { }
   leaveReview(review) {
     return this.http.post(this.path + '/leavereview', review);

@@ -51,3 +51,4 @@ Route::group([
 });
 
 Route::get('/confirm', array('middleware' => 'cors', 'uses' => 'StripeController@confirmPayment'));
+Route::post('/leavereview', 'ReviewController@addReview');

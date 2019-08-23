@@ -4,6 +4,7 @@ import { CarService } from '../../car.service';
 import {NgForm} from "@angular/forms";
 import {Review} from "../../models/Review";
 import {ReviewService} from "../../review.service";
+import {AlertController} from "@ionic/angular";
 @Component({
   selector: 'app-tab2',
   templateUrl: './tab2.page.html',
@@ -18,7 +19,8 @@ export class Tab2Page implements OnInit {
   error = '';
   constructor(private carService: CarService,
               private activatedRoute: ActivatedRoute,
-              private reviewService: ReviewService) {
+              private reviewService: ReviewService,
+              private alertController: AlertController) {
   }
 
   ngOnInit() {
@@ -31,12 +33,18 @@ export class Tab2Page implements OnInit {
   }
 
    leaveReview(form: NgForm) {
+    this.error = '';
      if (this.regNumb !== '' && this.regNumb !== undefined) {
        if (this.type !== '') {
          if (form.value.message !== '') {
            let review: Review = new Review(this.regNumb, form.value.message, this.star, this.type);
-           //this.reviewService.leaveReview(review).subscribe();
-           console.log(review);
+           this.reviewService.leaveReview(review).subscribe((res) => {
+             if (res['error']) {
+               this.error = res['error'];
+             } else {
+               this.presentAlert();
+             }
+           });
          } else {
            this.error = 'Enter your car review';
          }
@@ -60,5 +68,13 @@ export class Tab2Page implements OnInit {
   setType(msg: string) {
     this.error = '';
     this.type = msg;
+  }
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      header: 'Review left',
+      buttons: ['OK']
+    });
+
+    await alert.present();
   }
 }
