@@ -14,7 +14,7 @@ export class Tab2Page implements OnInit {
 
   regNumb = '';
   other = false;
-  type = '';
+  type = 0;
   star;
   error = '';
   constructor(private carService: CarService,
@@ -26,16 +26,19 @@ export class Tab2Page implements OnInit {
   ngOnInit() {
     this.activatedRoute.params.subscribe((params) => {
       this.regNumb = params['regNumb'];
-    })
+    });
     setTimeout(() => {
       this.rate(4);
     },100);
+    this.reviewService.getReviews(this.regNumb).subscribe((res) => {
+      console.log(res);
+    });
   }
 
    leaveReview(form: NgForm) {
     this.error = '';
      if (this.regNumb !== '' && this.regNumb !== undefined) {
-       if (this.type !== '') {
+       if (this.type !== 0) {
          if (form.value.message !== '') {
            let review: Review = new Review(this.regNumb, form.value.message, this.star, this.type);
            this.reviewService.leaveReview(review).subscribe((res) => {
@@ -65,7 +68,7 @@ export class Tab2Page implements OnInit {
     this.star = n;
   }
 
-  setType(msg: string) {
+  setType(msg) {
     this.error = '';
     this.type = msg;
   }

@@ -3,7 +3,7 @@ export class Review {
         public reg = '',
         public message = '',
         public star = '',
-        public type = '',
+        public type = 0,
 
     ) {}
 }

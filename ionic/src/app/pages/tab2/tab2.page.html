@@ -9,17 +9,17 @@
 
       <ion-list>
         <ion-radio-group>
+          <ion-item>
+            <ion-label>This is my own car</ion-label>
+            <ion-radio (ionSelect) = "setType(1)"></ion-radio>
+          </ion-item>
         <ion-item>
           <ion-label>I am looking to buy this car</ion-label>
-          <ion-radio (ionSelect) = "setType('I am looking to buy this car')"></ion-radio>
+          <ion-radio (ionSelect) = "setType(2)"></ion-radio>
         </ion-item>
-        <ion-item>
-          <ion-label>This is my own car</ion-label>
-          <ion-radio (ionSelect) = "setType('This is my own car')"></ion-radio>
-        </ion-item>
-        <ion-item>
+          <ion-item>
           <ion-label>Other</ion-label>
-          <ion-radio  (ionSelect) = "setType('Other')" ></ion-radio>
+          <ion-radio  (ionSelect) = "setType(3)" ></ion-radio>
         </ion-item>
     </ion-radio-group>
       </ion-list>
