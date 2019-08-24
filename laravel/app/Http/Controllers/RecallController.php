@@ -6,17 +6,37 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Recall;
+use App\Models\Mot;
+use DB;
 
 class RecallController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        set_time_limit(0);
+        $number = $request->input('number');
+        
+        return response()->json([
+            'object' => DB::select(DB::Raw("select * from (
+                select 
+                    reg, 
+                    m->>'make' as make, 
+                    m->>'model' as model, 
+                    to_date(m->>'manufactureDate', 'YYYY.MM.DD') as manuf 
+                from mot where reg = '$number'
+                ) as sub 
+                left join recall on recall.make = sub.make and recall.model = sub.model 
+                where manuf between build_start and build_end 
+                order by id desc")),
+        ]);
+    }
+
+    public function fill()
+    {
         $start = microtime(true);
 
-        Storage::disk('local')->put('Recalls.csv', file_get_contents('https://www.check-vehicle-recalls.service.gov.uk/documents/RecallsFile.csv'));
+        // Storage::disk('local')->put('RecallsFile.csv', file_get_contents('https://www.check-vehicle-recalls.service.gov.uk/documents/RecallsFile.csv'));
 
-        $csv = array_map('str_getcsv', preg_replace( '/[^[:print:]]/', '', file(storage_path('app/Recalls.csv'))));
+        $csv = array_map('str_getcsv', preg_replace( '/[^[:print:]]/', '', file(storage_path('app/RecallsFile.csv'))));
         array_walk($csv, function(&$a) use ($csv) {
             $a = array_combine($csv[0], $a);
         });
@@ -25,27 +45,39 @@ class RecallController extends Controller
         $data = [];
 
         foreach($csv as $line) {
-            array_push($data, 
-                array(
-                    'launch_date' => $line["Launch Date"],
-                    'recalls_number' => $line["Recalls Number"],
-                    'make' => $line["Make"],
-                    'recalls_model_information' => $line["Recalls Model Information"],
-                    'concern' => $line["Concern"],
-                    'defect' => $line["Defect"],
-                    'remedy' => $line["Remedy"],
-                    'vehicle_numbers' => $line["Vehicle Numbers"],
-                    'manufacturer_ref' => $line["Manufacturer Ref"],
-                    'model' => $line["Model"],
-                    'vin_start' => $line["VIN Start"],
-                    'vin_end' => $line["VIN End"],
-                    'build_start' => $line["Build Start"],
-                    'build_end' => $line["Build End"],
-                ),
-            );
-        };
+            $nodes = array_map(function($value) {
+                return $value === "" ? NULL : $value;
+             }, array(
+                    'launch_date' => trim($line["Launch Date"], ' .'),
+                    'recalls_number' => trim($line["Recalls Number"]),
+                    'make' => trim($line["Make"]),
+                    'recalls_model_information' => trim($line["Recalls Model Information"]),
+                    'concern' => trim($line["Concern"]),
+                    'defect' => trim($line["Defect"]),
+                    'remedy' => trim($line["Remedy"]),
+                    'vehicle_numbers' => trim($line["Vehicle Numbers"]),
+                    'manufacturer_ref' => trim($line["Manufacturer Ref"]),
+                    'model' => trim($line["Model"]),
+                    'vin_start' => trim($line["VIN Start"]),
+                    'vin_end' => trim($line["VIN End"]),
+                    'build_start' => trim($line["Build Start"], ' .'),
+                    'build_end' => trim($line["Build End"], ' .'),
+                ));
+
+            array_push($data, $nodes);
+        }
+        self::PrepareTable();
+
+        $data = collect($data);
+        $chunks = $data->chunk(1000);
+
+        foreach ($chunks as $chunk)
+        {
+            $query = Recall::insert($chunk->toArray());
+        }
         
-        $query = Recall::insert($data);
+        Recall::where('model', 'Mazda6')
+            ->update(['model' => '6']);
 
         if($query) {
             echo "Done";
@@ -53,7 +85,14 @@ class RecallController extends Controller
             echo "Query did not execute";
         }
 
-        var_dump(round((microtime(true) - $start) * 1000));
+        print_r(" " . round((microtime(true) - $start) * 1000) . " ms");
 
+    }
+
+    public function PrepareTable()
+    {
+        DB::statement("SET datestyle = 'ISO, DMY'");
+        DB::statement("TRUNCATE TABLE recall");
+        DB::statement("ALTER SEQUENCE recall_id_seq RESTART");
     }
 }

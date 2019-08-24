@@ -48,9 +48,10 @@ Route::group([
     Route::get('/dvla/{number}', 'DvlaController@index');
     Route::get('/vdi/{number}', 'VdiController@index');
     Route::get('/stolen/{number}', 'StealController@index');
+    Route::get('/recall/{number}', 'RecallController@index');
 });
 
-Route::get('/recall', 'RecallController@index');
+Route::get('/getrecall', 'RecallController@fill');
 
 Route::get('/confirm', array('middleware' => 'cors', 'uses' => 'StripeController@confirmPayment'));
 Route::post('/leavereview', 'ReviewController@addReview');

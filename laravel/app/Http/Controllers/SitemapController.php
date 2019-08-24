@@ -21,7 +21,7 @@ class SitemapController extends Controller
             'style' => $style,
             'pwa' => $pwa,
         ]);
-
+        Storage::disk('index')->delete(["sitemap.xml"]);
         Storage::disk('index')->put("sitemap.xml", $file);
         
         for($i = 1; $i <= $pages; $i++) {
@@ -47,7 +47,7 @@ class SitemapController extends Controller
                 'style' => $style,
                 'pwa' => $pwa,
             ]);
-
+            Storage::disk('car')->delete(["$page.xml"]);
             Storage::disk('car')->put("$page.xml", $file);
         } else {
             abort(404);
