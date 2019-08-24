@@ -98,10 +98,10 @@ export class Tab1Page implements OnInit {
 
                 if (this.obj !== undefined) {
                     if (this.obj['m']['motTests'] !== undefined) {
-                        const motDate = this.transferDate(this.obj['m']['motTests']['0']['expiryDate'], '.') //new Date(moment(this.obj['m']['motTests']['0']['expiryDate']).format('YYYY-MM-DD'));
+                        const strDate = this.obj['m']['motTests']['0']['expiryDate'];
+                        const motDate = new Date(moment(strDate).format('YYYY-MM-DD'));
                         const today = new Date();
                         this.motDate = motDate;
-                        this.test = this.obj['m']['motTests']['0']['expiryDate'];
                         console.log(this.motDate);
                         this.motDays = this.diffdate(motDate, today);
                         this.createChart();
