@@ -87,9 +87,6 @@ export class Tab2Page implements OnInit {
       this.reviews = res['reviews'];
       if(this.reviews)
       this.reviews = this.reviews.reverse();
-      console.log(this.reviews);
-
-      console.log(this.reviews);
     });
   }
 

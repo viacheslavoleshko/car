@@ -42,7 +42,6 @@ export class PurchasePage implements OnInit {
       } else {
         console.log(paymentMethod);
         this.purchaseServie.confirm(paymentMethod.id, this.regNumb, '', this.product.toString()).subscribe((res) => {
-          console.log(res);
           this.handleServerResponse(res);
         });
       }
@@ -90,16 +89,13 @@ export class PurchasePage implements OnInit {
       return;
     }
     if (response.error) {
-      console.log('RESPONSE ERROR');
       this.loadingController.dismiss();
       this.message = response.error['jsonBody']['error']['message'];
     } else if (response.requires_action) {
-      console.log('require');
       const { error: errorAction, paymentIntent } =
           await this.stripe.handleCardAction(response.payment_intent_client_secret);
       if (errorAction) {
         this.message = 'Fail authentication';
-        console.log('ActionError');
         this.loadingController.dismiss();
       } else {
         this.purchaseServie.confirm('', this.regNumb, paymentIntent.id, '').subscribe((servereResponse) => {
@@ -107,7 +103,6 @@ export class PurchasePage implements OnInit {
         });
       }
     } else {
-      console.log("handle  success");
          if (response['product'] == '2') {
            this.purchaseServie.product = 2;
            this.tariffVdi();

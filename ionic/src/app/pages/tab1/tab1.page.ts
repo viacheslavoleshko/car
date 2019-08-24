@@ -87,12 +87,11 @@ export class Tab1Page implements OnInit {
         if (this.regNumb !== '' && this.regNumb !== undefined) {
             this.purchaseService.numberInInput = this.regNumb;
             this.showDiscount();
-            this.regNumb = this.regNumb.toUpperCase();
+            this.regNumb = this.triml(this.regNumb.toUpperCase());
             this.carService.getMot(this.regNumb).subscribe((res) => {
                 this.obj = res['object']['0'];
                 if(res['carMake'])
                     this.carLogo = res['carMake'].toLowerCase();
-
                 if (this.obj !== undefined) {
                     if (this.obj['m']['motTests'] !== undefined) {
                         const motDate = new Date(moment(res['object']['0']['m']['motTests']['0']['expiryDate'], 'YYYY.MM.DD').format());
@@ -101,6 +100,11 @@ export class Tab1Page implements OnInit {
                         this.createChart();
                     }
                 }
+            }, (e) => {
+                this.obj = undefined;
+                this.tax = undefined;
+                this.dvla = undefined;
+                this.co = undefined;
             });
             this.carService.getTax(this.regNumb).subscribe((res) => {
                 this.tax = res['object']['0'];
@@ -122,6 +126,10 @@ export class Tab1Page implements OnInit {
             });
             this.carService.getRecalls(this.regNumb).subscribe((res) => {
                 this.recalls = res['object'];
+                if (this.recalls.length !== 0) {
+                    this.danger = true;
+                    console.log('daanger');
+                }
             })
 
         }
@@ -181,12 +189,6 @@ export class Tab1Page implements OnInit {
            },200);
             this.purchaseService.product = 1;
         }
-    }
-    dialog(state) {
-        document.getElementById('dialog').style.display = state;
-        document.getElementById('filter').style.display = state;
-
-
     }
 
     async showDiscount() {
@@ -384,4 +386,7 @@ export class Tab1Page implements OnInit {
         this.purchaseService.numberPurchase = n;
         this.router.navigateByUrl('/purchase/' + this.regNumb);
   }
+    triml(str) {
+        return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+    }
 }

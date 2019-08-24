@@ -503,7 +503,7 @@
 
 
         <ion-grid *ngIf="recalls.length !== 0">
-            <div class="label">Recalls</div>
+            <div style="color: black" class="label red">Recalls</div>
             <div  *ngFor="let recall of recalls"  class="recall">
               <ion-row>
                 <ion-col>Launch date</ion-col>
@@ -538,17 +538,13 @@
                     <ion-col>Recalls number</ion-col>
                     <ion-col>{{recall.recalls_number}}</ion-col>
                 </ion-row>
-              <ion-row>
-                <ion-col>ID</ion-col>
-                <ion-col>{{recall.id}}</ion-col>
-              </ion-row>
                 <ion-row>
-                    <ion-col>Concern</ion-col>
-                    <ion-col>{{recall.concern}}</ion-col>
+                    <ion-col class="red">Concern</ion-col>
+                    <ion-col class="red">{{recall.concern}}</ion-col>
                 </ion-row>
                 <ion-row>
-                    <ion-col>Defect</ion-col>
-                    <ion-col>{{recall.defect}}</ion-col>
+                    <ion-col class="red">Defect</ion-col>
+                    <ion-col class="red">{{recall.defect}}</ion-col>
                 </ion-row>
               <ion-row>
                 <ion-col>Remedy</ion-col>
