@@ -98,8 +98,8 @@ export class Tab1Page implements OnInit {
 
                 if (this.obj !== undefined) {
                     if (this.obj['m']['motTests'] !== undefined) {
-                        var motDate = new Date(moment(this.obj['m']['motTests']['0']['expiryDate']).format('YYYY-MM-DD'));
-                        var today = new Date();
+                        const motDate = this.transferDate(this.obj['m']['motTests']['0']['expiryDate'], '.') //new Date(moment(this.obj['m']['motTests']['0']['expiryDate']).format('YYYY-MM-DD'));
+                        const today = new Date();
                         this.motDate = motDate;
                         this.test = this.obj['m']['motTests']['0']['expiryDate'];
                         console.log(this.motDate);
@@ -281,14 +281,14 @@ export class Tab1Page implements OnInit {
            if(this.vdi['vdi']['Response']['DataItems']['WrittenOff'])
            document.getElementById('writtenOff').classList.add('red');
            if(this.vdi['vdi']['Response']['DataItems']['LatestKeeperChangeDate']) {
-               let changeData = this.transferData(this.vdi['vdi']['Response']['DataItems']['LatestKeeperChangeDate']);
+               let changeData = this.transferDate(this.vdi['vdi']['Response']['DataItems']['LatestKeeperChangeDate'], '/');
                if(this.monthsDiff(changeData, today) < 6) {
                    document.getElementById('LatestKeeperChangeDate').classList.add('red');
                    this.danger = true;
                }
            }
            if(this.vdi['vdi']['Response']['DataItems']['LatestV5cIssuedDate']) {
-               let changeData = this.transferData(this.vdi['vdi']['Response']['DataItems']['LatestV5cIssuedDate']);
+               let changeData = this.transferDate(this.vdi['vdi']['Response']['DataItems']['LatestV5cIssuedDate'],'/');
                if(this.monthsDiff(changeData, today) < 6) {
                    document.getElementById('LatestV5cIssuedDate').classList.add('red');
                    this.danger = true;
@@ -365,8 +365,8 @@ export class Tab1Page implements OnInit {
       diff /= (60 * 60 * 24 * 7 * 4);
       return Math.abs(Math.round(diff));
   }
-  transferData(data) {
-      let latestChange = data.split('/');
+  transferDate(data, s) {
+      let latestChange = data.split(s);
       let string = latestChange[2] + '.' + latestChange[1] + '.' + latestChange[0];
       return new Date(moment(string).format('YYYY-MM-DD'));
   }
