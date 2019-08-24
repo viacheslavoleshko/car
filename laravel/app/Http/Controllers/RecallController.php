@@ -24,7 +24,7 @@ class RecallController extends Controller
                     to_date(m->>'manufactureDate', 'YYYY.MM.DD') as manuf 
                 from mot where reg = '$number'
                 ) as sub 
-                left join recall on recall.make = sub.make and recall.model = sub.model 
+                left join recall on  recall.model = sub.model 
                 where manuf between build_start and build_end 
                 order by id desc")),
         ]);
