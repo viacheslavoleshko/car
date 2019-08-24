@@ -99,7 +99,7 @@ export class Tab1Page implements OnInit {
                 if (this.obj !== undefined) {
                     if (this.obj['m']['motTests'] !== undefined) {
                         const strDate = this.obj['m']['motTests']['0']['expiryDate'];
-                        const motDate = new Date(moment(strDate).format('YYYY-MM-DD'));
+                        const motDate = new Date(moment(strDate.replace(' ', 'T')).format('YYYY-MM-DD'));
                         const today = new Date();
                         this.motDate = motDate;
                         console.log(this.motDate);
