@@ -47,9 +47,6 @@ export class Tab1Page implements OnInit {
     danger = false;
     carLogo = '';
     recalls: Recall[] = [];
-    //test
-    motDate;
-    taxDate;
     constructor(private router: Router,
                 private carService: CarService,
                 public purchaseService: PurchaseService,
@@ -98,12 +95,8 @@ export class Tab1Page implements OnInit {
 
                 if (this.obj !== undefined) {
                     if (this.obj['m']['motTests'] !== undefined) {
-                        const strDate = this.obj['m']['motTests']['0']['expiryDate'];
                         const motDate = new Date(moment(res['object']['0']['m']['motTests']['0']['expiryDate'], 'YYYY.MM.DD').format());
-                        //const motDate = new Date(strDate.replace(/ /g,"T"));
                         const today = new Date();
-                        this.motDate = motDate;
-                        console.log(this.motDate);
                         this.motDays = this.diffdate(motDate, today);
                         this.createChart();
                     }
@@ -115,7 +108,6 @@ export class Tab1Page implements OnInit {
                 if (res['object']['0']) {
                     const taxDate = new Date(moment(res['object']['0']['t']['Tax due']).format('YYYY-MM-DD'));
                     const today = new Date();
-                    this.taxDate = taxDate;
                     this.taxDays = this.diffdate(taxDate, today);
                 }
             });
@@ -370,7 +362,7 @@ export class Tab1Page implements OnInit {
   transferDate(data, s) {
       let latestChange = data.split(s);
       let string = latestChange[2] + '.' + latestChange[1] + '.' + latestChange[0];
-      return new Date(moment(string).format('YYYY-MM-DD'));
+      return new Date(moment(string, 'YYYY.MM.DD').format());
   }
   redTax() {
       setTimeout(() => {

@@ -266,9 +266,6 @@
   </ion-grid>
   <ion-grid *ngIf="obj !== undefined && obj.m !== null">
     <div class="label">MOT</div>
-      <h1>{{motDays}}</h1>
-      <h1>{{motDate}}</h1>
-      <h1>Tax{{taxDate}}</h1>
     <ion-row *ngIf="motDays < 0" >
       <ion-col>Days Left</ion-col>
       <ion-col class="fail">{{-motDays}} days overdue</ion-col>
@@ -568,6 +565,10 @@
                     <ion-col>Vehicle numbers</ion-col>
                     <ion-col>{{recall.vehicle_numbers}}</ion-col>
                 </ion-row>
+              <ion-row>
+                <ion-col>Vin start</ion-col>
+                <ion-col>{{recall.vin_start}}</ion-col>
+              </ion-row>
                 <ion-row>
                     <ion-col>Vin end</ion-col>
                     <ion-col>{{recall.vin_end}}</ion-col>
