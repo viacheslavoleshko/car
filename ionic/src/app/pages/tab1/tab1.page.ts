@@ -49,6 +49,7 @@ export class Tab1Page implements OnInit {
     recalls: Recall[] = [];
     //test
     motDate;
+    test = 1;
     constructor(private router: Router,
                 private carService: CarService,
                 public purchaseService: PurchaseService,
@@ -100,6 +101,7 @@ export class Tab1Page implements OnInit {
                         var motDate = new Date(moment(this.obj['m']['motTests']['0']['expiryDate']).format('YYYY-MM-DD'));
                         var today = new Date();
                         this.motDate = motDate;
+                        this.test = this.obj['m']['motTests']['0']['expiryDate'];
                         console.log(this.motDate);
                         this.motDays = this.diffdate(motDate, today);
                         this.createChart();
