@@ -26,7 +26,7 @@ class RecallController extends Controller
                 ) as sub 
                 left join recall on  recall.model = sub.model 
                 where manuf between build_start and build_end 
-                order by id desc")),
+                order by launch_date desc")),
         ]);
     }
 
