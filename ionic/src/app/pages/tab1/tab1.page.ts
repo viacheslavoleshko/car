@@ -16,6 +16,7 @@ import {log} from "util";
 import * as moment from 'moment'
 import {months} from "moment";
 import set = Reflect.set;
+import {Recall} from "../../models/Recall";
 
 @Component({
   selector: 'app-tab1',
@@ -45,6 +46,7 @@ export class Tab1Page implements OnInit {
     mileage = false;
     danger = false;
     carLogo = '';
+    recalls: Recall[] = [];
     constructor(private router: Router,
                 private carService: CarService,
                 public purchaseService: PurchaseService,
@@ -81,6 +83,7 @@ export class Tab1Page implements OnInit {
         this.danger = false;
         this.carLogo = '';
         this.purchaseService.product = 0;
+        this.recalls = [];
         if (this.regNumb !== '' && this.regNumb !== undefined) {
             this.purchaseService.numberInInput = this.regNumb;
             this.showDiscount();
@@ -109,13 +112,7 @@ export class Tab1Page implements OnInit {
                     this.taxDays = this.diffdate(taxDate, today);
                 }
             });
-            // this.carService.getVdi(this.regNumb).subscribe(res => {
-            //             //     this.vdi = res['object']['0'];
-            //             //     if(this.vdi !== undefined && this.vdi['vdi'] !== null && this.vdi['vdi'] !== undefined) {
-            //             //         this.writeOffRecordList = this.vdi['vdi']['Response']['DataItems']['WriteOffRecordList'];
-            //             //         this.financeList = this.vdi['vdi']['Response']['DataItems']['FinanceRecordList'];
-            //             //     }
-            //             // });
+
             this.showStolen(this.purchaseService.stolen, this.regNumb);
              this.showVdi(this.purchaseService.vdimap, this.regNumb.toUpperCase());
              this.carService.getDvla(this.regNumb).subscribe((res) => {
@@ -124,6 +121,9 @@ export class Tab1Page implements OnInit {
             this.carService.getCo(this.regNumb).subscribe((res) => {
                 this.co = res['object']['0'];
             });
+            this.carService.getRecalls(this.regNumb).subscribe((res) => {
+                this.recalls = res['object'];
+            })
 
         }
     }

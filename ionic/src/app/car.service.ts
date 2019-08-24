@@ -29,4 +29,7 @@ export class CarService {
   getStolen(registration) {
     return this.http.get(`${this.basepath}/stolen/${registration}`);
   }
+  getRecalls(registration) {
+    return this.http.get(`${this.basepath}/recall/${registration}`)
+  }
 }

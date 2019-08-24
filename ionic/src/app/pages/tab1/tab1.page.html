@@ -501,4 +501,76 @@
     </table>
       <div *ngIf="mileage" class="red">*Possible clocked car</div>
 
+
+        <ion-grid *ngIf="recalls.length !== 0">
+            <div class="label">Recalls</div>
+            <div  *ngFor="let recall of recalls"  class="recall">
+                <ion-row>
+                    <ion-col>ID</ion-col>
+                    <ion-col>{{recall.id}}</ion-col>
+                </ion-row>
+            <ion-row>
+                <ion-col>Reg</ion-col>
+                <ion-col>{{recall.reg}}</ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>Make</ion-col>
+                <ion-col>{{recall.make}}</ion-col>
+            </ion-row>
+                <ion-row>
+                    <ion-col>Model</ion-col>
+                    <ion-col>{{recall.model}}</ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>Manuf</ion-col>
+                    <ion-col>{{recall.manuf}}</ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>Manufacturer ref</ion-col>
+                    <ion-col>{{recall.manufacturer_ref}}</ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>Launch date</ion-col>
+                    <ion-col>{{recall.launch_date}}</ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>Recalls number</ion-col>
+                    <ion-col>{{recall.recalls_number}}</ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>Recalls model information</ion-col>
+                    <ion-col>{{recall.recalls_model_information}}</ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>Concern</ion-col>
+                    <ion-col>{{recall.concern}}</ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>Defect</ion-col>
+                    <ion-col>{{recall.defect}}</ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>Build start</ion-col>
+                    <ion-col>{{recall.build_start}}</ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>Build end</ion-col>
+                    <ion-col>{{recall.build_end}}</ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>Remedy</ion-col>
+                    <ion-col>{{recall.remedy}}</ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>Vehicle numbers</ion-col>
+                    <ion-col>{{recall.vehicle_numbers}}</ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>Vin end</ion-col>
+                    <ion-col>{{recall.vin_end}}</ion-col>
+                </ion-row>
+            </div>
+        </ion-grid>
+
+
 </ion-content>
