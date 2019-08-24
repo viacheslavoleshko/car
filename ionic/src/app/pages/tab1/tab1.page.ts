@@ -49,7 +49,7 @@ export class Tab1Page implements OnInit {
     recalls: Recall[] = [];
     //test
     motDate;
-    test = 1;
+    taxDate;
     constructor(private router: Router,
                 private carService: CarService,
                 public purchaseService: PurchaseService,
@@ -99,7 +99,7 @@ export class Tab1Page implements OnInit {
                 if (this.obj !== undefined) {
                     if (this.obj['m']['motTests'] !== undefined) {
                         const strDate = this.obj['m']['motTests']['0']['expiryDate'];
-                        const motDate = new Date(moment(strDate.replace(' ', 'T')).format('YYYY-MM-DD'));
+                        const motDate = new Date(moment(res['object']['0']['m']['motTests']['0']['expiryDate']).format('YYYY-MM-DD'));
                         const today = new Date();
                         this.motDate = motDate;
                         console.log(this.motDate);
@@ -112,8 +112,9 @@ export class Tab1Page implements OnInit {
                 this.tax = res['object']['0'];
                 this.redTax();
                 if (res['object']['0']) {
-                    var taxDate = new Date(moment(res['object']['0']['t']['Tax due']).format('YYYY-MM-DD'));
-                    var today = new Date();
+                    const taxDate = new Date(moment(res['object']['0']['t']['Tax due']).format('YYYY-MM-DD'));
+                    const today = new Date();
+                    this.taxDate = taxDate;
                     this.taxDays = this.diffdate(taxDate, today);
                 }
             });
