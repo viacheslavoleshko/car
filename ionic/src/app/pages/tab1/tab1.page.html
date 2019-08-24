@@ -266,6 +266,7 @@
   </ion-grid>
   <ion-grid *ngIf="obj !== undefined && obj.m !== null">
     <div class="label">MOT</div>
+      <h1>{{motDays}}</h1>
     <ion-row *ngIf="motDays < 0" >
       <ion-col>Days Left</ion-col>
       <ion-col class="fail">{{-motDays}} days overdue</ion-col>

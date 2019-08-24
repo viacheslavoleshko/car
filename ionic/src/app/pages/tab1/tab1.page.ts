@@ -92,8 +92,7 @@ export class Tab1Page implements OnInit {
                 this.obj = res['object']['0'];
                 if(res['carMake'])
                     this.carLogo = res['carMake'].toLowerCase();
-                //if (this.carLogo === 'https://hpcheck.co.uk/assets/logos/ford.png')
-                  //  this.carLogo = 'https://hpcheck.co.uk/assets/logos/1.png';
+
                 if (this.obj !== undefined) {
                     if (this.obj['m']['motTests'] !== undefined) {
                         this.createChart();
