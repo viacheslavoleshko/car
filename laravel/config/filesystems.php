@@ -71,7 +71,7 @@ return [
 
         'car' => [
             'driver' => 'local',
-            'root' => getenv('PWA_LOCATION') . '/www/gmaps/car' . '/car',
+            'root' => getenv('PWA_LOCATION') . '/www/gmaps/car/',
         ],
     ],
 
