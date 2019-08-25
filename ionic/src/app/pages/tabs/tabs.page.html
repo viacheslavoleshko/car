@@ -3,13 +3,17 @@
 <ion-tabs>
   <ion-tab-bar slot="bottom">
     <ion-tab-button [tab]="'check/' + purchseService.numberInInput">
-      <ion-icon name="sunny"></ion-icon>
+      <ion-icon name="md-clipboard"></ion-icon>
       <ion-label>Check</ion-label>
     </ion-tab-button>
 
     <ion-tab-button [tab]="'review/' + purchseService.numberInInput">
-      <ion-icon name="moon"></ion-icon>
+      <ion-icon name="md-thumbs-up"></ion-icon>
       <ion-label>Review</ion-label>
+    </ion-tab-button>
+    <ion-tab-button [tab]="'lowtax/' + purchseService.numberInInput">
+      <ion-icon name="md-car"></ion-icon>
+      <ion-label>Low Tax Cars</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>

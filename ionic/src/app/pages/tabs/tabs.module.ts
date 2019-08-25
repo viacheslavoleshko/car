@@ -18,6 +18,10 @@ const routes: Routes = [
 
       { path: "review",
       loadChildren: "../tab2/tab2.module#Tab2PageModule" 
+      },
+
+      { path: "lowtax",
+      loadChildren: "../tab3/tab3.module#Tab3PageModule" 
       }
     ]
   },

@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Cars With Lowest Tax</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div *ngFor="let car of cars" class="mleft">
+    <ion-grid *ngIf="car !== undefined && car !== null">
+      <div class="label">{{ car.make }}</div>
+      <ion-row>
+        <ion-col>Model</ion-col>
+        <ion-col>{{ car.model }}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>Manufacture Year</ion-col>
+        <ion-col>{{ car.year }}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>12 Months Cost</ion-col>
+        <ion-col>£{{car.tax12_single}}</ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

@@ -13,7 +13,6 @@ export class CarService {
   getTax(registration) {
     return this.http.get(`${this.basepath}/tax/${registration}`);
   }
-
   getMot(registration) {
     return this.http.get(`${this.basepath}/mot/${registration}`);
   }
@@ -30,6 +29,9 @@ export class CarService {
     return this.http.get(`${this.basepath}/stolen/${registration}`);
   }
   getRecalls(registration) {
-    return this.http.get(`${this.basepath}/recall/${registration}`)
+    return this.http.get(`${this.basepath}/recall/${registration}`);
+  }
+  getLowTax() {
+    return this.http.get(`${this.basepath}/lowtax`);
   }
 }
