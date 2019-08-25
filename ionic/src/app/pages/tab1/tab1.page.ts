@@ -128,8 +128,9 @@ export class Tab1Page implements OnInit {
                 this.recalls = res['object'];
                 if (this.recalls.length !== 0) {
                     this.danger = true;
-                    console.log('daanger');
                 }
+            }, (e) => {
+                this.recalls = [];
             })
 
         }
