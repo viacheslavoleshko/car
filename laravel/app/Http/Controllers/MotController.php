@@ -19,12 +19,18 @@ class MotController extends Controller
              'seat', 'skoda', 'smart', 'subaru', 'suzuki', 'toyota', 'triumph', 'vauxhall', 'volkswagen', 'volvo'];
         if(!$data || is_null($data['m'])) {
             $res = self::get_car($number);
+            $make = $res[0]->make;
+            $model = $res[0]->model;
+            $year = $res[0]->manufactureDate;
             $json = ($res->httpStatus == "404") ? '-1' : json_encode($res[0]);
 
             Mot::updateOrInsert(['reg' => $number],
             [
                 'updated_at' => now()->toDateTimeString('Y-m-d H:i:s'), 
                 'm' => $json,
+                'make' => $make,
+                'model' => $model,
+                'year' => substr($year, 0, 4),
             ]);
         }
 

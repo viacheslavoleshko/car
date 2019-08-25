@@ -52,6 +52,7 @@ Route::group([
 });
 
 Route::get('/getrecall', 'RecallController@fill');
+Route::get('/lowtax/{order?}', 'LowTaxController@index');
 
 Route::get('/confirm', array('middleware' => 'cors', 'uses' => 'StripeController@confirmPayment'));
 Route::post('/leavereview', 'ReviewController@addReview');
