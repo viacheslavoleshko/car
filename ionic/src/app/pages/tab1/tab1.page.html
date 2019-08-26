@@ -572,11 +572,12 @@
                 </ion-row>
             </div>
         </ion-grid>
-  <table  *ngIf="obj !== undefined && obj.m !== null">
+  <div  *ngIf="obj !== undefined && obj.m !== null && recallsForMake.length !== 0">
+  <table >
     <caption class="label">{{obj.m['make']}}</caption>
     <tr >
       <th>Year</th>
-      <th>Count</th>
+      <th>Amount of recalls</th>
     </tr>
     <tr *ngFor="let item of recallsForMake">
       <td>{{item.ye}}</td>
@@ -584,5 +585,11 @@
       <td *ngIf="item.threshold >= item.count">{{item.count}}</td>
     </tr>
   </table>
-
+  <div class="mleft-10">
+    Years to avoid in red. Manufacture had a lot of recalls in above years.
+    Therefore build quality in such years may suffer.
+    (This data is calculated based on amounts of recalls valid for such years across all {{obj.m['make']}} models.
+    It doesn't take amount of cars recalled. For exact model recall information see recall table)
+  </div>
+  </div>
 </ion-content>
