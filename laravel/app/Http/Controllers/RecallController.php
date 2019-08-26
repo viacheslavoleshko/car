@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Recall;
 use App\Models\Mot;
 use DB;
+use Symfony\Component\Mime\Part\DataPart;
 
 class RecallController extends Controller
 {
@@ -94,5 +95,22 @@ class RecallController extends Controller
         DB::statement("SET datestyle = 'ISO, DMY'");
         DB::statement("TRUNCATE TABLE recall");
         DB::statement("ALTER SEQUENCE recall_id_seq RESTART");
+    }
+
+    public function recallsForMake($make) {
+        echo json_encode([ 'result' => DB::select(DB::Raw("
+        WITH range AS (
+       SELECT generate_series(build_start,build_end, interval '1 year') y 
+       FROM recall 
+       WHERE make like '$make%' and build_start is not null and build_end is not null-- VW MERCEDES CITROEN
+          )
+
+       select ye, count(cnt), round(avg(count(1)) over()) threshold from (
+      SELECT date_part('year', y) ye, 1 cnt FROM range 
+       ) t where ye < date_part('YEAR', now()) and ye > 2000
+       group by ye
+        order by 1 desc
+        "))
+        ]);
     }
 }

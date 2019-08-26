@@ -7,6 +7,7 @@ import {Mot, Object} from "./models/Mot";
 })
 export class CarService {
   basepath = 'https://car.hpcheck.co.uk';
+  //basepath = 'http://localhost';
 
   constructor(private http : HttpClient) { }
 
@@ -33,5 +34,8 @@ export class CarService {
   }
   getLowTax() {
     return this.http.get(`${this.basepath}/lowtax`);
+  }
+  getRecallsInYears(make) {
+    return this.http.get(`${this.basepath}/recallsformake/${make}`)
   }
 }

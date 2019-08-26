@@ -21,3 +21,10 @@ export class Recall {
     }
 
 }
+export class RecallsForMake {
+    constructor(
+        public ye = 0,
+        public count = 0,
+        public threshold = 0
+    ) {}
+}

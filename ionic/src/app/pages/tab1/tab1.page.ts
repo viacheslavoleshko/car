@@ -16,7 +16,7 @@ import {log} from "util";
 import * as moment from 'moment'
 import {months} from "moment";
 import set = Reflect.set;
-import {Recall} from "../../models/Recall";
+import {Recall, RecallsForMake} from "../../models/Recall";
 
 @Component({
   selector: 'app-tab1',
@@ -47,6 +47,7 @@ export class Tab1Page implements OnInit {
     danger = false;
     carLogo = '';
     recalls: Recall[] = [];
+    recallsForMake: RecallsForMake[] = [];
     constructor(private router: Router,
                 private carService: CarService,
                 public purchaseService: PurchaseService,
@@ -84,6 +85,7 @@ export class Tab1Page implements OnInit {
         this.carLogo = '';
         this.purchaseService.product = 0;
         this.recalls = [];
+        this.recallsForMake = [];
         if (this.regNumb !== '' && this.regNumb !== undefined) {
             this.purchaseService.numberInInput = this.regNumb;
             this.showDiscount();
@@ -93,6 +95,10 @@ export class Tab1Page implements OnInit {
                 if(res['carMake'])
                     this.carLogo = res['carMake'].toLowerCase();
                 if (this.obj !== undefined) {
+                    this.carService.getRecallsInYears(this.obj.m['make'].substr(0,4)).subscribe((res) => {
+                        this.recallsForMake = res['result'];
+
+                    });
                     if (this.obj['m']['motTests'] !== undefined) {
                         const motDate = new Date(moment(res['object']['0']['m']['motTests']['0']['expiryDate'], 'YYYY.MM.DD').format());
                         const today = new Date();
