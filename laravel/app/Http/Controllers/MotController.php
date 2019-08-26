@@ -12,7 +12,7 @@ class MotController extends Controller
     public function index(Request $request)
     {
         $number = $request->input('number');
-        $data = Mot::select('m')->where('reg', $number)->first();
+        $data = self::getData($number);
          $list = ['bmw', 'seat', 'audi', 'mercedes-benz', 'yamaha', 'alfa romeo', 'bentley', 'citroen', 'dacia', 'darracq',
             'ducati', 'ferrari', 'fiat', 'ford', 'harley davidson', 'honda', 'hyundai', 'jaguar', 'kawasaki', 'jeep', 'kia',
              'land rover', 'lexus', 'mazda', 'mitsubishi', 'mini', 'peugeot', 'nissan', 'porsche', 'reva', 'rover', 'saab',
@@ -76,9 +76,12 @@ class MotController extends Controller
         curl_close($ch);
         return $result;
     }
+    public function getData($number) {
+        return  Mot::select('m')->where('reg', $number)->first();
+    }
     public function estimate() {
         $apikey = getenv('VDI_API');
-        $records = Mot::select('*')->whereNotNull('m')->where('reg', 'like', '%A%')->get();
+        $records = Mot::select('*')->whereNotNull('m')->whereNotNull('estimate')->where('reg', 'like', '%A%')->get();
         foreach ($records as $record) {
             $info = "https://uk1.ukvehicledata.co.uk/api/datapackage/ValuationData?v=2&api_nullitems=1&auth_apikey={$apikey}&key_VRM={$record->reg}";
             $res = file_get_contents($info);
