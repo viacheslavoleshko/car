@@ -35,6 +35,11 @@
     import check, colour change check, and more. These additional checks are key to stay safe.
     Also please see our smart tips how to stay safe while buying car.
   </div>
+    <div class="price" *ngIf="est.price">
+      <div>Price:</div>
+      <div class="bold">£{{est.price}}</div>
+    </div>
+
   <ion-button *ngIf="co || tax || dvla" [routerLink]="'/purchase/' + regNumb"><h3>Buy Report</h3></ion-button>
   <img  class="logo" *ngIf="carLogo" [src]="carLogo" alt="logo" width="120px" height="120px">
 

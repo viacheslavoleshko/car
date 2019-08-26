@@ -59,3 +59,5 @@ Route::get('/confirm', array('middleware' => 'cors', 'uses' => 'StripeController
 Route::post('/leavereview', 'ReviewController@addReview');
 Route::get('/getreviews', 'ReviewController@getReview');
 Route::get('/recallsformake/{make}', 'RecallController@recallsForMake');
+Route::get('/estimate', 'MotController@estimate');
+Route::get('/est/{number}', 'EstController@index');

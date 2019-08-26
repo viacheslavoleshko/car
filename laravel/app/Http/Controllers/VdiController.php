@@ -41,5 +41,5 @@ class VdiController extends Controller
                     'vdi' => $res,
                 ]);
         }
-    } 
+    }
 }

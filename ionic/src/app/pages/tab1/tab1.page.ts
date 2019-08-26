@@ -17,6 +17,7 @@ import * as moment from 'moment'
 import {months} from "moment";
 import set = Reflect.set;
 import {Recall, RecallsForMake} from "../../models/Recall";
+import {Est} from "../../models/Est";
 
 @Component({
   selector: 'app-tab1',
@@ -48,6 +49,7 @@ export class Tab1Page implements OnInit {
     carLogo = '';
     recalls: Recall[] = [];
     recallsForMake: RecallsForMake[] = [];
+    est:Est = new Est();
     constructor(private router: Router,
                 private carService: CarService,
                 public purchaseService: PurchaseService,
@@ -86,6 +88,7 @@ export class Tab1Page implements OnInit {
         this.purchaseService.product = 0;
         this.recalls = [];
         this.recallsForMake = [];
+        this.est = new Est();
         if (this.regNumb !== '' && this.regNumb !== undefined) {
             this.purchaseService.numberInInput = this.regNumb;
             this.showDiscount();
@@ -137,7 +140,12 @@ export class Tab1Page implements OnInit {
                 }
             }, (e) => {
                 this.recalls = [];
-            })
+            });
+            this.carService.getEst(this.regNumb).subscribe((res) => {
+                if(res['est']) {
+                    this.est = res['est'];
+                }
+            });
 
         }
     }
