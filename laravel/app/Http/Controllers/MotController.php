@@ -84,13 +84,14 @@ class MotController extends Controller
         $records = Mot::select('*')->whereNotNull('m')->whereNull('estimate')->where('reg', 'like', '%A%')->get();
         foreach ($records as $record) {
             $info = "https://uk1.ukvehicledata.co.uk/api/datapackage/ValuationData?v=2&api_nullitems=1&auth_apikey={$apikey}&key_VRM={$record->reg}";
-            $res = file_get_contents($info);
+            $res = file_get_contents($info) ? file_get_contents($info): null;
+            sleep(1);
             Mot::where('reg', $record->reg)->update([
                 'estimate' => $res
             ]);
+            echo json_encode([
+                'response' => $res
+            ]);
         }
-        echo json_encode([
-            'response' => 'success'
-        ]);
     }
 }
