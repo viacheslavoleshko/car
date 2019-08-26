@@ -6,8 +6,8 @@ import {Mot, Object} from "./models/Mot";
   providedIn: 'root'
 })
 export class CarService {
-  //basepath = 'https://car.hpcheck.co.uk';
-  basepath = 'http://localhost';
+  basepath = 'https://car.hpcheck.co.uk';
+  //basepath = 'http://localhost';
 
   constructor(private http : HttpClient) { }
 
