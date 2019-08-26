@@ -78,7 +78,9 @@ class RecallController extends Controller
         }
         
         Recall::where('model', 'Mazda6')
-            ->update(['model' => '6']);
+            ->update(['model' => '6']);   
+        Recall::where('make', 'GREEN MACHINES')
+            ->delete();
 
         if($query) {
             echo "Done";

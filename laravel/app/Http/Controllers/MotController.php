@@ -76,4 +76,74 @@ class MotController extends Controller
         curl_close($ch);
         return $result;
     }
+
+    function regsFromPage($pages) 
+    {
+        $start = microtime(true);
+        set_time_limit(0);
+        $data = [];
+        $valid = [];
+        $pattern = '/(?=[A-Z]{2}[0-9]{2}[A-Z]{3})[^IQZ]{2}[0-9]{2}[^IQ]{3}/';
+
+        for($i = 0; $i < $pages; $i++) {
+            $url = "https://beta.check-mot.service.gov.uk/trade/vehicles/mot-tests?page=$i";
+            $apiKey = getenv('MOT_API');   
+            $headers = array(
+                'Accept: application/json+v6',
+                "X-Api-Key: $apiKey"
+            );
+        
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_exec($ch);
+
+            if (curl_errno($ch)) {
+                echo 'Error:' . curl_error($ch);
+            }
+
+            $records = json_decode(curl_exec($ch));
+
+            foreach($records as $record) {
+                if (preg_match($pattern, $record->registration)) {
+                    $find = stripos($record->registration, "A");
+                    if ($find !== false) {
+                        $record = [
+                            'reg' => $record->registration,
+                            'updated_at' => now()->toDateTimeString('Y-m-d H:i:s'),
+                            'm' => json_encode($record),
+                            'make' => $record->make,
+                            'model' => $record->model,
+                            'year' => substr($record->manufactureDate, 0, 4),
+                        ];
+                        array_push($valid, $record);
+                    }
+                }        
+            }
+            
+            array_push($data, $valid);
+            array_unique($data);
+            $result = array_merge(...$data);
+            sleep(2);
+        }
+        curl_close($ch);
+
+        $result = collect($result);
+        $chunks = $result->chunk(1000);
+
+        foreach ($chunks as $chunk)
+        {
+            $query = Mot::insert($chunk->toArray());
+        }
+
+        if($query) {
+            echo "Done";
+        } else {
+            echo "Query did not execute";
+        }
+
+        print_r(" " . round((microtime(true) - $start) * 1000) . " ms");
+    }
 }
