@@ -81,7 +81,7 @@ class MotController extends Controller
     }
     public function estimate() {
         $apikey = getenv('VDI_API');
-        $records = Mot::select('*')->whereNotNull('m')->whereNotNull('estimate')->where('reg', 'like', '%A%')->get();
+        $records = Mot::select('*')->whereNotNull('m')->whereNull('estimate')->where('reg', 'like', '%A%')->get();
         foreach ($records as $record) {
             $info = "https://uk1.ukvehicledata.co.uk/api/datapackage/ValuationData?v=2&api_nullitems=1&auth_apikey={$apikey}&key_VRM={$record->reg}";
             $res = file_get_contents($info);
