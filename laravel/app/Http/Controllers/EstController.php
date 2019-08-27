@@ -41,7 +41,7 @@ class EstController extends Controller
             $info = "https://uk1.ukvehicledata.co.uk/api/datapackage/ValuationData?v=2&api_nullitems=1&auth_apikey={$apikey}&key_VRM={$record->min}";
             $apiResult = file_get_contents($info);
             $res = $apiResult ? $apiResult : null;
-            //sleep(3);
+            sleep(3);
             $res = stripslashes(html_entity_decode($res));
             $estimate = json_decode($res, true);
             $otr = array_column($estimate['Response']['DataItems'], 'OTR');
