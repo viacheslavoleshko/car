@@ -129,7 +129,7 @@ class MotController extends Controller
             sleep(2);
         }
         curl_close($ch);
-
+        
         $result = collect($result);
         $chunks = $result->chunk(1000);
 
@@ -144,7 +144,7 @@ class MotController extends Controller
             echo "Query did not execute";
         }
 
-        print_r(" " . round((microtime(true) - $start) * 1000) . " ms");
+        print_r(" " . count($result) . " regs inserted in " . round((microtime(true) - $start) * 1000) . " ms");
     }
 
     public function getData($number) {
