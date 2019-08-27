@@ -80,12 +80,12 @@ class MotController extends Controller
     function regsFromPage($pages) 
     {
         $start = microtime(true);
+        $allregs = 0;
         set_time_limit(0);
-        $data = [];
-        $valid = [];
         $pattern = '/(?=[A-Z]{2}[0-9]{2}[A-Z]{3})[^IQZ]{2}[0-9]{2}[^IQ]{3}/';
 
         for($i = 0; $i < $pages; $i++) {
+            $valid = [];
             $url = "https://beta.check-mot.service.gov.uk/trade/vehicles/mot-tests?page=$i";
             $apiKey = getenv('MOT_API');   
             $headers = array(
@@ -98,18 +98,19 @@ class MotController extends Controller
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            curl_exec($ch);
+            $json = curl_exec($ch);
 
             if (curl_errno($ch)) {
                 echo 'Error:' . curl_error($ch);
             }
 
-            $records = json_decode(curl_exec($ch));
-
+            $records = json_decode($json);
             foreach($records as $record) {
                 if (preg_match($pattern, $record->registration)) {
+
                     $find = stripos($record->registration, "A");
                     if ($find !== false) {
+                        
                         $record = [
                             'reg' => $record->registration,
                             'updated_at' => now()->toDateTimeString('Y-m-d H:i:s'),
@@ -122,29 +123,24 @@ class MotController extends Controller
                     }
                 }        
             }
-            
-            array_push($data, $valid);
-            array_unique($data);
-            $result = array_merge(...$data);
+            $query = Mot::insert($valid);
+            $regs = count($valid);
+            echo nl2br($regs . " regs inserted to database from $i page\n");
+            $allregs += $regs;
+
+            ob_flush();
+            flush();
             sleep(2);
         }
         curl_close($ch);
         
-        $result = collect($result);
-        $chunks = $result->chunk(1000);
-
-        foreach ($chunks as $chunk)
-        {
-            $query = Mot::insert($chunk->toArray());
-        }
-
         if($query) {
             echo "Done";
         } else {
             echo "Query did not execute";
         }
-
-        print_r(" " . count($result) . " regs inserted in " . round((microtime(true) - $start) * 1000) . " ms");
+        print_r(" " . $allregs . " regs inserted in " . round((microtime(true) - $start) * 1000) . " ms");
+        ob_end_flush();
     }
 
     public function getData($number) {

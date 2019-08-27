@@ -24,8 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call('App\Http\Controllers\SitemapController@index')
-                ->hourly();
+        $schedule->call('App\Http\Controllers\SitemapController@index')->hourly();
     }
 
     /**
