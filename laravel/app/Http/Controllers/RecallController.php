@@ -100,17 +100,17 @@ class RecallController extends Controller
     }
 
     public function recallsForMake($make) {
-        echo json_encode([ 'result' => DB::select(DB::Raw("
+        return response()->json([ 'result' => DB::select(DB::Raw("
         WITH range AS (
-       SELECT generate_series(build_start,build_end, interval '1 year') y 
-       FROM recall 
-       WHERE make like '$make%' and build_start is not null and build_end is not null-- VW MERCEDES CITROEN
+        SELECT generate_series(build_start,build_end, interval '1 year') y 
+        FROM recall 
+        WHERE make like '$make%' and build_start is not null and build_end is not null-- VW MERCEDES CITROEN
           )
 
        select ye, count(cnt), round(avg(count(1)) over()) threshold from (
-      SELECT date_part('year', y) ye, 1 cnt FROM range 
-       ) t where ye < date_part('YEAR', now()) and ye > 2000
-       group by ye
+       SELECT date_part('year', y) ye, 1 cnt FROM range 
+        ) t where ye < date_part('YEAR', now()) and ye > 2000
+        group by ye
         order by 1 desc
         "))
         ]);

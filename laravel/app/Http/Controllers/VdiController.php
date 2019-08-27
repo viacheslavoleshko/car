@@ -11,17 +11,6 @@ class VdiController extends Controller
     public function index(Request $request)
     {
         $number = $request->input('number');
-
-
-        if(isset($data['reg']) && is_null($data['vdi'])) {
-            $res = self::curlNumberPlate($number);
-            
-            Vdi::where('reg', $number)
-            ->update([
-                'updated_at' => now()->toDateTimeString('Y-m-d H:i:s'), 
-                'vdi' => $res,
-            ]);
-        }
         return response()->json([
             'object' => Vdi::select('vdi')->where( 'reg', $number)->get()
         ]);
