@@ -77,7 +77,7 @@ class MotController extends Controller
         return $result;
     }
 
-    function regsFromPage($pages) 
+    function regsFromPage($pages)
     {
         $start = microtime(true);
         set_time_limit(0);
@@ -87,12 +87,12 @@ class MotController extends Controller
 
         for($i = 0; $i < $pages; $i++) {
             $url = "https://beta.check-mot.service.gov.uk/trade/vehicles/mot-tests?page=$i";
-            $apiKey = getenv('MOT_API');   
+            $apiKey = getenv('MOT_API');
             $headers = array(
                 'Accept: application/json+v6',
                 "X-Api-Key: $apiKey"
             );
-        
+
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -120,16 +120,16 @@ class MotController extends Controller
                         ];
                         array_push($valid, $record);
                     }
-                }        
+                }
             }
-            
+
             array_push($data, $valid);
             array_unique($data);
             $result = array_merge(...$data);
             sleep(2);
         }
         curl_close($ch);
-        
+
         $result = collect($result);
         $chunks = $result->chunk(1000);
 
@@ -151,19 +151,5 @@ class MotController extends Controller
         return  Mot::select('m')->where('reg', $number)->first();
     }
 
-    public function estimate() {
-        $apikey = getenv('VDI_API');
-        $records = Mot::select('*')->whereNotNull('m')->whereNull('estimate')->where('reg', 'like', '%A%')->get();
-        foreach ($records as $record) {
-            $info = "https://uk1.ukvehicledata.co.uk/api/datapackage/ValuationData?v=2&api_nullitems=1&auth_apikey={$apikey}&key_VRM={$record->reg}";
-            $res = file_get_contents($info) ? file_get_contents($info): null;
-            sleep(1);
-            Mot::where('reg', $record->reg)->update([
-                'estimate' => $res
-            ]);
-            echo json_encode([
-                'response' => $res
-            ]);
-        }
-    }
 }
+
