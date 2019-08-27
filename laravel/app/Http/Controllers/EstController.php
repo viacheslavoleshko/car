@@ -14,7 +14,7 @@ class EstController extends Controller
 {
   public function index($number) {
       $mot =  MotController::getData($number);
-      echo json_encode([
+      return response()->json([
           'est' => Est::select('*')->whereNotNull('price')->where('make',$mot['m']['make'])->where('model', $mot['m']['model'])->first()
       ]);
   }

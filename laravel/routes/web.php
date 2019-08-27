@@ -49,15 +49,15 @@ Route::group([
     Route::get('/vdi/{number}', 'VdiController@index');
     Route::get('/stolen/{number}', 'StealController@index');
     Route::get('/recall/{number}', 'RecallController@index');
+    Route::get('/est/{number}', 'EstController@index');
 });
 
 Route::get('/getrecall', 'RecallController@fill');
 Route::get('/lowtax', 'LowTaxController@index');
 Route::get('/getregs/{pages}', 'MotController@regsFromPage');
-
 Route::get('/confirm', array('middleware' => 'cors', 'uses' => 'StripeController@confirmPayment'));
 Route::post('/leavereview', 'ReviewController@addReview');
 Route::get('/getreviews', 'ReviewController@getReview');
 Route::get('/recallsformake/{make}', 'RecallController@recallsForMake');
 Route::get('/estimate', 'EstController@estimate');
-Route::get('/est/{number}', 'EstController@index');
+
