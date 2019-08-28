@@ -12,8 +12,8 @@ class LowTaxController extends Controller
     {
         return response()->json([
             'object' => Mot::select('make', 'model', 'year', 'tax12_single')
-                ->join('year_tax', function ($join) {
-                    $join->whereRaw('mot.co2 between year_tax.co_min and year_tax.co_max');
+                ->join('tax', function ($join) {
+                    $join->whereRaw('mot.co2 between tax.co_min and tax.co_max');
                 })
                 ->whereBetween('mot.co2', [0, 120])
                 ->whereNotNull('make')

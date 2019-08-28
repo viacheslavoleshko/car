@@ -56,7 +56,7 @@ Route::get('/getrecall', 'RecallController@fill');
 Route::get('/lowtax', 'LowTaxController@index');
 Route::get('/getregs/{offset}/{pages}', 'MotController@regsFromPage');
 Route::get('/getins', 'InsuranceController@insurance');
-
+Route::get('/ins', 'InsuranceController@index');
 Route::get('/confirm', array('middleware' => 'cors', 'uses' => 'StripeController@confirmPayment'));
 Route::get('/getkey', 'StripeController@getKey');
 Route::post('/leavereview', 'ReviewController@addReview');

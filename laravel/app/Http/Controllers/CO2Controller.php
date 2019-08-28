@@ -15,7 +15,7 @@ class CO2Controller extends Controller
         return response()->json([
             'object' => CO2::select('band', 'co2', 'tax12_single', 'tax6_single')
                 ->join('mot', 'mot.co2', '=', 'co2')
-                ->whereRaw('mot.co2 between year_tax.co_min and year_tax.co_max')
+                ->whereRaw('mot.co2 between tax.co_min and tax.co_max')
                 ->where('mot.reg', $number)
                 ->get(),
         ]);

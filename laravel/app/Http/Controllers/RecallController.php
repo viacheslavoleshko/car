@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Recall;
-use App\Models\Mot;
 use DB;
 use Symfony\Component\Mime\Part\DataPart;
 
