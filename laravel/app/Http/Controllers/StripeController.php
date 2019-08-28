@@ -79,12 +79,12 @@ class StripeController extends Controller
             ]);
         } else if ($intent->status == 'succeeded') {
 
-//             if($record->product == '1') {
-//                 StealController::ifStolen($request);
-//             }
-//             if($record->product == '2') {
-//                 VdiController::curlNumberPlate($request);
-//             }
+            if($record->product == '1') {
+                 StealController::ifStolen($request);
+             }
+             if($record->product == '2') {
+                 VdiController::curlNumberPlate($request);
+             }
 
             echo json_encode([
               'success' => true,
