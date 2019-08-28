@@ -12,7 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class StripeController extends Controller
 {
-    public function confirmPayment(\Illuminate\Http\Request $request) {
+    public function confirmPayment(Request $request) {
+
         $paymentId = $request->header('token');
         $regNumb = $request->header('number');
         $intentId = $request->header('paymentIntent');
@@ -21,6 +22,7 @@ class StripeController extends Controller
         $price = ($product == '1') ? 799 : 1499;
         if($data->first()) {
             Stripe::setApiKey(env(BUY_REPORT_SERCET_KEY));
+
             try {
                 if ($paymentId != '') {
                     $intent = PaymentIntent::create([
@@ -76,13 +78,13 @@ class StripeController extends Controller
 
             ]);
         } else if ($intent->status == 'succeeded') {
-            
-             if($record->product == '1') {
-                 StealController::ifStolen($request);
-             }
-             if($record->product == '2') {
-                 VdiController::curlNumberPlate($request);
-             }
+
+//             if($record->product == '1') {
+//                 StealController::ifStolen($request);
+//             }
+//             if($record->product == '2') {
+//                 VdiController::curlNumberPlate($request);
+//             }
 
             echo json_encode([
               'success' => true,
