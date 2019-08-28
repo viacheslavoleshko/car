@@ -59,20 +59,23 @@ export class PurchasePage implements OnInit {
       hidePostalCode: true,
       style: {
         base: {
-          color: '#32325d',
+          color: '#000000',
           fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
           fontSmoothing: 'antialiased',
           fontSize: '16px',
+          fontWeight: 'bold',
           '::placeholder': {
-            color: '#aab7c4'
+            color: '#557055'
           }
         },
+
         invalid: {
           color: '#fa755a',
           iconColor: '#fa755a'
         }
       }
       });
+
     this.cardElement.mount('#card-element');
     if (this.purchaseServie.numberPurchase === 1) {
       document.getElementById('stolen').setAttribute('checked', 'true');

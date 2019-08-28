@@ -25,3 +25,22 @@
   text-align: center;
   background: rgba(255, 12, 0, 0.44);
 }
+.policy {
+  margin: 0 10px;
+}
+.mb-10 {
+  margin-bottom: 10px;
+}
+.label{
+  text-align: center;
+  border-top: 1px solid gainsboro;
+  border-bottom: 1px solid gainsboro;
+  font-size: 22px;
+  color: #0bb8cc;
+  clear: both;
+  margin-top: 20px;
+}
+#cart_mail {
+  unicode-bidi: bidi-override;
+  direction: rtl;
+}

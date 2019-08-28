@@ -3,6 +3,7 @@
     <ion-title>{{regNumb}}</ion-title>
   </ion-toolbar>
 </ion-header>
+<ion-content>
 <ion-radio-group>
   <ion-item>
     <h1 >Silver
@@ -22,10 +23,10 @@
     <span style="color:#2adc11">14.99£</span>
     </h1>
     <div style="margin-left: 10px">
-      <span>Clocked mileage,</span>
-      <span>Stolen check, </span>
-      <span>Check mot and  road tax, </span>
-      <span>check gaps in MOT, </span>
+      <span> Clocked mileage,</span>
+      <span> Stolen check, </span>
+      <span> Check mot and  road tax, </span>
+      <span> check gaps in MOT, </span>
       <span> HP check - oustanding finance check , </span>
       <span> Scrapped check, </span>
       <span> VIN check, </span>
@@ -40,7 +41,7 @@
     <ion-radio  (ionSelect)="setCost(2)" slot="end" color="success" id="vdi"></ion-radio>
   </ion-item>
 </ion-radio-group>
-<ion-content>
+
   <div id="card-element">
     A Stripe Element will be inserted here.
     <p class="message">{{message}}</p>
@@ -49,4 +50,24 @@
   <div id="payment-request-button">
   </div>
   <ion-button expand="block" color="success" (click)="Submit()">Buy</ion-button>
+
+    <div class="policy">
+        <div class="label">Our Policy</div>
+        <div><b>Security</b></div>
+        <div class="mb-10">
+            All the information you submit on this website is secured by the latest TLS technology
+        </div>
+        <div><b>Access</b></div>
+        <div class="mb-10">
+            You will get instant car check report. Also you will be able access it for 2 hours.
+        </div>
+        <div><b>Privacy</b></div>
+        <div class="mb-10">
+            All your purchases are private. Any information you purchase about a vehicle will be kept strictly confidential.
+        </div>
+        <div><b>Support</b></div>
+        <div class="mb-10">
+            If you have any questions email us at <span id="cart_mail">ku.oc.kcehcph@ni</span>
+        </div>
+    </div>
 </ion-content>
