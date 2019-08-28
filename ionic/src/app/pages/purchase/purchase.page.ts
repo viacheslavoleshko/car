@@ -65,15 +65,17 @@ export class PurchasePage implements OnInit {
           fontSize: '16px',
           fontWeight: 'bold',
           '::placeholder': {
-            color: '#617b61'
+            color: '#557055'
           }
         },
+
         invalid: {
           color: '#fa755a',
           iconColor: '#fa755a'
         }
       }
       });
+
     this.cardElement.mount('#card-element');
     if (this.purchaseServie.numberPurchase === 1) {
       document.getElementById('stolen').setAttribute('checked', 'true');
