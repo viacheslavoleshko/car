@@ -9,12 +9,14 @@ import { CarService } from '../../car.service';
 export class Tab4Page implements OnInit {
 
   public inses: any;
+  public img : any;
 
   constructor(private carService: CarService) { }
 
   ngOnInit() {
     this.carService.getIns().subscribe((result) => {
       this.inses = result['object'];
+      this.img = 'assets/imgs/ins.png';
     });
   }
 

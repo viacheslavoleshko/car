@@ -4,6 +4,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <p class="image"><img *ngIf="img" [src]="img" alt="logo"></p>
   <div *ngFor="let car of cars" class="mleft">
     <ion-grid *ngIf="car !== undefined && car !== null">
       <div class="label">{{ car.make }}</div>

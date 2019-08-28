@@ -5,13 +5,11 @@
 </ion-header>
 
 <ion-content>
+  <p class="image"><img *ngIf="img" [src]="img" alt="logo"></p>
+
   <div *ngFor="let ins of inses" class="mleft">
     <ion-grid *ngIf="ins !== undefined && ins !== null">
-      <div class="label">{{ ins.make }}</div>
-      <ion-row>
-        <ion-col>Model</ion-col>
-        <ion-col>{{ ins.model }}</ion-col>
-      </ion-row>
+      <div class="label">{{ ins.make }} {{ ins.model }}</div>
     </ion-grid>
   </div>
 </ion-content>

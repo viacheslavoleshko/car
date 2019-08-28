@@ -8,6 +8,7 @@ import { CarService } from '../../car.service';
 export class Tab3Page implements OnInit {
 
   public cars: any;
+  public img : any;
 
   constructor(private carService: CarService) {
   }
@@ -15,6 +16,7 @@ export class Tab3Page implements OnInit {
   ngOnInit() {
     this.carService.getLowTax().subscribe((result) => {
       this.cars = result['object'];
+      this.img = 'assets/imgs/tax.png';
     });
   }
 }
