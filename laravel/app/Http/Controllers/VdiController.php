@@ -15,7 +15,6 @@ class VdiController extends Controller
             'object' => Vdi::select('vdi')->where( 'reg', $number)->get()
         ]);
     }
-
     public function curlNumberPlate(Request $request)
     {
         $apikey = getenv('VDI_API');
