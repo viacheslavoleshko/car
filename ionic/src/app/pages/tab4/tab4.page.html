@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Cheapest To Insure</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngFor="let ins of inses" class="mleft">
+    <ion-grid *ngIf="ins !== undefined && ins !== null">
+      <div class="label">{{ ins.make }}</div>
+      <ion-row>
+        <ion-col>Model</ion-col>
+        <ion-col>{{ ins.model }}</ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

@@ -22,6 +22,10 @@ const routes: Routes = [
 
       { path: "lowtax",
       loadChildren: "../tab3/tab3.module#Tab3PageModule" 
+      },
+
+      { path: "ins",
+      loadChildren: "../tab4/tab4.module#Tab4PageModule" 
       }
     ]
   },

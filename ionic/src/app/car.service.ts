@@ -35,6 +35,9 @@ export class CarService {
   getLowTax() {
     return this.http.get(`${this.basepath}/lowtax`);
   }
+  getIns() {
+    return this.http.get(`${this.basepath}/ins`);
+  }
   getRecallsInYears(make) {
     return this.http.get(`${this.basepath}/recallsformake/${make}`)
   }
