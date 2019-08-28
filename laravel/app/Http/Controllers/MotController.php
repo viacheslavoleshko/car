@@ -77,14 +77,14 @@ class MotController extends Controller
         return $result;
     }
 
-    function regsFromPage($pages)
+    function regsFromPage($offset, $pages)
     {
         $start = microtime(true);
         $allregs = 0;
         set_time_limit(0);
         $pattern = '/(?=[A-Z]{2}[0-9]{2}[A-Z]{3})[^IQZ]{2}[0-9]{2}[^IQ]{3}/';
 
-        for($i = 0; $i < $pages; $i++) {
+        for($i = $offset; $i <= $pages; $i++) {
             $valid = [];
             $url = "https://beta.check-mot.service.gov.uk/trade/vehicles/mot-tests?page=$i";
             $apiKey = getenv('MOT_API');
@@ -123,11 +123,15 @@ class MotController extends Controller
                     }
                 }
             }
-            $query = Mot::insert($valid);
-            $regs = count($valid);
-            echo nl2br($regs . " regs inserted to database from $i page\n");
-            $allregs += $regs;
-
+            try { 
+                $query = Mot::insert($valid);
+                $regs = count($valid);
+                echo nl2br($regs . " regs inserted to database from $i page\n");
+                $allregs += $regs;
+            } catch(\Illuminate\Database\QueryException $ex) { 
+                echo nl2br("0 regs inserted to database from $i page\n");
+                dump($ex->getMessage()); 
+            }
             ob_flush();
             flush();
             sleep(2);
