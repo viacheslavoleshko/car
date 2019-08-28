@@ -20,7 +20,7 @@ class StealController extends Controller
 
     function ifStolen(Request $request){
         $number = $request->input('number');
-        $data = Stolen::all()->where('reg', $number)->first();
+        $data = Stolen::select('*')->where('reg', $number)->first();
         if(isset($data['reg']) && is_null($data['stolen'])) {
             $start = microtime(true);
             $proxy = 'proxy.nix.ltd:9123';

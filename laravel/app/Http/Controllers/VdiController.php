@@ -19,8 +19,8 @@ class VdiController extends Controller
     {
         $apikey = getenv('VDI_API_LIVE');
         $number = $request->input('number');
-        $info = "https://uk1.ukvehicledata.co.uk/api/datapackage/VdiCheckFull?v=2&api_nullitems=1&auth_apikey={$apikey}&key_VRM={$number}";
-        $data = Vdi::all()->where('reg', $number)->first();
+         $info = "https://uk1.ukvehicledata.co.uk/api/datapackage/VdiCheckFull?v=2&api_nullitems=1&auth_apikey={$apikey}&key_VRM={$number}";
+        $data = Vdi::select('*')->where('reg', $number)->first();
         if(!is_null($data['reg']) && is_null($data['vdi'])) {
             $res = file_get_contents($info);
             Vdi::where('reg', $number)
