@@ -15,10 +15,9 @@ class VdiController extends Controller
             'object' => Vdi::select('vdi')->where( 'reg', $number)->get()
         ]);
     }
-
     public function curlNumberPlate(Request $request)
     {
-        $apikey = getenv('VDI_API');
+        $apikey = getenv('VDI_API_LIVE');
         $number = $request->input('number');
         $info = "https://uk1.ukvehicledata.co.uk/api/datapackage/VdiCheckFull?v=2&api_nullitems=1&auth_apikey={$apikey}&key_VRM={$number}";
         $data = Vdi::all()->where('reg', $number)->first();

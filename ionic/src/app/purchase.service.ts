@@ -10,6 +10,8 @@ let dhost;
 
 
 export class PurchaseService {
+    path = 'https://car.hpcheck.co.uk';
+  //  path = 'http://localhost';
     vdimap = new Map();
     numberVdi = '';
     showModal = false;
@@ -27,7 +29,10 @@ export class PurchaseService {
             .set('token',id).set('number', number)
             .set('paymentIntent',paymentIntent )
             .set('product', product);
-        return this.http.get('https://car.hpcheck.co.uk/confirm', {headers: headers});
+        return this.http.get(`${this.path}/confirm`, {headers: headers});
+    }
+    getKey() {
+        return this.http.get(`${this.path}/getkey`);
     }
 }
 

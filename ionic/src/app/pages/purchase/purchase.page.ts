@@ -16,7 +16,7 @@ export class PurchasePage implements OnInit {
                private route: ActivatedRoute,
                private router: Router,
                private loadingController: LoadingController) { }
-  stripe = Stripe('pk_test_DXtuhrwBCTqVo7v0OBaCzArG');
+  stripe;
 
   card = null;
   elements = null;
@@ -48,6 +48,8 @@ export class PurchasePage implements OnInit {
     } else this.message = 'Select product'
   }
   ngOnInit() {
+    this.purchaseServie.getKey().subscribe((res) => {
+    this.stripe = Stripe(res['key']);
     this.route.params.subscribe((params) => {
       this.regNumb = params['regNumb'];
     });
@@ -60,7 +62,7 @@ export class PurchasePage implements OnInit {
           color: '#32325d',
           fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
           fontSmoothing: 'antialiased',
-          fontSize: '15px',
+          fontSize: '16px',
           '::placeholder': {
             color: '#aab7c4'
           }
@@ -80,6 +82,7 @@ export class PurchasePage implements OnInit {
       document.getElementById('vdi').setAttribute('checked', 'true');
       this.product = 2;
     }
+    });
   }
 
   async handleServerResponse(response) {

@@ -20,7 +20,7 @@ class EstController extends Controller
   }
     public function estimate() {
         $apikey = getenv('VDI_API_TEST');
-        $records = DB::select(DB::raw("select min(reg), make, model from (
+        $records = DB::select(DB::raw("select min(reg), make, model, count(1) from (
        select reg, m.make, m.model from mot m
        left join (select distinct make, model from est) e
        on m.make = e.make and m.model = e.model
@@ -33,6 +33,8 @@ class EstController extends Controller
        and e.make is null
        ) t
           group by make, model
+          having count(1) > 50
+          order by 4 desc
           LIMIT 10
         "));
 

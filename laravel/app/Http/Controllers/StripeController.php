@@ -94,4 +94,9 @@ class StripeController extends Controller
         }
 
     }
+    public function getKey() {
+        return response()->json([
+            'key' => getenv('BUY_REPORT_PUBLIC_KEY')
+        ]);
+    }
 }

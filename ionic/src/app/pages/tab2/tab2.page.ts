@@ -5,6 +5,7 @@ import {NgForm} from "@angular/forms";
 import {Review} from "../../models/Review";
 import {ReviewService} from "../../review.service";
 import {AlertController} from "@ionic/angular";
+import {PurchaseService} from "../../purchase.service";
 @Component({
   selector: 'app-tab2',
   templateUrl: './tab2.page.html',
@@ -19,6 +20,7 @@ export class Tab2Page implements OnInit {
   error = '';
   reviews: Review[] = [];
   constructor(private carService: CarService,
+              private purchaseService: PurchaseService,
               private activatedRoute: ActivatedRoute,
               private reviewService: ReviewService,
               private alertController: AlertController) {
@@ -27,6 +29,8 @@ export class Tab2Page implements OnInit {
   ngOnInit() {
     this.activatedRoute.params.subscribe((params) => {
       this.regNumb = params['regNumb'];
+      if(this.regNumb !== undefined)
+        this.purchaseService.numberInInput = this.regNumb;
     });
     setTimeout(() => {
       this.rate(4);

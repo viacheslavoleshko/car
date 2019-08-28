@@ -11,10 +11,6 @@ const routes: Routes = [
   {
     path: '',
     component: Tab3Page
-  },
-  {
-    path: ':regNumb',
-    component: Tab3Page
   }
 ];
 
