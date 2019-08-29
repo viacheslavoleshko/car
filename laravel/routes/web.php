@@ -63,5 +63,6 @@ Route::post('/leavereview', 'ReviewController@addReview');
 Route::get('/getreviews', 'ReviewController@getReview');
 Route::get('/recallsformake/{make}', 'RecallController@recallsForMake');
 Route::get('/estimate', 'EstController@estimate');
+Route::get('/history', 'StatController@index');
 
 

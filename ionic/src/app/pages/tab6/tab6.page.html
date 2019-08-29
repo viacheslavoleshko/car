@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>History</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<ion-grid>
+  <div *ngFor="let item of history" class="history">
+    <ion-row>
+      <ion-col>Number</ion-col>
+      <ion-col [routerLink]="'/vehicle/check/' + item.reg"><a>{{item.reg}}</a></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Action</ion-col>
+      <ion-col>{{item.d}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Make</ion-col>
+      <ion-col>{{item.make}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Model</ion-col>
+      <ion-col>{{item.model}}</ion-col>
+    </ion-row>
+  </div>
+</ion-grid>
+
+</ion-content>

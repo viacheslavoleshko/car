@@ -29,6 +29,9 @@ const routes: Routes = [
       },
       { path: "aboutcheck",
         loadChildren: "../tab5/tab5.module#Tab5PageModule"
+      },
+      { path: "history",
+        loadChildren: "../tab6/tab6.module#Tab6PageModule"
       }
     ]
   },
