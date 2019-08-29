@@ -8,6 +8,7 @@ const routes: Routes = [
   { path: 'purchase/:regNumb', loadChildren: './pages/purchase/purchase.module#PurchasePageModule' },
 
 
+
 ];
 
 @NgModule({

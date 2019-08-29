@@ -1,0 +1,40 @@
+.label{
+  text-align: center;
+  border-top: 1px solid gainsboro;
+  border-bottom: 1px solid gainsboro;
+  font-size: 22px;
+  color: #0bb8cc;
+  clear: both;
+}
+.label2{
+  font-size: 22px;
+  color: #0bb8cc;
+  margin: 0 10px 10px 10px;
+}
+
+
+.reason {
+  margin: 5px 10px 20px 10px;
+  font-size: larger;
+  font-weight: bold;
+  //border-bottom: 0.5px solid silver;
+}
+ion-content {
+  ion-thumbnail{
+    --size: 80%;
+    margin: 0 auto;
+  }
+}
+.img{
+  margin-top: 5px;
+}
+.margin {
+  margin: 10px 10px;
+}
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.image{
+  text-align: center;
+}

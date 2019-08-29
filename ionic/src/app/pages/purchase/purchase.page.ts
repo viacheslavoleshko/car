@@ -50,8 +50,8 @@ export class PurchasePage implements OnInit {
   ngOnInit() {
     this.purchaseServie.getKey().subscribe((res) => {
     this.stripe = Stripe(res['key']);
-    this.route.params.subscribe((params) => {
-      this.regNumb = params['regNumb'];
+     this.route.params.subscribe((params) => {
+       this.regNumb = params['regNumb'];
     });
     this.purchaseServie.showModal = true;
     this.elements = this.stripe.elements();
@@ -98,6 +98,7 @@ export class PurchasePage implements OnInit {
       this.loadingController.dismiss();
       this.message = response.error['jsonBody']['error']['message'];
     } else if (response.requires_action) {
+      console.log(response + '!!!!!!!!!!!!');
       const { error: errorAction, paymentIntent } =
           await this.stripe.handleCardAction(response.payment_intent_client_secret);
       if (errorAction) {
@@ -118,6 +119,8 @@ export class PurchasePage implements OnInit {
            this.tariffStolen();
          }
          this.purchaseServie.purchased = true;
+      console.log(response);
+
     }
   }
 

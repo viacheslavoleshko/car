@@ -26,6 +26,9 @@ const routes: Routes = [
 
       { path: "ins",
       loadChildren: "../tab4/tab4.module#Tab4PageModule" 
+      },
+      { path: "aboutcheck",
+        loadChildren: "../tab5/tab5.module#Tab5PageModule"
       }
     ]
   },
