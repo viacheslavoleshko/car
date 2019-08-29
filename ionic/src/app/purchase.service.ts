@@ -11,8 +11,8 @@ let dhost;
 
 
 export class PurchaseService {
-    path = 'https://car.hpcheck.co.uk';
-   // path = 'http://localhost';
+   path = 'https://car.hpcheck.co.uk';
+    //path = 'http://localhost';
     vdimap = new Map();
     numberVdi = '';
     showModal = false;

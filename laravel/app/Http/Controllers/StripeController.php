@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Stat;
 use App\Models\Vdi;
 use App\Models\Stolen;
 use Illuminate\Http\Request;
@@ -18,6 +19,7 @@ class StripeController extends Controller
         $regNumb = $request->header('number');
         $intentId = $request->header('paymentIntent');
         $product = $request->header('product');
+
         $data =  \App\Models\Mot::select('reg')->where('reg', $regNumb)->get();
         $price = ($product == '1') ? 799 : 1499;
         if($data->first()) {
@@ -72,6 +74,7 @@ class StripeController extends Controller
         \App\Models\Stripe::where('payment_intent', $intent->id)->update([
             'status' => $intent->status
         ]);
+        $token = $request->header('token');
         if ($intent->status == 'requires_source_action' && $intent->next_action->type == 'use_stripe_sdk') {
             echo json_encode([
                 'requires_action' => true,
@@ -86,8 +89,11 @@ class StripeController extends Controller
              if($record->product == '2') {
                  VdiController::curlNumberPlate($request);
              }
-
+            \App\Models\Stripe::where('payment_intent', $intent->id)->update([
+                'token' => $token
+            ]);
             echo json_encode([
+
               'success' => true,
                 'product' => $record->product
             ]);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Stat;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Mot;
@@ -11,6 +12,7 @@ class MotController extends Controller
 {
     public function index(Request $request)
     {
+        $token = $request->header('token');
         $number = $request->input('number');
         $data = self::getData($number);
          $list = ['bmw', 'seat', 'audi', 'mercedes-benz', 'yamaha', 'alfa romeo', 'bentley', 'citroen', 'dacia', 'darracq',
@@ -36,6 +38,10 @@ class MotController extends Controller
 
         Mot::where('reg', $number)
             ->increment('cnt');
+        Stat::insert([
+            'reg' => $number,
+            'token' => $token
+        ]);
         $record = Mot::select('m')->where('reg', $number)->get();
         $path = in_array(strtolower($record[0]['m']['make']), $list) ?  "assets/logos/{$record[0]['m']['make']}.png" : null;
 
