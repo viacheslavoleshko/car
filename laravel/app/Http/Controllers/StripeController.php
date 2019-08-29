@@ -14,7 +14,7 @@ class StripeController extends Controller
 {
     public function confirmPayment(Request $request) {
 
-        $paymentId = $request->header('token');
+        $paymentId = $request->header('payment');
         $regNumb = $request->header('number');
         $intentId = $request->header('paymentIntent');
         $product = $request->header('product');
@@ -55,6 +55,7 @@ class StripeController extends Controller
                     );
                     $intent->confirm();
                 }
+
                 $this->generatePaymentResponse($intent, $request, $record);
             } catch (\Stripe\Error\Base $e) {
                 return response()->json(['error' => $e]);

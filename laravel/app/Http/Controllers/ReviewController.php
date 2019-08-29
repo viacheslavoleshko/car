@@ -33,8 +33,9 @@ class ReviewController extends Controller
 
    public function getReview(Request $request) {
        $number = $request->header('number');
-       echo json_encode([
+       return response()->json([
                'reviews' => Review::select('*')->where('reg', $number)->get()
+
        ]);
 
    }

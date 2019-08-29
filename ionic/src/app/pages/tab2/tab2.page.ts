@@ -101,7 +101,7 @@ export class Tab2Page implements OnInit {
       this.showStar(3);
       this.showStar(2);
       this.showStar(1);
-    },500);
+    },1000);
   }
 
   showStar(n) {
